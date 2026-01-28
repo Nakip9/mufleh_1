@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo_svg.svg" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0891b2" />
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="ابن المفلحي للسفريات والسياحة - وكالة سفر متكاملة تقدم خدمات الحج والعمرة، حجوزات الطيران والفنادق، تأجير السيارات، خدمات التأشيرات، والترجمة المعتمدة"
+    />
+    <meta
+      name="keywords"
+      content="سفر، سياحة، حج، عمرة، تأشيرات، حجز طيران، حجز فنادق، تأجير سيارات، ترجمة معتمدة"
+    />
+    <meta name="author" content="ابن المفلحي للسفريات والسياحة" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="ابن المفلحي للسفريات والسياحة" />
+    <meta
+      property="og:description"
+      content="وكالة سفر متكاملة تقدم جميع خدمات السفر والسياحة"
+    />
+    <meta property="og:image" content="/logo_svg.svg" />
+    <meta property="og:type" content="website" />
+    <!-- TODO: Replace YOUR_NETLIFY_SITE_URL with your actual Netlify domain (e.g., https://alnajm-travel.netlify.app) -->
+    <meta property="og:url" content="https://alnajm-travel.com" />
+    <meta property="og:locale" content="ar_SA" />
+    <meta property="og:site_name" content="ابن المفلحي للسفريات والسياحة" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ابن المفلحي للسفريات والسياحة" />
+    <meta
+      name="twitter:description"
+      content="وكالة سفر متكاملة تقدم جميع خدمات السفر والسياحة"
+    />
+    <meta name="twitter:image" content="/logo_svg.svg" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://alnajm-travel.com" />
+
+    <!-- Preload Critical Logo (SVG for best quality) -->
+    <link
+      rel="preload"
+      as="image"
+      href="/logo_svg.svg"
+      type="image/svg+xml"
+      fetchpriority="high"
+    />
+
+    <!-- Google Fonts - Arabic (Optimized: Only loading essential weights) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Load only Cairo font (primary) - Remove other fonts if not needed for better performance -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>ابن المفلحي للسفريات والسياحة</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TravelAgency",
+        "name": "ابن المفلحي للسفريات والسياحة",
+        "alternateName": "Ibn Al Muflehi Travel & Tourism",
+        "url": "https://alnajm-travel.com",
+        "logo": "https://alnajm-travel.com/logo_svg.svg",
+        "description": "وكالة سفر متكاملة تقدم خدمات الحج والعمرة، حجوزات الطيران والفنادق، تأجير السيارات، خدمات التأشيرات، والترجمة المعتمدة",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "شارع حدّة",
+          "addressLocality": "صنعاء",
+          "addressCountry": "YE"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+967-779-717-177",
+          "contactType": "customer service",
+          "email": "alnajmpluo@gmail.com",
+          "availableLanguage": ["Arabic", "English"]
+        },
+        "areaServed": {
+          "@type": "Country",
+          "name": "Saudi Arabia"
+        },
+        "priceRange": "$$",
+        "serviceType": [
+          "Flight Booking",
+          "Hotel Reservation",
+          "Hajj & Umrah Packages",
+          "Visa Services",
+          "Car Rental",
+          "Tour Packages",
+          "Translation Services"
+        ],
+        "sameAs": [
+          "https://facebook.com",
+          "https://twitter.com",
+          "https://instagram.com",
+          "https://linkedin.com"
+        ]
+      }
+    </script>
+
+    <!-- Organization Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "ابن المفلحي للسفريات والسياحة",
+    "url": "https://alnajm-travel.com",
+    "logo": "https://alnajm-travel.com/logo_svg.svg",
+        "foundingDate": "2010",
+        "numberOfEmployees": {
+          "@type": "QuantitativeValue",
+          "value": "10-50"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,0 +1,98 @@
+/* 
+   ابن المفلحي - "Azure Clarity" Theme
+   Version: 2.0.0
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap');
+
+:root {
+  /* --- Palette: Sky & Earth --- */
+  --primary-brand: #0ea5e9; /* <--- Paste your logo's Hex Code here */    /* Sky Blue - The Core Color */
+  --primary-dark: #0284c7;     /* Darker Blue for hover states */
+  --primary-light: #e0f2fe;    /* Very light blue for backgrounds */
+  
+  --bg-main: #ffffff;          /* Pure White */
+  --bg-secondary: #f8fafc;     /* Slate 50 - Soft gray/white */
+  
+  --text-main: #0f172a;        /* Deep Navy - High contrast text */
+  --text-muted: #64748b;       /* Soft Gray for subtitles */
+  
+  --accent-pop: #f59e0b;       /* Amber - For urgent buttons/notifications */
+
+  /* --- Spacing & Shape --- */
+  --radius-xl: 24px;           /* Modern rounded corners */
+  --radius-full: 9999px;       /* Pill shapes */
+  
+  --shadow-soft: 0 10px 40px -10px rgba(14, 165, 233, 0.15); /* Blue glow shadow */
+  --shadow-hover: 0 20px 40px -10px rgba(14, 165, 233, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-secondary);
+  color: var(--text-main);
+  font-family: 'Almarai', sans-serif;
+  direction: rtl; /* Enforce Right-to-Left for Arabic */
+  overflow-x: hidden;
+}
+
+/* --- Typography --- */
+h1, h2, h3, h4 {
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+p {
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+/* --- Global Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 16px 36px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--primary-brand);
+  color: white;
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(14, 165, 233, 0.5);
+}
+
+.btn-secondary {
+  background-color: white;
+  color: var(--primary-brand);
+  border: 1px solid var(--primary-light);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+
+.btn-secondary:hover {
+  border-color: var(--primary-brand);
+  background-color: var(--primary-light);
+}
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}

@@ -1,0 +1,17 @@
+.about-page-azure { background-color: var(--bg-main); padding-bottom: 4rem; }
+.about-hero { background: var(--bg-secondary); padding: 120px 0 60px; text-align: center; margin-bottom: 4rem; }
+.about-hero h1 { font-size: 3rem; color: var(--text-main); margin-bottom: 1rem; }
+.about-hero p { color: var(--text-muted); font-size: 1.2rem; }
+.story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 6rem; }
+.story-content h2 { font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--text-main); }
+.story-content p { color: var(--text-muted); line-height: 1.8; margin-bottom: 1.5rem; font-size: 1.05rem; }
+.stats-row { display: flex; gap: 2rem; margin-top: 2rem; }
+.stat-box strong { display: block; font-size: 2rem; color: var(--primary-brand); }
+.stat-box span { color: var(--text-muted); }
+.story-image .img-placeholder { width: 100%; height: 400px; background: #e2e8f0; border-radius: var(--radius-xl); position: relative; overflow: hidden; }
+.about-values { background: var(--primary-light); padding: 5rem 0; border-radius: var(--radius-xl); }
+.values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; text-align: center; }
+.val-icon { font-size: 2.5rem; color: var(--primary-brand); margin-bottom: 1.5rem; }
+.value-card h3 { margin-bottom: 1rem; color: var(--text-main); }
+.value-card p { color: var(--text-muted); line-height: 1.6; }
+@media (max-width: 992px) { .story-grid, .values-grid { grid-template-columns: 1fr; } }

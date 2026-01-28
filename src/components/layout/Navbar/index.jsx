@@ -1,0 +1,73 @@
+import { useState, useEffect } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import { FiMenu, FiX, FiPhoneCall } from 'react-icons/fi';
+import './Navbar.css';
+
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <nav className={`navbar-azure ${scrolled ? 'scrolled' : ''}`}>
+      <div className="container navbar-container">
+        
+        {/* Logo */}
+        <Link to="/" className="navbar-logo" aria-label="العودة إلى الصفحة الرئيسية">
+          <img src="/logo_muf.svg" alt="شعار ابن المفلحي" className="logo-image" />
+        </Link>
+
+        {/* Desktop Menu */}
+        <div className="navbar-links desktop-only">
+          <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            الرئيسية
+          </NavLink>
+          <NavLink to="/about" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            من نحن
+          </NavLink>
+          <NavLink to="/services" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            خدماتنا
+          </NavLink>
+          <NavLink to="/destinations" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            الوجهات
+          </NavLink>
+          <NavLink to="/contact" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            اتصل بنا
+          </NavLink>
+        </div>
+
+        {/* Action Button */}
+        <div className="navbar-action desktop-only">
+          <Link to="/contact" className="btn btn-primary btn-sm">
+            <FiPhoneCall /> اتصل بنا
+          </Link>
+        </div>
+
+        {/* Mobile Toggle */}
+        <button className="mobile-toggle" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? <FiX /> : <FiMenu />}
+        </button>
+
+        {/* Mobile Menu Overlay */}
+        <div className={`mobile-menu ${isOpen ? 'open' : ''}`}>
+          <div className="mobile-links">
+            <Link to="/" onClick={() => setIsOpen(false)}>الرئيسية</Link>
+            <Link to="/about" onClick={() => setIsOpen(false)}>من نحن</Link>
+            <Link to="/services" onClick={() => setIsOpen(false)}>خدماتنا</Link>
+            <Link to="/destinations" onClick={() => setIsOpen(false)}>الوجهات</Link>
+            <Link to="/contact" onClick={() => setIsOpen(false)}>اتصل بنا</Link>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;

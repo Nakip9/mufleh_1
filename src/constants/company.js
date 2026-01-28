@@ -1,0 +1,1 @@
+export { COMPANY_INFO, CONTACT_INFO, SOCIAL_LINKS } from '../data/edit_data';

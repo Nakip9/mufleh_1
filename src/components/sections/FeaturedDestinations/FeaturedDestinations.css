@@ -1,0 +1,22 @@
+.destinations-azure { padding: 6rem 0; background-color: var(--bg-main); }
+.section-header-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
+.azure-tag { color: var(--primary-brand); font-weight: 800; letter-spacing: 1px; text-transform: uppercase; font-size: 0.85rem; display: block; margin-bottom: 0.5rem; }
+.view-all-btn { display: inline-flex; align-items: center; gap: 8px; color: var(--text-muted); text-decoration: none; font-weight: 600; transition: color 0.3s; }
+.view-all-btn:hover { color: var(--primary-brand); }
+.destinations-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2.5rem; }
+.dest-card { background: white; border-radius: var(--radius-xl); overflow: hidden; border: 1px solid #f1f5f9; transition: all 0.4s ease; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+.dest-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+.card-image-wrapper { position: relative; height: 240px; overflow: hidden; }
+.card-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.dest-card:hover .card-image-wrapper img { transform: scale(1.1); }
+.price-badge { position: absolute; bottom: 15px; right: 15px; background: white; color: var(--primary-brand); padding: 6px 14px; border-radius: var(--radius-full); font-weight: 800; font-size: 0.9rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.rating-badge { position: absolute; top: 15px; left: 15px; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); color: #facc15; padding: 4px 10px; border-radius: 8px; font-weight: 700; display: flex; align-items: center; gap: 4px; font-size: 0.85rem; }
+.card-content { padding: 1.5rem; }
+.card-meta { display: flex; gap: 15px; margin-bottom: 1rem; font-size: 0.85rem; color: var(--text-muted); }
+.meta-item { display: flex; align-items: center; gap: 6px; }
+.dest-card h3 { font-size: 1.25rem; margin-bottom: 0.75rem; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+.pin-icon { color: var(--primary-brand); }
+.dest-card p { font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.6; }
+.btn-card-action { display: block; text-align: center; width: 100%; padding: 12px; border-radius: 12px; background: var(--primary-light); color: var(--primary-brand); font-weight: 700; text-decoration: none; transition: all 0.3s; }
+.btn-card-action:hover { background: var(--primary-brand); color: white; }
+@media (max-width: 768px) { .section-header-row { flex-direction: column; align-items: flex-start; } .view-all-btn { margin-top: 0.5rem; } }

@@ -1,0 +1,18437 @@
+# Table of Contents
+- API_REFERENCE.md
+- README.md
+- package.json
+- VERCEL_QUICK_START.md
+- PROJECT_STATUS.md
+- TROUBLESHOOTING.md
+- SUPABASE_SETUP.md
+- 404.html
+- vercel.json
+- index.html
+- eslint.config.js
+- GIT_SETUP.md
+- vite.config.js
+- package-lock.json
+- .gitignore
+- VERCEL_DEPLOYMENT_GUIDE.md
+- PASSPORT_STATUS_README.md
+- api/check-visa-status.js
+- src/App.css
+- src/main.jsx
+- src/index.css
+- src/App.jsx
+- public/logo_svg.svg
+- public/manifest.json
+- public/_redirects
+- public/sw.js
+- api/admin/delete-entry.js
+- api/admin/create-entry.js
+- api/admin/list-entries.js
+- api/admin/update-status.js
+- src/components/index.js
+- src/pages/About.jsx
+- src/pages/Destinations.jsx
+- src/pages/Admin.css
+- src/pages/Admin.jsx
+- src/pages/Contact.jsx
+- src/pages/Home.jsx
+- src/pages/Home.css
+- src/pages/Services.jsx
+- src/pages/Contact.css
+- src/pages/About.css
+- src/pages/Services.css
+- src/pages/Destinations.css
+- src/data/destinations.js
+- src/data/faq.js
+- src/data/testimonials.js
+- src/data/index.js
+- src/data/services.js
+- src/constants/routes.js
+- src/constants/company.js
+- src/constants/index.js
+- src/components/layout/index.js
+- src/components/common/Analytics.jsx
+- src/components/common/ErrorBoundary.jsx
+- src/components/common/index.js
+- src/components/common/LazyImage.jsx
+- src/components/admin/Admin.css
+- src/components/admin/AddEntryForm.jsx
+- src/components/admin/EditEntryModal.jsx
+- src/components/admin/PassportTable.jsx
+- src/components/sections/index.js
+- src/components/widgets/index.js
+- src/components/layout/Footer/Footer.css
+- src/components/layout/Footer/index.jsx
+- src/components/layout/Navbar/index.jsx
+- src/components/layout/Navbar/Navbar.css
+- src/components/common/ExpandableServiceCard/ExpandableServiceCard.css
+- src/components/common/ExpandableServiceCard/index.jsx
+- src/components/common/Card/Card.css
+- src/components/common/Card/index.jsx
+- src/components/sections/AboutUs/AboutUs.css
+- src/components/sections/AboutUs/index.jsx
+- src/components/sections/Testimonials/index.jsx
+- src/components/sections/Testimonials/Testimonials.css
+- src/components/sections/DestinationsCarousel/DestinationsCarousel.css
+- src/components/sections/DestinationsCarousel/index.jsx
+- src/components/sections/PassportCheck/index.jsx
+- src/components/sections/PassportCheck/PassportCheck.css
+- src/components/sections/PassportCheck/StatusResult.jsx
+- src/components/sections/HomeServices/index.jsx
+- src/components/sections/HomeServices/HomeServices.css
+- src/components/sections/Hero/Hero.css
+- src/components/sections/Hero/index.jsx
+- src/components/widgets/WhatsAppWidget/index.jsx
+- src/components/widgets/WhatsAppWidget/WhatsAppWidget.css
+
+## File: API_REFERENCE.md
+
+- Extension: .md
+- Language: markdown
+- Size: 4746 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-11 17:37:58
+
+### Code
+
+```markdown
+# API Reference Documentation
+
+Complete API reference for the passport status check system.
+
+---
+
+## Base URL
+
+All API endpoints are available at:
+```
+https://your-project.vercel.app/api
+```
+
+For local development:
+```
+http://localhost:5173/api
+```
+
+---
+
+## Public Endpoints
+
+### Check Visa Status
+
+Check the status of a passport number.
+
+**Endpoint:** `GET /api/check-visa-status`
+
+**Query Parameters:**
+- `passport_number` (required): The passport number to check
+
+**Example Request:**
+```
+GET /api/check-visa-status?passport_number=TEST123
+```
+
+**Success Response (200):**
+```json
+{
+  "found": true,
+  "passport_number": "TEST123",
+  "status": "ready",
+  "updated_at": "2025-12-10T12:00:00Z",
+  "admin_notes": "Ready for pickup"
+}
+```
+
+**Not Found Response (404):**
+```json
+{
+  "found": false,
+  "message": "Passport number not found in our system"
+}
+```
+
+**Error Response (400):**
+```json
+{
+  "error": "Passport number is required"
+}
+```
+
+**Error Response (500):**
+```json
+{
+  "error": "Database error occurred"
+}
+```
+
+---
+
+## Admin Endpoints
+
+All admin endpoints require proper authentication (currently using private URL access).
+
+### Create Entry
+
+Create a new passport entry.
+
+**Endpoint:** `POST /api/admin/create-entry`
+
+**Request Body:**
+```json
+{
+  "passport_number": "ABC123",
+  "status": "pending",
+  "admin_notes": "Optional notes"
+}
+```
+
+**Status Values:**
+- `pending` - Application is pending
+- `processing` - Application is being processed
+- `ready` - Visa is ready
+- `rejected` - Application was rejected
+
+**Success Response (201):**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid-here",
+    "passport_number": "ABC123",
+    "status": "pending",
+    "admin_notes": "Optional notes",
+    "created_at": "2025-12-10T12:00:00Z"
+  }
+}
+```
+
+**Error Response (409):**
+```json
+{
+  "error": "Passport number already exists in the system"
+}
+```
+
+---
+
+### Update Status
+
+Update an existing passport entry.
+
+**Endpoint:** `PUT /api/admin/update-status`
+
+**Request Body:**
+```json
+{
+  "id": "uuid-here",
+  "status": "ready",
+  "admin_notes": "Updated notes"
+}
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid-here",
+    "passport_number": "ABC123",
+    "status": "ready",
+    "admin_notes": "Updated notes",
+    "updated_at": "2025-12-10T13:00:00Z"
+  }
+}
+```
+
+**Error Response (404):**
+```json
+{
+  "error": "Entry not found"
+}
+```
+
+---
+
+### List Entries
+
+Get a paginated list of all passport entries.
+
+**Endpoint:** `GET /api/admin/list-entries`
+
+**Query Parameters:**
+- `page` (optional): Page number (default: 1)
+- `limit` (optional): Items per page (default: 50, max: 100)
+- `status` (optional): Filter by status (`pending`, `processing`, `ready`, `rejected`)
+- `search` (optional): Search in passport number
+
+**Example Request:**
+```
+GET /api/admin/list-entries?page=1&limit=50&status=ready&search=TEST
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "uuid-1",
+      "passport_number": "TEST123",
+      "status": "ready",
+      "created_at": "2025-12-10T12:00:00Z",
+      "updated_at": "2025-12-10T13:00:00Z",
+      "admin_notes": "Notes here"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 50,
+    "total": 100,
+    "totalPages": 2
+  }
+}
+```
+
+---
+
+### Delete Entry
+
+Delete a passport entry.
+
+**Endpoint:** `DELETE /api/admin/delete-entry`
+
+**Query Parameters:**
+- `id` (required): Entry ID to delete
+
+**Example Request:**
+```
+DELETE /api/admin/delete-entry?id=uuid-here
+```
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Entry deleted successfully",
+  "data": {
+    "id": "uuid-here",
+    "passport_number": "ABC123"
+  }
+}
+```
+
+**Error Response (404):**
+```json
+{
+  "error": "Entry not found"
+}
+```
+
+---
+
+## Error Codes
+
+| Status Code | Meaning |
+|------------|---------|
+| 200 | Success |
+| 201 | Created |
+| 400 | Bad Request (invalid input) |
+| 404 | Not Found |
+| 405 | Method Not Allowed |
+| 409 | Conflict (duplicate entry) |
+| 500 | Internal Server Error |
+
+---
+
+## CORS
+
+All endpoints support CORS and accept requests from any origin.
+
+**Headers:**
+- `Access-Control-Allow-Origin: *`
+- `Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS`
+- `Access-Control-Allow-Headers: Content-Type`
+
+---
+
+## Rate Limiting
+
+Currently no rate limiting is implemented. Consider adding rate limiting for production use.
+
+---
+
+## Authentication
+
+Admin endpoints are currently protected by private URL access (`/admin` route). Consider adding proper authentication for production.
+
+---
+
+## Environment Variables
+
+Required environment variables:
+- `SUPABASE_URL`: Supabase project URL
+- `SUPABASE_SERVICE_KEY`: Supabase service role key
+
+Set these in Vercel dashboard: Settings → Environment Variables
+
+
+
+```
+
+## File: README.md
+
+- Extension: .md
+- Language: markdown
+- Size: 4338 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-11 17:37:58
+
+### Code
+
+```markdown
+# Alnajm Alazrak Travel & Tourism - Passport Status Check System
+
+A modern travel agency website with integrated passport/visa status checking system.
+
+## Features
+
+✅ **Public Passport Check**
+- Users can check visa status by entering passport number
+- Real-time status display (Ready, Processing, Pending, Rejected)
+- Beautiful, responsive UI with Arabic content
+- Input validation and error handling
+
+✅ **Admin Panel**
+- Accessible at `/admin` route
+- Add, edit, delete passport entries
+- Search and filter functionality
+- Status management
+
+✅ **Backend API**
+- Vercel serverless API routes
+- Secure Supabase database integration
+- Input validation and sanitization
+- CORS handling
+
+## Tech Stack
+
+- **Frontend**: React 19 + Vite
+- **Backend**: Vercel API Routes (Serverless Functions)
+- **Database**: Supabase (PostgreSQL)
+- **Deployment**: Vercel
+- **Styling**: CSS with CSS Variables
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js 18+
+- Git
+- Vercel account
+- Supabase account
+
+### Installation
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Deployment
+
+### Deploy to Vercel
+
+1. **Push to GitHub**
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit"
+   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+   git push -u origin main
+   ```
+
+2. **Connect to Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Import your GitHub repository
+   - Vercel will auto-detect settings
+
+3. **Add Environment Variables**
+   - `SUPABASE_URL`: Your Supabase project URL
+   - `SUPABASE_SERVICE_KEY`: Your Supabase service role key
+
+4. **Set Up Database**
+   - Create `visa_status` table in Supabase
+   - See `SUPABASE_SETUP.md` for details
+
+**For detailed instructions, see:** `VERCEL_DEPLOYMENT_GUIDE.md`
+
+## Documentation
+
+- **`VERCEL_DEPLOYMENT_GUIDE.md`** - Complete deployment guide with detailed steps
+- **`VERCEL_QUICK_START.md`** - Quick reference for experienced users
+- **`API_REFERENCE.md`** - Complete API documentation
+- **`TROUBLESHOOTING.md`** - Common issues and solutions
+- **`SUPABASE_SETUP.md`** - Database setup instructions
+
+## Project Structure
+
+```
+project/
+├── api/                          # Vercel API routes
+│   ├── check-visa-status.js      # Public API
+│   └── admin/                    # Admin APIs
+│       ├── create-entry.js
+│       ├── update-status.js
+│       ├── list-entries.js
+│       └── delete-entry.js
+├── src/                          # React source code
+│   ├── components/
+│   │   ├── sections/
+│   │   │   └── PassportCheck/   # Public check component (Arabic UI)
+│   │   └── admin/                # Admin components
+│   └── pages/
+│       └── Admin.jsx             # Admin page
+├── public/                       # Static files
+├── vercel.json                   # Vercel configuration
+└── package.json
+```
+
+## API Endpoints
+
+### Public
+- `GET /api/check-visa-status?passport_number=XXX` - Check passport status
+
+### Admin
+- `POST /api/admin/create-entry` - Create new entry
+- `PUT /api/admin/update-status` - Update entry
+- `GET /api/admin/list-entries` - List all entries
+- `DELETE /api/admin/delete-entry` - Delete entry
+
+See `API_REFERENCE.md` for complete API documentation.
+
+## Environment Variables
+
+Required environment variables (set in Vercel):
+
+- `SUPABASE_URL` - Supabase project URL
+- `SUPABASE_SERVICE_KEY` - Supabase service role key
+
+## Database Schema
+
+**Table: `visa_status`**
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | uuid | Primary key |
+| passport_number | text | Unique passport number |
+| status | text | Status: pending, processing, ready, rejected |
+| created_at | timestamp | Creation timestamp |
+| updated_at | timestamp | Last update timestamp |
+| admin_notes | text | Optional admin notes |
+
+## Development
+
+```bash
+# Start dev server
+npm run dev
+
+# Build
+npm run build
+
+# Preview build
+npm run preview
+
+# Lint
+npm run lint
+```
+
+## License
+
+Private project - Alnajm Alazrak Travel & Tourism
+
+## Support
+
+For deployment help, see:
+- `VERCEL_DEPLOYMENT_GUIDE.md` - Step-by-step deployment
+- `TROUBLESHOOTING.md` - Common issues and solutions
+
+```
+
+## File: package.json
+
+- Extension: .json
+- Language: json
+- Size: 703 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-26 23:55:54
+
+### Code
+
+```json
+{
+  "name": "alnajm_2025",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "vercel": "vercel"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "framer-motion": "^12.23.26",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.10.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@vitejs/plugin-react": "^5.1.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "vite": "^7.2.4"
+  }
+}
+
+```
+
+## File: VERCEL_QUICK_START.md
+
+- Extension: .md
+- Language: markdown
+- Size: 2010 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-11 17:37:58
+
+### Code
+
+```markdown
+# Vercel Quick Start Guide
+
+Fast deployment guide for experienced users.
+
+---
+
+## Prerequisites
+
+- ✅ GitHub account
+- ✅ Vercel account
+- ✅ Supabase account and project
+- ✅ Code pushed to GitHub
+
+---
+
+## Deployment Steps
+
+### 1. Connect to Vercel
+
+1. Go to [vercel.com/dashboard](https://vercel.com/dashboard)
+2. Click **"Add New..."** → **"Import Git Repository"**
+3. Connect GitHub (if first time)
+4. Select your repository
+5. Click **"Import"**
+
+### 2. Configure Project
+
+**Settings:**
+- Framework: **Vite** (auto-detected)
+- Build Command: `npm run build`
+- Output Directory: `dist`
+- Root Directory: `.`
+
+Click **"Deploy"**
+
+### 3. Add Environment Variables
+
+**After deployment:**
+1. Go to **Settings** → **Environment Variables**
+2. Add:
+   - `SUPABASE_URL` = `https://tqnalzuyvprpkpbzylvc.supabase.co`
+   - `SUPABASE_SERVICE_KEY` = (your service role key)
+3. Select all environments (Production, Preview, Development)
+4. **Redeploy** from Deployments tab
+
+### 4. Set Up Database
+
+1. Go to Supabase Dashboard
+2. Create table `visa_status` with columns:
+   - `id` (uuid, primary key)
+   - `passport_number` (text, unique)
+   - `status` (text, default: 'pending')
+   - `created_at` (timestamp)
+   - `updated_at` (timestamp)
+   - `admin_notes` (text, nullable)
+
+### 5. Test
+
+1. Visit your site: `https://your-project.vercel.app`
+2. Test passport check form
+3. Test admin panel: `/admin`
+
+---
+
+## API Endpoints
+
+- **Public**: `GET /api/check-visa-status?passport_number=XXX`
+- **Admin**: 
+  - `POST /api/admin/create-entry`
+  - `PUT /api/admin/update-status`
+  - `GET /api/admin/list-entries`
+  - `DELETE /api/admin/delete-entry`
+
+---
+
+## Troubleshooting
+
+- **Build fails**: Check `vercel.json` and `package.json`
+- **API 500 errors**: Verify environment variables
+- **404 errors**: Check API routes exist in `api/` folder
+- **Database errors**: Verify table exists and variables are correct
+
+For detailed help, see `VERCEL_DEPLOYMENT_GUIDE.md`
+
+---
+
+**Done! Your site is live on Vercel.** 🚀
+
+
+
+```
+
+## File: PROJECT_STATUS.md
+
+- Extension: .md
+- Language: markdown
+- Size: 4797 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```markdown
+# Project Status - Ready for Deployment ✅
+
+## ✅ All Issues Fixed
+
+### 1. Logo Caching Issue - FIXED
+- ✅ Updated `index.html` favicon to use `logo_svg.svg`
+- ✅ Updated `manifest.json` to use `logo_svg.svg`
+- ✅ Updated service worker (`public/sw.js`) to cache new logo
+- ✅ Changed cache version from `v1` to `v2` to force refresh
+- ✅ All logo references now point to `/logo_svg.svg`
+
+**Why you saw the old logo:**
+- Browser was caching the old logo file
+- Service worker was caching old logo files
+- Solution: Updated cache version and all references
+
+**To see the new logo:**
+1. Clear browser cache (`Ctrl+Shift+Delete` or `Cmd+Shift+Delete`)
+2. Hard refresh (`Ctrl+F5` or `Cmd+Shift+R`)
+3. Clear service worker cache (DevTools → Application → Clear storage)
+
+### 2. GitHub Pages Configuration - COMPLETE
+- ✅ Created `.github/workflows/deploy.yml` for automatic deployment
+- ✅ Created `404.html` for SPA routing on GitHub Pages
+- ✅ Configured `vite.config.js` with base path option
+- ✅ All necessary files in place
+
+### 3. Documentation - COMPLETE
+- ✅ `README.md` - Complete English documentation with GitHub Pages instructions
+- ✅ `DEPLOYMENT.md` - Comprehensive deployment guide
+- ✅ `DEPLOYMENT_INSTRUCTIONS.md` - Quick reference guide
+
+### 4. Build Verification - PASSED
+- ✅ Build tested successfully
+- ✅ All assets included in build
+- ✅ Logo file present in dist folder
+- ✅ No build errors
+
+## 📋 Current Configuration
+
+### Logo Files
+- **Active Logo:** `public/logo_svg.svg` (transparent SVG)
+- **Referenced in:**
+  - `src/components/layout/Navbar/index.jsx`
+  - `src/components/layout/Footer/index.jsx`
+  - `index.html` (favicon)
+  - `public/manifest.json`
+  - `public/sw.js` (service worker)
+
+### Build Configuration
+- **Output Directory:** `dist/`
+- **Base Path:** `/` (can be changed for subdirectory deployment)
+- **Build Tool:** Vite 7.2.4
+- **Framework:** React 19
+
+### Deployment Files
+- **GitHub Actions:** `.github/workflows/deploy.yml`
+- **SPA Routing:** `404.html`
+- **Netlify Routing:** `public/_redirects`
+
+## 🚀 Ready to Deploy
+
+Your project is **100% ready** for GitHub Pages deployment!
+
+### Quick Start:
+1. Push code to GitHub
+2. Enable GitHub Pages (Settings → Pages → GitHub Actions)
+3. Wait 2-5 minutes
+4. Site is live!
+
+See `DEPLOYMENT_INSTRUCTIONS.md` for detailed steps.
+
+## 🔍 Files Changed/Added
+
+### Modified Files:
+- `index.html` - Updated favicon to SVG
+- `public/manifest.json` - Updated icon references
+- `public/sw.js` - Updated cache version and logo references
+- `vite.config.js` - Added base path configuration
+- `README.md` - Complete rewrite in English with GitHub Pages instructions
+
+### New Files:
+- `.github/workflows/deploy.yml` - GitHub Actions deployment workflow
+- `404.html` - SPA routing for GitHub Pages
+- `DEPLOYMENT.md` - Comprehensive deployment guide
+- `DEPLOYMENT_INSTRUCTIONS.md` - Quick reference
+- `PROJECT_STATUS.md` - This file
+
+## ⚠️ Important Notes
+
+### Base Path Configuration
+- **For repository-based site** (`username.github.io/repo-name/`):
+  - Update `vite.config.js`: `base: '/repo-name/',`
+  
+- **For user/organization site** (`username.github.io/`):
+  - Keep `base: '/'` in `vite.config.js`
+  - Repository name must match username
+
+### Logo Caching
+- If old logo appears after deployment:
+  1. Clear browser cache
+  2. Hard refresh page
+  3. Clear service worker cache
+  4. The new cache version (v2) will be used automatically
+
+### First Deployment
+- First deployment may take 5-10 minutes
+- Subsequent deployments are faster (2-5 minutes)
+- Monitor progress in GitHub Actions tab
+
+## 📊 Build Statistics
+
+```
+Build Time: ~2 seconds
+Output Size: ~510 KB (gzipped: ~147 KB)
+Assets: All included
+Status: ✅ Ready
+```
+
+## 🎯 Next Steps
+
+1. **Deploy to GitHub Pages:**
+   - Follow `DEPLOYMENT_INSTRUCTIONS.md`
+   - Or see `README.md` for detailed guide
+
+2. **Test Deployment:**
+   - Verify logo displays correctly
+   - Test all routes
+   - Check on mobile devices
+
+3. **Optional - Custom Domain:**
+   - See `DEPLOYMENT.md` for custom domain setup
+   - Add `CNAME` file in `public/` folder
+
+4. **Update SEO:**
+   - Replace `YOUR_NETLIFY_SITE_URL` in `index.html` with your GitHub Pages URL
+   - Update Open Graph and Twitter Card meta tags
+
+## ✅ Deployment Checklist
+
+- [x] Logo updated to transparent SVG
+- [x] All logo references updated
+- [x] Service worker cache updated
+- [x] Build tested successfully
+- [x] GitHub Actions workflow configured
+- [x] SPA routing configured (404.html)
+- [x] Documentation complete
+- [x] Base path configured
+- [x] All files ready
+
+## 🎉 Project Status: READY FOR DEPLOYMENT
+
+Everything is configured and ready. Just push to GitHub and enable GitHub Pages!
+
+---
+
+**Last Updated:** December 9, 2025
+**Status:** ✅ Production Ready
+
+
+```
+
+## File: TROUBLESHOOTING.md
+
+- Extension: .md
+- Language: markdown
+- Size: 9207 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-11 17:37:58
+
+### Code
+
+```markdown
+# Troubleshooting Guide
+
+Common issues and solutions for the passport status check system on Vercel.
+
+---
+
+## Build Issues
+
+### Build Fails with "Command not found"
+
+**Symptoms:**
+- Deployment shows "Build Failed"
+- Error: "npm: command not found" or similar
+
+**Solution:**
+1. Check `package.json` exists in root directory
+2. Verify `vercel.json` has correct build command
+3. Ensure Node.js version is compatible (18+)
+
+**Fix:**
+- Update `vercel.json`:
+  ```json
+  {
+    "buildCommand": "npm run build"
+  }
+  ```
+
+---
+
+### Build Fails with Module Not Found
+
+**Symptoms:**
+- Error: "Cannot find module '@supabase/supabase-js'"
+- Missing dependencies errors
+
+**Solution:**
+1. Check `package.json` has all dependencies
+2. Verify `node_modules` is not in `.gitignore` incorrectly
+3. Ensure dependencies are listed in `dependencies` (not `devDependencies`)
+
+**Fix:**
+```bash
+npm install
+git add package.json package-lock.json
+git commit -m "Add dependencies"
+git push
+```
+
+---
+
+### Build Succeeds but Site Shows 404
+
+**Symptoms:**
+- Build completes successfully
+- Site shows 404 or blank page
+- Routes don't work
+
+**Solution:**
+1. Check `vercel.json` has rewrites configured
+2. Verify `outputDirectory` is `dist`
+3. Check `index.html` exists in `dist` folder
+
+**Fix:**
+Update `vercel.json`:
+```json
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
+
+---
+
+## API Issues
+
+### API Routes Return 500 Error
+
+**Symptoms:**
+- Passport check doesn't work
+- Browser console shows 500 errors
+- Admin panel shows errors
+
+**Diagnosis Steps:**
+
+1. **Check Environment Variables**
+   - Go to Vercel Dashboard → Your Project → Settings → Environment Variables
+   - Verify `SUPABASE_URL` exists and is correct
+   - Verify `SUPABASE_SERVICE_KEY` exists and is correct
+   - Check that variables are set for all environments (Production, Preview, Development)
+
+2. **Check Function Logs**
+   - Go to Deployments tab
+   - Click on latest deployment
+   - Click "Functions" tab
+   - Look for error messages
+   - Check for "Missing Supabase environment variables" error
+
+3. **Verify Supabase Connection**
+   - Check Supabase URL format: `https://xxxxx.supabase.co`
+   - Verify service key is `service_role` key (not `anon` key)
+   - Check Supabase project is active (not paused)
+
+**Solutions:**
+
+**If variables are missing:**
+1. Add environment variables in Vercel
+2. Redeploy the project
+3. Wait for deployment to complete
+
+**If variables are incorrect:**
+1. Update environment variables with correct values
+2. Remove any extra spaces
+3. Redeploy
+
+**If Supabase connection fails:**
+1. Verify Supabase project is active
+2. Check service role key is correct
+3. Test connection from Supabase dashboard
+
+---
+
+### API Routes Return 404
+
+**Symptoms:**
+- API calls return 404 Not Found
+- "Function not found" errors
+
+**Diagnosis:**
+
+1. **Check API Files Exist**
+   - Verify `api/` folder exists in project root
+   - Check files are in correct location:
+     - `api/check-visa-status.js`
+     - `api/admin/create-entry.js`
+     - `api/admin/update-status.js`
+     - `api/admin/list-entries.js`
+     - `api/admin/delete-entry.js`
+
+2. **Check File Names**
+   - Must be exact: `check-visa-status.js` (with hyphens)
+   - Case-sensitive
+   - No typos
+
+3. **Check File Structure**
+   - Admin routes should be in `api/admin/` subfolder
+   - Not in `api/` root
+
+**Solutions:**
+
+**If files are missing:**
+1. Create `api/` directory
+2. Add all API route files
+3. Commit and push to GitHub
+4. Vercel will auto-deploy
+
+**If file names are wrong:**
+1. Rename files to match exact endpoint names
+2. Commit and push
+3. Redeploy
+
+---
+
+### CORS Errors
+
+**Symptoms:**
+- Browser console shows CORS errors
+- "Access-Control-Allow-Origin" errors
+- API calls blocked by browser
+
+**Solution:**
+- CORS is already handled in API routes
+- If issues persist, check API route files have CORS headers
+- Verify `corsHeaders` object is included in responses
+
+---
+
+## Database Issues
+
+### "Table does not exist" Error
+
+**Symptoms:**
+- API returns: "relation 'visa_status' does not exist"
+- Database errors in logs
+
+**Solution:**
+1. Go to Supabase Dashboard
+2. Check Table Editor
+3. Verify `visa_status` table exists
+4. Check table name is exactly `visa_status` (case-sensitive, no spaces)
+
+**Fix:**
+- Create table if missing
+- Use exact name: `visa_status`
+- Add all required columns
+
+---
+
+### "Permission denied" Error
+
+**Symptoms:**
+- API returns permission errors
+- Cannot read/write to database
+
+**Solution:**
+1. Check you're using `SUPABASE_SERVICE_KEY` (not `SUPABASE_ANON_KEY`)
+2. Verify service role key is correct
+3. Check Row Level Security (RLS) is disabled or configured correctly
+
+**Fix:**
+- Use service_role key in environment variables
+- Service role bypasses RLS
+- Anon key has limited permissions
+
+---
+
+### Database Connection Timeout
+
+**Symptoms:**
+- Slow API responses
+- Timeout errors
+- Connection errors
+
+**Solution:**
+1. Check Supabase project status (not paused)
+2. Verify network connectivity
+3. Check Supabase region matches your users' location
+
+**Fix:**
+- Ensure Supabase project is active
+- Consider upgrading Supabase plan if on free tier with limits
+- Check Supabase dashboard for any service issues
+
+---
+
+## Frontend Issues
+
+### Passport Check Form Doesn't Work
+
+**Symptoms:**
+- Form submits but nothing happens
+- No response shown
+- Loading state never ends
+
+**Diagnosis:**
+1. Open browser DevTools (F12)
+2. Go to Network tab
+3. Submit form
+4. Check for failed requests
+5. Look at Console tab for errors
+
+**Common Issues:**
+
+**API endpoint wrong:**
+- Check frontend code uses `/api/check-visa-status`
+- Not `/.netlify/functions/check-visa-status`
+
+**CORS issues:**
+- Check browser console for CORS errors
+- Verify API routes return CORS headers
+
+**Network errors:**
+- Check internet connection
+- Verify Vercel deployment is live
+- Check API route is accessible
+
+**Fix:**
+- Update API endpoints in frontend code
+- Verify API routes are deployed
+- Check environment variables
+
+---
+
+### Admin Panel Doesn't Load
+
+**Symptoms:**
+- `/admin` route shows blank page
+- Errors in console
+- Cannot access admin features
+
+**Diagnosis:**
+1. Check route exists in `App.jsx`
+2. Verify admin components exist
+3. Check browser console for errors
+4. Verify API endpoints are correct
+
+**Fix:**
+- Ensure `/admin` route is in `App.jsx`
+- Check admin components are imported correctly
+- Verify API endpoints use `/api/admin/` prefix
+
+---
+
+## Deployment Issues
+
+### Changes Not Appearing
+
+**Symptoms:**
+- Updated code but site shows old version
+- Changes not reflected after deployment
+
+**Solution:**
+1. **Clear Browser Cache**
+   - Hard refresh: `Ctrl+Shift+R` (Windows) or `Cmd+Shift+R` (Mac)
+   - Or clear browser cache completely
+
+2. **Check Deployment Status**
+   - Go to Vercel Dashboard → Deployments
+   - Verify latest deployment is successful
+   - Check deployment includes your changes
+
+3. **Verify Git Push**
+   - Check GitHub repository has latest code
+   - Verify Vercel is connected to correct branch
+   - Check Vercel is set to auto-deploy
+
+**Fix:**
+- Clear browser cache
+- Wait for deployment to complete
+- Verify code is pushed to GitHub
+
+---
+
+### Auto-Deploy Not Working
+
+**Symptoms:**
+- Pushed to GitHub but Vercel doesn't deploy
+- No automatic deployments
+
+**Solution:**
+1. Check Vercel GitHub integration
+2. Verify repository is connected
+3. Check deployment settings
+4. Verify GitHub webhook is active
+
+**Fix:**
+- Reconnect GitHub repository in Vercel
+- Check GitHub repository settings → Webhooks
+- Verify Vercel webhook is active
+
+---
+
+## Performance Issues
+
+### Slow API Responses
+
+**Symptoms:**
+- API calls take long time
+- Timeout errors
+- Slow page loads
+
+**Solution:**
+1. Check Supabase project region
+2. Verify database indexes exist
+3. Check for N+1 query problems
+4. Monitor Supabase usage
+
+**Fix:**
+- Add database indexes on frequently queried columns
+- Optimize queries
+- Consider upgrading Supabase plan
+
+---
+
+## Getting Help
+
+If you're still experiencing issues:
+
+1. **Check Logs**
+   - Vercel Dashboard → Deployments → Function Logs
+   - Browser Console (F12)
+   - Supabase Dashboard → Logs
+
+2. **Verify Configuration**
+   - `vercel.json` is correct
+   - `package.json` has all dependencies
+   - Environment variables are set
+
+3. **Test Locally**
+   - Run `npm run dev`
+   - Test API routes locally
+   - Verify everything works before deploying
+
+4. **Review Documentation**
+   - `VERCEL_DEPLOYMENT_GUIDE.md` for setup
+   - `API_REFERENCE.md` for API details
+   - `SUPABASE_SETUP.md` for database setup
+
+---
+
+## Common Error Messages
+
+| Error Message | Cause | Solution |
+|--------------|-------|----------|
+| "Missing Supabase environment variables" | Env vars not set | Add in Vercel dashboard |
+| "Table does not exist" | Database table missing | Create table in Supabase |
+| "Permission denied" | Wrong API key | Use service_role key |
+| "Function not found" | API route missing | Check `api/` folder exists |
+| "Build failed" | Build command error | Check `vercel.json` |
+| "404 Not Found" | Route not configured | Check rewrites in `vercel.json` |
+
+---
+
+**Still having issues?** Review the detailed deployment guide or check Vercel/Supabase documentation.
+
+
+
+```
+
+## File: SUPABASE_SETUP.md
+
+- Extension: .md
+- Language: markdown
+- Size: 5464 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-17 00:26:30
+
+### Code
+
+```markdown
+# Supabase Database Setup Guide
+
+Complete step-by-step guide to set up your Supabase database for the passport status check system.
+
+**What is Supabase?**
+- Supabase is a free PostgreSQL database service
+- It provides a database, API, and authentication
+- Free tier includes 500MB storage and 50K monthly active users
+- Perfect for your needs (<30 users/month)
+
+## Step 1: Create Supabase Account
+
+1. Go to [https://supabase.com](https://supabase.com)
+2. Click "Start your project" or "Sign up"
+3. Sign up with GitHub, Google, or email
+4. Verify your email if required
+
+## Step 2: Create a New Project
+
+1. Click "New Project" in the Supabase dashboard
+2. Fill in the project details:
+   - **Name**: `alnajm-visa-status` (or your preferred name)
+   - **Database Password**: Create a strong password (save it securely)
+   - **Region**: Choose the region closest to your users
+3. Click "Create new project"
+4. Wait for the project to be set up (~2 minutes)
+
+## Step 3: Create the Database Table
+
+1. In the Supabase dashboard, click on **"Table Editor"** in the left sidebar
+2. Click **"New Table"**
+3. Configure the table:
+   - **Name**: `visa_status`
+   - **Description**: "Stores passport numbers and visa statuses"
+4. Add the following columns:
+
+   | Column Name | Type | Default Value | Nullable | Unique |
+   |------------|------|---------------|----------|--------|
+   | id | uuid | `gen_random_uuid()` | No | Yes (Primary Key) |
+   | passport_number | text | - | No | Yes |
+   | status | text | `'pending'` | No | No |
+   | created_at | timestamp | `now()` | No | No |
+   | updated_at | timestamp | `now()` | No | No |
+   | admin_notes | text | - | Yes | No |
+   | first_name | text | - | Yes | No |
+   | last_name | text | - | Yes | No |
+
+5. Click **"Save"** to create the table
+
+## Step 4: Create Updated_at Trigger (Optional but Recommended)
+
+To automatically update the `updated_at` timestamp when a row is modified:
+
+1. Go to **"SQL Editor"** in the left sidebar
+2. Click **"New Query"**
+3. Paste this SQL:
+
+```sql
+-- Function to update updated_at timestamp
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Trigger to automatically update updated_at
+CREATE TRIGGER update_visa_status_updated_at
+    BEFORE UPDATE ON visa_status
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+```
+
+4. Click **"Run"** to execute the query
+
+## Step 5: Set Up Row Level Security (RLS)
+
+Since we're using Netlify Functions with service_role key, we can disable RLS for simplicity:
+
+1. Go to **"Table Editor"**
+2. Click on the `visa_status` table
+3. Click on **"Policies"** tab
+4. For now, you can leave RLS disabled (we're securing via Netlify Functions)
+
+**Note**: For production, consider enabling RLS with appropriate policies.
+
+## Step 6: Get API Credentials
+
+1. Go to **"Settings"** (gear icon) in the left sidebar
+2. Click on **"API"**
+3. Copy the following values:
+   - **Project URL**: `https://xxxxx.supabase.co`
+   - **service_role key**: (Keep this SECRET - used in Netlify Functions)
+   - **anon public key**: (Optional - for client-side if needed)
+
+## Step 7: Add Environment Variables to Netlify
+
+1. Go to your Netlify dashboard
+2. Select your site
+3. Go to **"Site settings"** → **"Environment variables"**
+4. Click **"Add variable"** and add:
+
+   - **Key**: `SUPABASE_URL`
+   - **Value**: Your Supabase Project URL (from Step 6)
+
+5. Click **"Add variable"** again and add:
+
+   - **Key**: `SUPABASE_SERVICE_KEY`
+   - **Value**: Your service_role key (from Step 6)
+   - **Sensitive**: Check this box to hide the value
+
+6. Click **"Save"**
+
+## Step 8: Test the Setup
+
+1. In Supabase dashboard, go to **"Table Editor"**
+2. Click on `visa_status` table
+3. Click **"Insert row"** to manually add a test entry:
+   - passport_number: `TEST123`
+   - status: `ready`
+   - admin_notes: `Test entry`
+4. Click **"Save"**
+5. Test the public check form on your website with passport number `TEST123`
+
+## Troubleshooting
+
+### Issue: Functions can't connect to Supabase
+- **Solution**: Verify environment variables are set correctly in Netlify
+- Check that `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` are correct
+- Redeploy your site after adding environment variables
+
+### Issue: "Table does not exist" error
+- **Solution**: Verify the table name is exactly `visa_status` (case-sensitive)
+- Check that you're in the correct project
+
+### Issue: "Permission denied" error
+- **Solution**: Ensure you're using the `service_role` key, not the `anon` key
+- The service_role key bypasses RLS
+
+## Next Steps
+
+After completing this setup:
+1. Deploy your site to Netlify
+2. Test the passport check functionality
+3. Access the admin panel at `/admin` to manage entries
+4. Add your first passport entries through the admin panel
+5. If upgrading, run this SQL:
+   ```sql
+   ALTER TABLE visa_status 
+   ADD COLUMN first_name text,
+   ADD COLUMN last_name text;
+   ```
+
+## Security Notes
+
+- **Never commit** your Supabase service_role key to Git
+- Always use environment variables for sensitive data
+- Consider enabling RLS in production for additional security
+- Regularly rotate your database password
+- Monitor your Supabase usage in the dashboard
+
+## Support
+
+If you encounter issues:
+1. Check Supabase dashboard logs
+2. Check Netlify function logs
+3. Verify all environment variables are set correctly
+4. Ensure your Netlify Functions are deployed correctly
+
+
+```
+
+## File: 404.html
+
+- Extension: .html
+- Language: html
+- Size: 1373 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>النجم الأزرق للسفريات والسياحة</title>
+  <script>
+    // Single Page Apps for GitHub Pages
+    // https://github.com/rafgraph/spa-github-pages
+    // This script takes the current url and converts the path and query
+    // string into just a query string, and then redirects the browser
+    // to the new url with only a query string and hash fragment,
+    // e.g., https://www.foo.tld/one/two?a=b&c=d#qwe, becomes
+    // https://www.foo.tld/?/one/two&a=b~and~c=d#qwe
+    // Note: this 404.html file must be at least 512 bytes for some
+    // browsers to see it. Otherwise, the browser may ignore it and
+    // load the default 404.html instead.
+
+    (function() {
+      var pathSegmentsToKeep = 0;
+
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        '/' +
+        (pathSegmentsToKeep ? l.pathname.split('/').slice(0, pathSegmentsToKeep + 1).join('/').slice(1) + '/' : '') +
+        '?/' + l.pathname.slice(1).split('/').join('/') +
+        (l.search ? '&' + l.search.slice(1).split('&').join('~and~') : '') +
+        l.hash
+      );
+    })();
+  </script>
+</head>
+<body>
+  <p>Redirecting...</p>
+</body>
+</html>
+
+
+```
+
+## File: vercel.json
+
+- Extension: .json
+- Language: json
+- Size: 1658 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-11 17:49:52
+
+### Code
+
+```json
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "geolocation=(), microphone=(), camera=()"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.png)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.jpg)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.jpeg)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.svg)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}
+
+
+
+```
+
+## File: index.html
+
+- Extension: .html
+- Language: html
+- Size: 5348 bytes
+- Created: 2025-12-27 23:56:25
+- Modified: 2025-12-27 23:56:25
+
+### Code
+
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo_svg.svg" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0891b2" />
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="النجم الأزرق للسفريات والسياحة - وكالة سفر متكاملة تقدم خدمات الحج والعمرة، حجوزات الطيران والفنادق، تأجير السيارات، خدمات التأشيرات، والترجمة المعتمدة"
+    />
+    <meta
+      name="keywords"
+      content="سفر، سياحة، حج، عمرة، تأشيرات، حجز طيران، حجز فنادق، تأجير سيارات، ترجمة معتمدة"
+    />
+    <meta name="author" content="النجم الأزرق للسفريات والسياحة" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="النجم الأزرق للسفريات والسياحة" />
+    <meta
+      property="og:description"
+      content="وكالة سفر متكاملة تقدم جميع خدمات السفر والسياحة"
+    />
+    <meta property="og:image" content="/logo_svg.svg" />
+    <meta property="og:type" content="website" />
+    <!-- TODO: Replace YOUR_NETLIFY_SITE_URL with your actual Netlify domain (e.g., https://alnajm-travel.netlify.app) -->
+    <meta property="og:url" content="https://alnajm-travel.com" />
+    <meta property="og:locale" content="ar_SA" />
+    <meta property="og:site_name" content="النجم الأزرق للسفريات والسياحة" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="النجم الأزرق للسفريات والسياحة" />
+    <meta
+      name="twitter:description"
+      content="وكالة سفر متكاملة تقدم جميع خدمات السفر والسياحة"
+    />
+    <meta name="twitter:image" content="/logo_svg.svg" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://alnajm-travel.com" />
+
+    <!-- Preload Critical Logo (SVG for best quality) -->
+    <link
+      rel="preload"
+      as="image"
+      href="/logo_svg.svg"
+      type="image/svg+xml"
+      fetchpriority="high"
+    />
+
+    <!-- Google Fonts - Arabic (Optimized: Only loading essential weights) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Load only Cairo font (primary) - Remove other fonts if not needed for better performance -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>النجم الأزرق للسفريات والسياحة</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TravelAgency",
+        "name": "النجم الأزرق للسفريات والسياحة",
+        "alternateName": "Alnajm Alazrak Travel & Tourism",
+        "url": "https://alnajm-travel.com",
+        "logo": "https://alnajm-travel.com/logo_svg.svg",
+        "description": "وكالة سفر متكاملة تقدم خدمات الحج والعمرة، حجوزات الطيران والفنادق، تأجير السيارات، خدمات التأشيرات، والترجمة المعتمدة",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "شارع حدّة",
+          "addressLocality": "صنعاء",
+          "addressCountry": "YE"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+967-779-717-177",
+          "contactType": "customer service",
+          "email": "alnajmpluo@gmail.com",
+          "availableLanguage": ["Arabic", "English"]
+        },
+        "areaServed": {
+          "@type": "Country",
+          "name": "Saudi Arabia"
+        },
+        "priceRange": "$$",
+        "serviceType": [
+          "Flight Booking",
+          "Hotel Reservation",
+          "Hajj & Umrah Packages",
+          "Visa Services",
+          "Car Rental",
+          "Tour Packages",
+          "Translation Services"
+        ],
+        "sameAs": [
+          "https://facebook.com",
+          "https://twitter.com",
+          "https://instagram.com",
+          "https://linkedin.com"
+        ]
+      }
+    </script>
+
+    <!-- Organization Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "النجم الأزرق للسفريات والسياحة",
+    "url": "https://alnajm-travel.com",
+    "logo": "https://alnajm-travel.com/logo_svg.svg",
+        "foundingDate": "2010",
+        "numberOfEmployees": {
+          "@type": "QuantitativeValue",
+          "value": "10-50"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
+```
+
+## File: eslint.config.js
+
+- Extension: .js
+- Language: javascript
+- Size: 787 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import { defineConfig, globalIgnores } from 'eslint/config'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{js,jsx}'],
+    extends: [
+      js.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+    },
+  },
+])
+
+```
+
+## File: GIT_SETUP.md
+
+- Extension: .md
+- Language: markdown
+- Size: 6496 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-11 17:22:14
+
+### Code
+
+```markdown
+# Git Setup Guide - Repository: vercel_najm_1
+
+Complete guide for setting up your Git repository and pushing to GitHub.
+
+---
+
+## Files to Include in Git
+
+### ✅ Files to COMMIT (Include):
+
+**Source Code:**
+- `src/` - All React source code
+- `api/` - All Vercel API routes
+- `public/` - Static files (images, manifest, etc.)
+
+**Configuration Files:**
+- `package.json` - Dependencies
+- `package-lock.json` - Lock file
+- `vite.config.js` - Vite configuration
+- `vercel.json` - Vercel configuration
+- `eslint.config.js` - ESLint configuration
+- `index.html` - Main HTML file
+- `404.html` - SPA routing fallback
+
+**Documentation (All in English):**
+- `README.md` - Project overview
+- `VERCEL_DEPLOYMENT_GUIDE.md` - Main deployment guide
+- `VERCEL_QUICK_START.md` - Quick reference
+- `API_REFERENCE.md` - API documentation
+- `TROUBLESHOOTING.md` - Troubleshooting guide
+- `SUPABASE_SETUP.md` - Database setup
+- `PASSPORT_STATUS_README.md` - Feature overview
+- `PROJECT_STATUS.md` - Project status
+
+**Git Files:**
+- `.gitignore` - Files to exclude
+
+### ❌ Files to EXCLUDE (Already in .gitignore):
+
+- `node_modules/` - Dependencies (installed via npm)
+- `dist/` - Build output (generated by Vercel)
+- `.env` files - Environment variables (sensitive)
+- `.vercel/` - Vercel cache
+- `.vite/` - Vite cache
+- Log files
+- Editor files
+
+---
+
+## Step-by-Step Git Setup
+
+### Step 1: Initialize Git Repository
+
+```bash
+# Navigate to project directory
+cd /home/eissa/Desktop/ubutnu_github_najm_1
+
+# Initialize git (if not already done)
+git init
+```
+
+### Step 2: Create GitHub Repository
+
+1. **Go to GitHub**
+   - Open [https://github.com](https://github.com)
+   - Log in to your account
+
+2. **Create New Repository**
+   - Click the **"+"** icon (top right)
+   - Select **"New repository"**
+   - **Repository name**: `vercel_najm_1`
+   - **Description**: "Passport status check system - Vercel deployment"
+   - **Visibility**: Choose **"Public"** (required for free Vercel)
+   - **DO NOT** check "Initialize with README"
+   - **DO NOT** add .gitignore or license
+   - Click **"Create repository"**
+
+### Step 3: Add Files to Git
+
+```bash
+# Add all files (respects .gitignore)
+git add .
+
+# Check what will be committed
+git status
+```
+
+**What you should see:**
+- ✅ `src/` files
+- ✅ `api/` files
+- ✅ `public/` files
+- ✅ Configuration files
+- ✅ Documentation files
+- ❌ `node_modules/` (excluded)
+- ❌ `dist/` (excluded)
+
+### Step 4: Create Initial Commit
+
+```bash
+# Create commit
+git commit -m "Initial commit - Vercel migration with passport status system"
+```
+
+### Step 5: Connect to GitHub
+
+```bash
+# Add GitHub repository as remote
+# Replace YOUR_USERNAME with your GitHub username
+git remote add origin https://github.com/YOUR_USERNAME/vercel_najm_1.git
+
+# Verify remote
+git remote -v
+```
+
+### Step 6: Push to GitHub
+
+```bash
+# Rename branch to main (if needed)
+git branch -M main
+
+# Push to GitHub
+git push -u origin main
+```
+
+**What happens:**
+- Your code is uploaded to GitHub
+- Repository is now available at: `https://github.com/YOUR_USERNAME/vercel_najm_1`
+- You can see all files in the repository
+
+---
+
+## Verify What's Included
+
+After pushing, check your GitHub repository. You should see:
+
+**✅ Included:**
+- `api/` folder with all API routes
+- `src/` folder with all React code
+- `public/` folder with images and static files
+- `vercel.json` configuration
+- `package.json` and `package-lock.json`
+- All `.md` documentation files
+- `vite.config.js`, `index.html`, etc.
+
+**❌ NOT Included (correctly excluded):**
+- `node_modules/` - Will be installed by Vercel
+- `dist/` - Will be built by Vercel
+- `.env` files - Sensitive, never commit
+- `.vercel/` - Vercel cache
+
+---
+
+## Quick Commands Summary
+
+```bash
+# Full setup (copy and paste)
+cd /home/eissa/Desktop/ubutnu_github_najm_1
+git init
+git add .
+git commit -m "Initial commit - Vercel migration with passport status system"
+git remote add origin https://github.com/YOUR_USERNAME/vercel_najm_1.git
+git branch -M main
+git push -u origin main
+```
+
+**Replace `YOUR_USERNAME` with your actual GitHub username!**
+
+---
+
+## After Pushing to GitHub
+
+Once your code is on GitHub:
+
+1. **Go to Vercel**
+   - [https://vercel.com/dashboard](https://vercel.com/dashboard)
+   - Click **"Add New..."** → **"Import Git Repository"**
+   - Select `vercel_najm_1` repository
+   - Click **"Import"**
+
+2. **Deploy**
+   - Vercel will auto-detect settings
+   - Click **"Deploy"**
+   - Wait for deployment
+
+3. **Add Environment Variables**
+   - Settings → Environment Variables
+   - Add `SUPABASE_URL` and `SUPABASE_SERVICE_KEY`
+   - Redeploy
+
+**For detailed deployment instructions, see:** `VERCEL_DEPLOYMENT_GUIDE.md`
+
+---
+
+## Important Notes
+
+### ✅ DO Commit:
+- Source code (`src/`, `api/`)
+- Configuration files
+- Documentation
+- Static assets (`public/`)
+
+### ❌ DON'T Commit:
+- `node_modules/` (too large, installed via npm)
+- `dist/` (build output, generated by Vercel)
+- `.env` files (sensitive data)
+- `.vercel/` (Vercel cache)
+- Personal editor settings
+
+### 🔒 Security:
+- **Never commit** environment variables
+- **Never commit** API keys or secrets
+- Use Vercel dashboard for environment variables
+- `.gitignore` already excludes sensitive files
+
+---
+
+## Repository Structure on GitHub
+
+After pushing, your repository will look like:
+
+```
+vercel_najm_1/
+├── api/                    # Vercel API routes
+│   ├── check-visa-status.js
+│   └── admin/
+├── src/                    # React source code
+│   ├── components/
+│   ├── pages/
+│   └── ...
+├── public/                 # Static files
+├── vercel.json            # Vercel config
+├── package.json           # Dependencies
+├── vite.config.js         # Vite config
+├── README.md              # Project overview
+├── VERCEL_DEPLOYMENT_GUIDE.md
+├── VERCEL_QUICK_START.md
+├── API_REFERENCE.md
+├── TROUBLESHOOTING.md
+├── SUPABASE_SETUP.md
+└── .gitignore            # Excluded files
+```
+
+---
+
+## Troubleshooting
+
+### "Repository not found"
+- Check repository name is exactly `vercel_najm_1`
+- Verify you have access to the repository
+- Check GitHub username is correct
+
+### "Permission denied"
+- Verify GitHub credentials
+- Check SSH keys if using SSH URL
+- Use HTTPS URL instead
+
+### "Large file" error
+- Check `node_modules/` is in `.gitignore`
+- Verify `dist/` is excluded
+- Don't commit large files
+
+---
+
+**Your repository is ready! Push to GitHub and deploy to Vercel.** 🚀
+
+
+```
+
+## File: vite.config.js
+
+- Extension: .js
+- Language: javascript
+- Size: 924 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-27 15:41:47
+
+### Code
+
+```javascript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  // Base path for GitHub Pages (uncomment and set your repository name)
+  // base: '/your-repo-name/',
+  // For root domain deployment, leave base as '/' or comment it out
+  base: '/',
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false,
+    minify: 'esbuild',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          motion: ['framer-motion'],
+        },
+      },
+    },
+  },
+  publicDir: 'public',
+  server: {
+    port: 3000,
+    open: true,
+    strictPort: true,
+    host: true,         // <-- ADD THIS: Tells Vite to listen to the network
+    allowedHosts: true, // <-- Keep this: Tells Vite to trust the Cloudflare link
+  },
+})
+```
+
+## File: package-lock.json
+
+- Extension: .json
+- Language: json
+- Size: 106750 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-27 00:20:21
+
+### Code
+
+```json
+{
+  "name": "alnajm_2025",
+  "version": "0.0.0",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {
+    "": {
+      "name": "alnajm_2025",
+      "version": "0.0.0",
+      "dependencies": {
+        "@supabase/supabase-js": "^2.39.0",
+        "framer-motion": "^12.23.26",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0",
+        "react-icons": "^5.5.0",
+        "react-router-dom": "^7.10.1"
+      },
+      "devDependencies": {
+        "@eslint/js": "^9.39.1",
+        "@vitejs/plugin-react": "^5.1.1",
+        "eslint": "^9.39.1",
+        "eslint-plugin-react-hooks": "^7.0.1",
+        "eslint-plugin-react-refresh": "^0.4.24",
+        "globals": "^16.5.0",
+        "vite": "^7.2.4"
+      }
+    },
+    "node_modules/@babel/code-frame": {
+      "version": "7.27.1",
+      "resolved": "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.27.1.tgz",
+      "integrity": "sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-validator-identifier": "^7.27.1",
+        "js-tokens": "^4.0.0",
+        "picocolors": "^1.1.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/compat-data": {
+      "version": "7.28.5",
+      "resolved": "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.28.5.tgz",
+      "integrity": "sha512-6uFXyCayocRbqhZOB+6XcuZbkMNimwfVGFji8CTZnCzOHVGvDqzvitu1re2AU5LROliz7eQPhB8CpAMvnx9EjA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/core": {
+      "version": "7.28.5",
+      "resolved": "https://registry.npmjs.org/@babel/core/-/core-7.28.5.tgz",
+      "integrity": "sha512-e7jT4DxYvIDLk1ZHmU/m/mB19rex9sv0c2ftBtjSBv+kVM/902eh0fINUzD7UwLLNR+jU585GxUJ8/EBfAM5fw==",
+      "dev": true,
+      "license": "MIT",
+      "peer": true,
+      "dependencies": {
+        "@babel/code-frame": "^7.27.1",
+        "@babel/generator": "^7.28.5",
+        "@babel/helper-compilation-targets": "^7.27.2",
+        "@babel/helper-module-transforms": "^7.28.3",
+        "@babel/helpers": "^7.28.4",
+        "@babel/parser": "^7.28.5",
+        "@babel/template": "^7.27.2",
+        "@babel/traverse": "^7.28.5",
+        "@babel/types": "^7.28.5",
+        "@jridgewell/remapping": "^2.3.5",
+        "convert-source-map": "^2.0.0",
+        "debug": "^4.1.0",
+        "gensync": "^1.0.0-beta.2",
+        "json5": "^2.2.3",
+        "semver": "^6.3.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/babel"
+      }
+    },
+    "node_modules/@babel/generator": {
+      "version": "7.28.5",
+      "resolved": "https://registry.npmjs.org/@babel/generator/-/generator-7.28.5.tgz",
+      "integrity": "sha512-3EwLFhZ38J4VyIP6WNtt2kUdW9dokXA9Cr4IVIFHuCpZ3H8/YFOl5JjZHisrn1fATPBmKKqXzDFvh9fUwHz6CQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/parser": "^7.28.5",
+        "@babel/types": "^7.28.5",
+        "@jridgewell/gen-mapping": "^0.3.12",
+        "@jridgewell/trace-mapping": "^0.3.28",
+        "jsesc": "^3.0.2"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-compilation-targets": {
+      "version": "7.27.2",
+      "resolved": "https://registry.npmjs.org/@babel/helper-compilation-targets/-/helper-compilation-targets-7.27.2.tgz",
+      "integrity": "sha512-2+1thGUUWWjLTYTHZWK1n8Yga0ijBz1XAhUXcKy81rd5g6yh7hGqMp45v7cadSbEHc9G3OTv45SyneRN3ps4DQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/compat-data": "^7.27.2",
+        "@babel/helper-validator-option": "^7.27.1",
+        "browserslist": "^4.24.0",
+        "lru-cache": "^5.1.1",
+        "semver": "^6.3.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-globals": {
+      "version": "7.28.0",
+      "resolved": "https://registry.npmjs.org/@babel/helper-globals/-/helper-globals-7.28.0.tgz",
+      "integrity": "sha512-+W6cISkXFa1jXsDEdYA8HeevQT/FULhxzR99pxphltZcVaugps53THCeiWA8SguxxpSp3gKPiuYfSWopkLQ4hw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-module-imports": {
+      "version": "7.27.1",
+      "resolved": "https://registry.npmjs.org/@babel/helper-module-imports/-/helper-module-imports-7.27.1.tgz",
+      "integrity": "sha512-0gSFWUPNXNopqtIPQvlD5WgXYI5GY2kP2cCvoT8kczjbfcfuIljTbcWrulD1CIPIX2gt1wghbDy08yE1p+/r3w==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/traverse": "^7.27.1",
+        "@babel/types": "^7.27.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-module-transforms": {
+      "version": "7.28.3",
+      "resolved": "https://registry.npmjs.org/@babel/helper-module-transforms/-/helper-module-transforms-7.28.3.tgz",
+      "integrity": "sha512-gytXUbs8k2sXS9PnQptz5o0QnpLL51SwASIORY6XaBKF88nsOT0Zw9szLqlSGQDP/4TljBAD5y98p2U1fqkdsw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-module-imports": "^7.27.1",
+        "@babel/helper-validator-identifier": "^7.27.1",
+        "@babel/traverse": "^7.28.3"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      },
+      "peerDependencies": {
+        "@babel/core": "^7.0.0"
+      }
+    },
+    "node_modules/@babel/helper-plugin-utils": {
+      "version": "7.27.1",
+      "resolved": "https://registry.npmjs.org/@babel/helper-plugin-utils/-/helper-plugin-utils-7.27.1.tgz",
+      "integrity": "sha512-1gn1Up5YXka3YYAHGKpbideQ5Yjf1tDa9qYcgysz+cNCXukyLl6DjPXhD3VRwSb8c0J9tA4b2+rHEZtc6R0tlw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-string-parser": {
+      "version": "7.27.1",
+      "resolved": "https://registry.npmjs.org/@babel/helper-string-parser/-/helper-string-parser-7.27.1.tgz",
+      "integrity": "sha512-qMlSxKbpRlAridDExk92nSobyDdpPijUq2DW6oDnUqd0iOGxmQjyqhMIihI9+zv4LPyZdRje2cavWPbCbWm3eA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-validator-identifier": {
+      "version": "7.28.5",
+      "resolved": "https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-7.28.5.tgz",
+      "integrity": "sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-validator-option": {
+      "version": "7.27.1",
+      "resolved": "https://registry.npmjs.org/@babel/helper-validator-option/-/helper-validator-option-7.27.1.tgz",
+      "integrity": "sha512-YvjJow9FxbhFFKDSuFnVCe2WxXk1zWc22fFePVNEaWJEu8IrZVlda6N0uHwzZrUM1il7NC9Mlp4MaJYbYd9JSg==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helpers": {
+      "version": "7.28.4",
+      "resolved": "https://registry.npmjs.org/@babel/helpers/-/helpers-7.28.4.tgz",
+      "integrity": "sha512-HFN59MmQXGHVyYadKLVumYsA9dBFun/ldYxipEjzA4196jpLZd8UjEEBLkbEkvfYreDqJhZxYAWFPtrfhNpj4w==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/template": "^7.27.2",
+        "@babel/types": "^7.28.4"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/parser": {
+      "version": "7.28.5",
+      "resolved": "https://registry.npmjs.org/@babel/parser/-/parser-7.28.5.tgz",
+      "integrity": "sha512-KKBU1VGYR7ORr3At5HAtUQ+TV3SzRCXmA/8OdDZiLDBIZxVyzXuztPjfLd3BV1PRAQGCMWWSHYhL0F8d5uHBDQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/types": "^7.28.5"
+      },
+      "bin": {
+        "parser": "bin/babel-parser.js"
+      },
+      "engines": {
+        "node": ">=6.0.0"
+      }
+    },
+    "node_modules/@babel/plugin-transform-react-jsx-self": {
+      "version": "7.27.1",
+      "resolved": "https://registry.npmjs.org/@babel/plugin-transform-react-jsx-self/-/plugin-transform-react-jsx-self-7.27.1.tgz",
+      "integrity": "sha512-6UzkCs+ejGdZ5mFFC/OCUrv028ab2fp1znZmCZjAOBKiBK2jXD1O+BPSfX8X2qjJ75fZBMSnQn3Rq2mrBJK2mw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-plugin-utils": "^7.27.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      },
+      "peerDependencies": {
+        "@babel/core": "^7.0.0-0"
+      }
+    },
+    "node_modules/@babel/plugin-transform-react-jsx-source": {
+      "version": "7.27.1",
+      "resolved": "https://registry.npmjs.org/@babel/plugin-transform-react-jsx-source/-/plugin-transform-react-jsx-source-7.27.1.tgz",
+      "integrity": "sha512-zbwoTsBruTeKB9hSq73ha66iFeJHuaFkUbwvqElnygoNbj/jHRsSeokowZFN3CZ64IvEqcmmkVe89OPXc7ldAw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-plugin-utils": "^7.27.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      },
+      "peerDependencies": {
+        "@babel/core": "^7.0.0-0"
+      }
+    },
+    "node_modules/@babel/template": {
+      "version": "7.27.2",
+      "resolved": "https://registry.npmjs.org/@babel/template/-/template-7.27.2.tgz",
+      "integrity": "sha512-LPDZ85aEJyYSd18/DkjNh4/y1ntkE5KwUHWTiqgRxruuZL2F1yuHligVHLvcHY2vMHXttKFpJn6LwfI7cw7ODw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/code-frame": "^7.27.1",
+        "@babel/parser": "^7.27.2",
+        "@babel/types": "^7.27.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/traverse": {
+      "version": "7.28.5",
+      "resolved": "https://registry.npmjs.org/@babel/traverse/-/traverse-7.28.5.tgz",
+      "integrity": "sha512-TCCj4t55U90khlYkVV/0TfkJkAkUg3jZFA3Neb7unZT8CPok7iiRfaX0F+WnqWqt7OxhOn0uBKXCw4lbL8W0aQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/code-frame": "^7.27.1",
+        "@babel/generator": "^7.28.5",
+        "@babel/helper-globals": "^7.28.0",
+        "@babel/parser": "^7.28.5",
+        "@babel/template": "^7.27.2",
+        "@babel/types": "^7.28.5",
+        "debug": "^4.3.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/types": {
+      "version": "7.28.5",
+      "resolved": "https://registry.npmjs.org/@babel/types/-/types-7.28.5.tgz",
+      "integrity": "sha512-qQ5m48eI/MFLQ5PxQj4PFaprjyCTLI37ElWMmNs0K8Lk3dVeOdNpB3ks8jc7yM5CDmVC73eMVk/trk3fgmrUpA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-string-parser": "^7.27.1",
+        "@babel/helper-validator-identifier": "^7.28.5"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@esbuild/aix-ppc64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/aix-ppc64/-/aix-ppc64-0.25.12.tgz",
+      "integrity": "sha512-Hhmwd6CInZ3dwpuGTF8fJG6yoWmsToE+vYgD4nytZVxcu1ulHpUQRAB1UJ8+N1Am3Mz4+xOByoQoSZf4D+CpkA==",
+      "cpu": [
+        "ppc64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "aix"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/android-arm": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/android-arm/-/android-arm-0.25.12.tgz",
+      "integrity": "sha512-VJ+sKvNA/GE7Ccacc9Cha7bpS8nyzVv0jdVgwNDaR4gDMC/2TTRc33Ip8qrNYUcpkOHUT5OZ0bUcNNVZQ9RLlg==",
+      "cpu": [
+        "arm"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "android"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/android-arm64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/android-arm64/-/android-arm64-0.25.12.tgz",
+      "integrity": "sha512-6AAmLG7zwD1Z159jCKPvAxZd4y/VTO0VkprYy+3N2FtJ8+BQWFXU+OxARIwA46c5tdD9SsKGZ/1ocqBS/gAKHg==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "android"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/android-x64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/android-x64/-/android-x64-0.25.12.tgz",
+      "integrity": "sha512-5jbb+2hhDHx5phYR2By8GTWEzn6I9UqR11Kwf22iKbNpYrsmRB18aX/9ivc5cabcUiAT/wM+YIZ6SG9QO6a8kg==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "android"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/darwin-arm64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.25.12.tgz",
+      "integrity": "sha512-N3zl+lxHCifgIlcMUP5016ESkeQjLj/959RxxNYIthIg+CQHInujFuXeWbWMgnTo4cp5XVHqFPmpyu9J65C1Yg==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "darwin"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/darwin-x64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.25.12.tgz",
+      "integrity": "sha512-HQ9ka4Kx21qHXwtlTUVbKJOAnmG1ipXhdWTmNXiPzPfWKpXqASVcWdnf2bnL73wgjNrFXAa3yYvBSd9pzfEIpA==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "darwin"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/freebsd-arm64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/freebsd-arm64/-/freebsd-arm64-0.25.12.tgz",
+      "integrity": "sha512-gA0Bx759+7Jve03K1S0vkOu5Lg/85dou3EseOGUes8flVOGxbhDDh/iZaoek11Y8mtyKPGF3vP8XhnkDEAmzeg==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "freebsd"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/freebsd-x64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/freebsd-x64/-/freebsd-x64-0.25.12.tgz",
+      "integrity": "sha512-TGbO26Yw2xsHzxtbVFGEXBFH0FRAP7gtcPE7P5yP7wGy7cXK2oO7RyOhL5NLiqTlBh47XhmIUXuGciXEqYFfBQ==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "freebsd"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/linux-arm": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-arm/-/linux-arm-0.25.12.tgz",
+      "integrity": "sha512-lPDGyC1JPDou8kGcywY0YILzWlhhnRjdof3UlcoqYmS9El818LLfJJc3PXXgZHrHCAKs/Z2SeZtDJr5MrkxtOw==",
+      "cpu": [
+        "arm"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/linux-arm64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-0.25.12.tgz",
+      "integrity": "sha512-8bwX7a8FghIgrupcxb4aUmYDLp8pX06rGh5HqDT7bB+8Rdells6mHvrFHHW2JAOPZUbnjUpKTLg6ECyzvas2AQ==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/linux-ia32": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-ia32/-/linux-ia32-0.25.12.tgz",
+      "integrity": "sha512-0y9KrdVnbMM2/vG8KfU0byhUN+EFCny9+8g202gYqSSVMonbsCfLjUO+rCci7pM0WBEtz+oK/PIwHkzxkyharA==",
+      "cpu": [
+        "ia32"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/linux-loong64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-loong64/-/linux-loong64-0.25.12.tgz",
+      "integrity": "sha512-h///Lr5a9rib/v1GGqXVGzjL4TMvVTv+s1DPoxQdz7l/AYv6LDSxdIwzxkrPW438oUXiDtwM10o9PmwS/6Z0Ng==",
+      "cpu": [
+        "loong64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/linux-mips64el": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-mips64el/-/linux-mips64el-0.25.12.tgz",
+      "integrity": "sha512-iyRrM1Pzy9GFMDLsXn1iHUm18nhKnNMWscjmp4+hpafcZjrr2WbT//d20xaGljXDBYHqRcl8HnxbX6uaA/eGVw==",
+      "cpu": [
+        "mips64el"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/linux-ppc64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-ppc64/-/linux-ppc64-0.25.12.tgz",
+      "integrity": "sha512-9meM/lRXxMi5PSUqEXRCtVjEZBGwB7P/D4yT8UG/mwIdze2aV4Vo6U5gD3+RsoHXKkHCfSxZKzmDssVlRj1QQA==",
+      "cpu": [
+        "ppc64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/linux-riscv64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-riscv64/-/linux-riscv64-0.25.12.tgz",
+      "integrity": "sha512-Zr7KR4hgKUpWAwb1f3o5ygT04MzqVrGEGXGLnj15YQDJErYu/BGg+wmFlIDOdJp0PmB0lLvxFIOXZgFRrdjR0w==",
+      "cpu": [
+        "riscv64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/linux-s390x": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-s390x/-/linux-s390x-0.25.12.tgz",
+      "integrity": "sha512-MsKncOcgTNvdtiISc/jZs/Zf8d0cl/t3gYWX8J9ubBnVOwlk65UIEEvgBORTiljloIWnBzLs4qhzPkJcitIzIg==",
+      "cpu": [
+        "s390x"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/linux-x64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.25.12.tgz",
+      "integrity": "sha512-uqZMTLr/zR/ed4jIGnwSLkaHmPjOjJvnm6TVVitAa08SLS9Z0VM8wIRx7gWbJB5/J54YuIMInDquWyYvQLZkgw==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/netbsd-arm64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/netbsd-arm64/-/netbsd-arm64-0.25.12.tgz",
+      "integrity": "sha512-xXwcTq4GhRM7J9A8Gv5boanHhRa/Q9KLVmcyXHCTaM4wKfIpWkdXiMog/KsnxzJ0A1+nD+zoecuzqPmCRyBGjg==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "netbsd"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/netbsd-x64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/netbsd-x64/-/netbsd-x64-0.25.12.tgz",
+      "integrity": "sha512-Ld5pTlzPy3YwGec4OuHh1aCVCRvOXdH8DgRjfDy/oumVovmuSzWfnSJg+VtakB9Cm0gxNO9BzWkj6mtO1FMXkQ==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "netbsd"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/openbsd-arm64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/openbsd-arm64/-/openbsd-arm64-0.25.12.tgz",
+      "integrity": "sha512-fF96T6KsBo/pkQI950FARU9apGNTSlZGsv1jZBAlcLL1MLjLNIWPBkj5NlSz8aAzYKg+eNqknrUJ24QBybeR5A==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "openbsd"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/openbsd-x64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/openbsd-x64/-/openbsd-x64-0.25.12.tgz",
+      "integrity": "sha512-MZyXUkZHjQxUvzK7rN8DJ3SRmrVrke8ZyRusHlP+kuwqTcfWLyqMOE3sScPPyeIXN/mDJIfGXvcMqCgYKekoQw==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "openbsd"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/openharmony-arm64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/openharmony-arm64/-/openharmony-arm64-0.25.12.tgz",
+      "integrity": "sha512-rm0YWsqUSRrjncSXGA7Zv78Nbnw4XL6/dzr20cyrQf7ZmRcsovpcRBdhD43Nuk3y7XIoW2OxMVvwuRvk9XdASg==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "openharmony"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/sunos-x64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/sunos-x64/-/sunos-x64-0.25.12.tgz",
+      "integrity": "sha512-3wGSCDyuTHQUzt0nV7bocDy72r2lI33QL3gkDNGkod22EsYl04sMf0qLb8luNKTOmgF/eDEDP5BFNwoBKH441w==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "sunos"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/win32-arm64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/win32-arm64/-/win32-arm64-0.25.12.tgz",
+      "integrity": "sha512-rMmLrur64A7+DKlnSuwqUdRKyd3UE7oPJZmnljqEptesKM8wx9J8gx5u0+9Pq0fQQW8vqeKebwNXdfOyP+8Bsg==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/win32-ia32": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/win32-ia32/-/win32-ia32-0.25.12.tgz",
+      "integrity": "sha512-HkqnmmBoCbCwxUKKNPBixiWDGCpQGVsrQfJoVGYLPT41XWF8lHuE5N6WhVia2n4o5QK5M4tYr21827fNhi4byQ==",
+      "cpu": [
+        "ia32"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@esbuild/win32-x64": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.25.12.tgz",
+      "integrity": "sha512-alJC0uCZpTFrSL0CCDjcgleBXPnCrEAhTBILpeAp7M/OFgoqtAetfBzX0xM00MUsVVPpVjlPuMbREqnZCXaTnA==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ],
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/@eslint-community/eslint-utils": {
+      "version": "4.9.0",
+      "resolved": "https://registry.npmjs.org/@eslint-community/eslint-utils/-/eslint-utils-4.9.0.tgz",
+      "integrity": "sha512-ayVFHdtZ+hsq1t2Dy24wCmGXGe4q9Gu3smhLYALJrr473ZH27MsnSL+LKUlimp4BWJqMDMLmPpx/Q9R3OAlL4g==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "eslint-visitor-keys": "^3.4.3"
+      },
+      "engines": {
+        "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
+      },
+      "funding": {
+        "url": "https://opencollective.com/eslint"
+      },
+      "peerDependencies": {
+        "eslint": "^6.0.0 || ^7.0.0 || >=8.0.0"
+      }
+    },
+    "node_modules/@eslint-community/eslint-utils/node_modules/eslint-visitor-keys": {
+      "version": "3.4.3",
+      "resolved": "https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-3.4.3.tgz",
+      "integrity": "sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "engines": {
+        "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
+      },
+      "funding": {
+        "url": "https://opencollective.com/eslint"
+      }
+    },
+    "node_modules/@eslint-community/regexpp": {
+      "version": "4.12.2",
+      "resolved": "https://registry.npmjs.org/@eslint-community/regexpp/-/regexpp-4.12.2.tgz",
+      "integrity": "sha512-EriSTlt5OC9/7SXkRSCAhfSxxoSUgBm33OH+IkwbdpgoqsSsUg7y3uh+IICI/Qg4BBWr3U2i39RpmycbxMq4ew==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": "^12.0.0 || ^14.0.0 || >=16.0.0"
+      }
+    },
+    "node_modules/@eslint/config-array": {
+      "version": "0.21.1",
+      "resolved": "https://registry.npmjs.org/@eslint/config-array/-/config-array-0.21.1.tgz",
+      "integrity": "sha512-aw1gNayWpdI/jSYVgzN5pL0cfzU02GT3NBpeT/DXbx1/1x7ZKxFPd9bwrzygx/qiwIQiJ1sw/zD8qY/kRvlGHA==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "dependencies": {
+        "@eslint/object-schema": "^2.1.7",
+        "debug": "^4.3.1",
+        "minimatch": "^3.1.2"
+      },
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      }
+    },
+    "node_modules/@eslint/config-helpers": {
+      "version": "0.4.2",
+      "resolved": "https://registry.npmjs.org/@eslint/config-helpers/-/config-helpers-0.4.2.tgz",
+      "integrity": "sha512-gBrxN88gOIf3R7ja5K9slwNayVcZgK6SOUORm2uBzTeIEfeVaIhOpCtTox3P6R7o2jLFwLFTLnC7kU/RGcYEgw==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "dependencies": {
+        "@eslint/core": "^0.17.0"
+      },
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      }
+    },
+    "node_modules/@eslint/core": {
+      "version": "0.17.0",
+      "resolved": "https://registry.npmjs.org/@eslint/core/-/core-0.17.0.tgz",
+      "integrity": "sha512-yL/sLrpmtDaFEiUj1osRP4TI2MDz1AddJL+jZ7KSqvBuliN4xqYY54IfdN8qD8Toa6g1iloph1fxQNkjOxrrpQ==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "dependencies": {
+        "@types/json-schema": "^7.0.15"
+      },
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      }
+    },
+    "node_modules/@eslint/eslintrc": {
+      "version": "3.3.3",
+      "resolved": "https://registry.npmjs.org/@eslint/eslintrc/-/eslintrc-3.3.3.tgz",
+      "integrity": "sha512-Kr+LPIUVKz2qkx1HAMH8q1q6azbqBAsXJUxBl/ODDuVPX45Z9DfwB8tPjTi6nNZ8BuM3nbJxC5zCAg5elnBUTQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "ajv": "^6.12.4",
+        "debug": "^4.3.2",
+        "espree": "^10.0.1",
+        "globals": "^14.0.0",
+        "ignore": "^5.2.0",
+        "import-fresh": "^3.2.1",
+        "js-yaml": "^4.1.1",
+        "minimatch": "^3.1.2",
+        "strip-json-comments": "^3.1.1"
+      },
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "funding": {
+        "url": "https://opencollective.com/eslint"
+      }
+    },
+    "node_modules/@eslint/eslintrc/node_modules/globals": {
+      "version": "14.0.0",
+      "resolved": "https://registry.npmjs.org/globals/-/globals-14.0.0.tgz",
+      "integrity": "sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=18"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
+    "node_modules/@eslint/js": {
+      "version": "9.39.1",
+      "resolved": "https://registry.npmjs.org/@eslint/js/-/js-9.39.1.tgz",
+      "integrity": "sha512-S26Stp4zCy88tH94QbBv3XCuzRQiZ9yXofEILmglYTh/Ug/a9/umqvgFtYBAo3Lp0nsI/5/qH1CCrbdK3AP1Tw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "funding": {
+        "url": "https://eslint.org/donate"
+      }
+    },
+    "node_modules/@eslint/object-schema": {
+      "version": "2.1.7",
+      "resolved": "https://registry.npmjs.org/@eslint/object-schema/-/object-schema-2.1.7.tgz",
+      "integrity": "sha512-VtAOaymWVfZcmZbp6E2mympDIHvyjXs/12LqWYjVw6qjrfF+VK+fyG33kChz3nnK+SU5/NeHOqrTEHS8sXO3OA==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      }
+    },
+    "node_modules/@eslint/plugin-kit": {
+      "version": "0.4.1",
+      "resolved": "https://registry.npmjs.org/@eslint/plugin-kit/-/plugin-kit-0.4.1.tgz",
+      "integrity": "sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "dependencies": {
+        "@eslint/core": "^0.17.0",
+        "levn": "^0.4.1"
+      },
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      }
+    },
+    "node_modules/@humanfs/core": {
+      "version": "0.19.1",
+      "resolved": "https://registry.npmjs.org/@humanfs/core/-/core-0.19.1.tgz",
+      "integrity": "sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "engines": {
+        "node": ">=18.18.0"
+      }
+    },
+    "node_modules/@humanfs/node": {
+      "version": "0.16.7",
+      "resolved": "https://registry.npmjs.org/@humanfs/node/-/node-0.16.7.tgz",
+      "integrity": "sha512-/zUx+yOsIrG4Y43Eh2peDeKCxlRt/gET6aHfaKpuq267qXdYDFViVHfMaLyygZOnl0kGWxFIgsBy8QFuTLUXEQ==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "dependencies": {
+        "@humanfs/core": "^0.19.1",
+        "@humanwhocodes/retry": "^0.4.0"
+      },
+      "engines": {
+        "node": ">=18.18.0"
+      }
+    },
+    "node_modules/@humanwhocodes/module-importer": {
+      "version": "1.0.1",
+      "resolved": "https://registry.npmjs.org/@humanwhocodes/module-importer/-/module-importer-1.0.1.tgz",
+      "integrity": "sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "engines": {
+        "node": ">=12.22"
+      },
+      "funding": {
+        "type": "github",
+        "url": "https://github.com/sponsors/nzakas"
+      }
+    },
+    "node_modules/@humanwhocodes/retry": {
+      "version": "0.4.3",
+      "resolved": "https://registry.npmjs.org/@humanwhocodes/retry/-/retry-0.4.3.tgz",
+      "integrity": "sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "engines": {
+        "node": ">=18.18"
+      },
+      "funding": {
+        "type": "github",
+        "url": "https://github.com/sponsors/nzakas"
+      }
+    },
+    "node_modules/@jridgewell/gen-mapping": {
+      "version": "0.3.13",
+      "resolved": "https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.3.13.tgz",
+      "integrity": "sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@jridgewell/sourcemap-codec": "^1.5.0",
+        "@jridgewell/trace-mapping": "^0.3.24"
+      }
+    },
+    "node_modules/@jridgewell/remapping": {
+      "version": "2.3.5",
+      "resolved": "https://registry.npmjs.org/@jridgewell/remapping/-/remapping-2.3.5.tgz",
+      "integrity": "sha512-LI9u/+laYG4Ds1TDKSJW2YPrIlcVYOwi2fUC6xB43lueCjgxV4lffOCZCtYFiH6TNOX+tQKXx97T4IKHbhyHEQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@jridgewell/gen-mapping": "^0.3.5",
+        "@jridgewell/trace-mapping": "^0.3.24"
+      }
+    },
+    "node_modules/@jridgewell/resolve-uri": {
+      "version": "3.1.2",
+      "resolved": "https://registry.npmjs.org/@jridgewell/resolve-uri/-/resolve-uri-3.1.2.tgz",
+      "integrity": "sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.0.0"
+      }
+    },
+    "node_modules/@jridgewell/sourcemap-codec": {
+      "version": "1.5.5",
+      "resolved": "https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.5.5.tgz",
+      "integrity": "sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/@jridgewell/trace-mapping": {
+      "version": "0.3.31",
+      "resolved": "https://registry.npmjs.org/@jridgewell/trace-mapping/-/trace-mapping-0.3.31.tgz",
+      "integrity": "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@jridgewell/resolve-uri": "^3.1.0",
+        "@jridgewell/sourcemap-codec": "^1.4.14"
+      }
+    },
+    "node_modules/@rolldown/pluginutils": {
+      "version": "1.0.0-beta.47",
+      "resolved": "https://registry.npmjs.org/@rolldown/pluginutils/-/pluginutils-1.0.0-beta.47.tgz",
+      "integrity": "sha512-8QagwMH3kNCuzD8EWL8R2YPW5e4OrHNSAHRFDdmFqEwEaD/KcNKjVoumo+gP2vW5eKB2UPbM6vTYiGZX0ixLnw==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/@rollup/rollup-android-arm-eabi": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-android-arm-eabi/-/rollup-android-arm-eabi-4.53.3.tgz",
+      "integrity": "sha512-mRSi+4cBjrRLoaal2PnqH82Wqyb+d3HsPUN/W+WslCXsZsyHa9ZeQQX/pQsZaVIWDkPcpV6jJ+3KLbTbgnwv8w==",
+      "cpu": [
+        "arm"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "android"
+      ]
+    },
+    "node_modules/@rollup/rollup-android-arm64": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-android-arm64/-/rollup-android-arm64-4.53.3.tgz",
+      "integrity": "sha512-CbDGaMpdE9sh7sCmTrTUyllhrg65t6SwhjlMJsLr+J8YjFuPmCEjbBSx4Z/e4SmDyH3aB5hGaJUP2ltV/vcs4w==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "android"
+      ]
+    },
+    "node_modules/@rollup/rollup-darwin-arm64": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.53.3.tgz",
+      "integrity": "sha512-Nr7SlQeqIBpOV6BHHGZgYBuSdanCXuw09hon14MGOLGmXAFYjx1wNvquVPmpZnl0tLjg25dEdr4IQ6GgyToCUA==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "darwin"
+      ]
+    },
+    "node_modules/@rollup/rollup-darwin-x64": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-darwin-x64/-/rollup-darwin-x64-4.53.3.tgz",
+      "integrity": "sha512-DZ8N4CSNfl965CmPktJ8oBnfYr3F8dTTNBQkRlffnUarJ2ohudQD17sZBa097J8xhQ26AwhHJ5mvUyQW8ddTsQ==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "darwin"
+      ]
+    },
+    "node_modules/@rollup/rollup-freebsd-arm64": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-freebsd-arm64/-/rollup-freebsd-arm64-4.53.3.tgz",
+      "integrity": "sha512-yMTrCrK92aGyi7GuDNtGn2sNW+Gdb4vErx4t3Gv/Tr+1zRb8ax4z8GWVRfr3Jw8zJWvpGHNpss3vVlbF58DZ4w==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "freebsd"
+      ]
+    },
+    "node_modules/@rollup/rollup-freebsd-x64": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-freebsd-x64/-/rollup-freebsd-x64-4.53.3.tgz",
+      "integrity": "sha512-lMfF8X7QhdQzseM6XaX0vbno2m3hlyZFhwcndRMw8fbAGUGL3WFMBdK0hbUBIUYcEcMhVLr1SIamDeuLBnXS+Q==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "freebsd"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-arm-gnueabihf": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-arm-gnueabihf/-/rollup-linux-arm-gnueabihf-4.53.3.tgz",
+      "integrity": "sha512-k9oD15soC/Ln6d2Wv/JOFPzZXIAIFLp6B+i14KhxAfnq76ajt0EhYc5YPeX6W1xJkAdItcVT+JhKl1QZh44/qw==",
+      "cpu": [
+        "arm"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-arm-musleabihf": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-arm-musleabihf/-/rollup-linux-arm-musleabihf-4.53.3.tgz",
+      "integrity": "sha512-vTNlKq+N6CK/8UktsrFuc+/7NlEYVxgaEgRXVUVK258Z5ymho29skzW1sutgYjqNnquGwVUObAaxae8rZ6YMhg==",
+      "cpu": [
+        "arm"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-arm64-gnu": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-arm64-gnu/-/rollup-linux-arm64-gnu-4.53.3.tgz",
+      "integrity": "sha512-RGrFLWgMhSxRs/EWJMIFM1O5Mzuz3Xy3/mnxJp/5cVhZ2XoCAxJnmNsEyeMJtpK+wu0FJFWz+QF4mjCA7AUQ3w==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-arm64-musl": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-arm64-musl/-/rollup-linux-arm64-musl-4.53.3.tgz",
+      "integrity": "sha512-kASyvfBEWYPEwe0Qv4nfu6pNkITLTb32p4yTgzFCocHnJLAHs+9LjUu9ONIhvfT/5lv4YS5muBHyuV84epBo/A==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-loong64-gnu": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-loong64-gnu/-/rollup-linux-loong64-gnu-4.53.3.tgz",
+      "integrity": "sha512-JiuKcp2teLJwQ7vkJ95EwESWkNRFJD7TQgYmCnrPtlu50b4XvT5MOmurWNrCj3IFdyjBQ5p9vnrX4JM6I8OE7g==",
+      "cpu": [
+        "loong64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-ppc64-gnu": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-ppc64-gnu/-/rollup-linux-ppc64-gnu-4.53.3.tgz",
+      "integrity": "sha512-EoGSa8nd6d3T7zLuqdojxC20oBfNT8nexBbB/rkxgKj5T5vhpAQKKnD+h3UkoMuTyXkP5jTjK/ccNRmQrPNDuw==",
+      "cpu": [
+        "ppc64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-riscv64-gnu": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-riscv64-gnu/-/rollup-linux-riscv64-gnu-4.53.3.tgz",
+      "integrity": "sha512-4s+Wped2IHXHPnAEbIB0YWBv7SDohqxobiiPA1FIWZpX+w9o2i4LezzH/NkFUl8LRci/8udci6cLq+jJQlh+0g==",
+      "cpu": [
+        "riscv64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-riscv64-musl": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-riscv64-musl/-/rollup-linux-riscv64-musl-4.53.3.tgz",
+      "integrity": "sha512-68k2g7+0vs2u9CxDt5ktXTngsxOQkSEV/xBbwlqYcUrAVh6P9EgMZvFsnHy4SEiUl46Xf0IObWVbMvPrr2gw8A==",
+      "cpu": [
+        "riscv64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-s390x-gnu": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-s390x-gnu/-/rollup-linux-s390x-gnu-4.53.3.tgz",
+      "integrity": "sha512-VYsFMpULAz87ZW6BVYw3I6sWesGpsP9OPcyKe8ofdg9LHxSbRMd7zrVrr5xi/3kMZtpWL/wC+UIJWJYVX5uTKg==",
+      "cpu": [
+        "s390x"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-x64-gnu": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.53.3.tgz",
+      "integrity": "sha512-3EhFi1FU6YL8HTUJZ51imGJWEX//ajQPfqWLI3BQq4TlvHy4X0MOr5q3D2Zof/ka0d5FNdPwZXm3Yyib/UEd+w==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-x64-musl": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.53.3.tgz",
+      "integrity": "sha512-eoROhjcc6HbZCJr+tvVT8X4fW3/5g/WkGvvmwz/88sDtSJzO7r/blvoBDgISDiCjDRZmHpwud7h+6Q9JxFwq1Q==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-openharmony-arm64": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-openharmony-arm64/-/rollup-openharmony-arm64-4.53.3.tgz",
+      "integrity": "sha512-OueLAWgrNSPGAdUdIjSWXw+u/02BRTcnfw9PN41D2vq/JSEPnJnVuBgw18VkN8wcd4fjUs+jFHVM4t9+kBSNLw==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "openharmony"
+      ]
+    },
+    "node_modules/@rollup/rollup-win32-arm64-msvc": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-win32-arm64-msvc/-/rollup-win32-arm64-msvc-4.53.3.tgz",
+      "integrity": "sha512-GOFuKpsxR/whszbF/bzydebLiXIHSgsEUp6M0JI8dWvi+fFa1TD6YQa4aSZHtpmh2/uAlj/Dy+nmby3TJ3pkTw==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ]
+    },
+    "node_modules/@rollup/rollup-win32-ia32-msvc": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-win32-ia32-msvc/-/rollup-win32-ia32-msvc-4.53.3.tgz",
+      "integrity": "sha512-iah+THLcBJdpfZ1TstDFbKNznlzoxa8fmnFYK4V67HvmuNYkVdAywJSoteUszvBQ9/HqN2+9AZghbajMsFT+oA==",
+      "cpu": [
+        "ia32"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ]
+    },
+    "node_modules/@rollup/rollup-win32-x64-gnu": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-win32-x64-gnu/-/rollup-win32-x64-gnu-4.53.3.tgz",
+      "integrity": "sha512-J9QDiOIZlZLdcot5NXEepDkstocktoVjkaKUtqzgzpt2yWjGlbYiKyp05rWwk4nypbYUNoFAztEgixoLaSETkg==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ]
+    },
+    "node_modules/@rollup/rollup-win32-x64-msvc": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.53.3.tgz",
+      "integrity": "sha512-UhTd8u31dXadv0MopwGgNOBpUVROFKWVQgAg5N1ESyCz8AuBcMqm4AuTjrwgQKGDfoFuz02EuMRHQIw/frmYKQ==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ]
+    },
+    "node_modules/@supabase/auth-js": {
+      "version": "2.87.1",
+      "resolved": "https://registry.npmjs.org/@supabase/auth-js/-/auth-js-2.87.1.tgz",
+      "integrity": "sha512-6RDeOf5TVoaXFtEstN188ykp3pXLZaU9qoAWfx8dc50FFAAqt+kcFJ96V0IvSmcpb4mDAWcpTJ7BegmVDn/WIw==",
+      "license": "MIT",
+      "dependencies": {
+        "tslib": "2.8.1"
+      },
+      "engines": {
+        "node": ">=20.0.0"
+      }
+    },
+    "node_modules/@supabase/functions-js": {
+      "version": "2.87.1",
+      "resolved": "https://registry.npmjs.org/@supabase/functions-js/-/functions-js-2.87.1.tgz",
+      "integrity": "sha512-rWmYo4gRD0XAjMhYDlz7IH67bp4TIQ1UE4VqwIQtl1gGPwtLDq6wcRnu7jLKlXx0Gtrknw/eoiHYG9//XrCTzQ==",
+      "license": "MIT",
+      "dependencies": {
+        "tslib": "2.8.1"
+      },
+      "engines": {
+        "node": ">=20.0.0"
+      }
+    },
+    "node_modules/@supabase/postgrest-js": {
+      "version": "2.87.1",
+      "resolved": "https://registry.npmjs.org/@supabase/postgrest-js/-/postgrest-js-2.87.1.tgz",
+      "integrity": "sha512-Yzu5eL3iGmZW0C/8x+vEojAOou63FI9oVw8HI8YOq63+5yM8g8aGh7Y1E2vbXFb7+gHGsPqLnaC6dPhrYt7qBA==",
+      "license": "MIT",
+      "dependencies": {
+        "tslib": "2.8.1"
+      },
+      "engines": {
+        "node": ">=20.0.0"
+      }
+    },
+    "node_modules/@supabase/realtime-js": {
+      "version": "2.87.1",
+      "resolved": "https://registry.npmjs.org/@supabase/realtime-js/-/realtime-js-2.87.1.tgz",
+      "integrity": "sha512-XvLtEznxmYZXA7LYuy5zbSXpSYjDLJq2wQeRh3MzON2OR4U8Kq+RtPz2E2Wi8HEzvBfsc+nNu1TG8LQ9+3DRkA==",
+      "license": "MIT",
+      "dependencies": {
+        "@types/phoenix": "^1.6.6",
+        "@types/ws": "^8.18.1",
+        "tslib": "2.8.1",
+        "ws": "^8.18.2"
+      },
+      "engines": {
+        "node": ">=20.0.0"
+      }
+    },
+    "node_modules/@supabase/storage-js": {
+      "version": "2.87.1",
+      "resolved": "https://registry.npmjs.org/@supabase/storage-js/-/storage-js-2.87.1.tgz",
+      "integrity": "sha512-0Uc8tNV4yzkNNmp1inpXru0RB4a7ECq05G2S6BDvSpMxTxJrDVJ4vVDwyhqB8ZZ+O9+8prHaQYoByQeuDnwpFQ==",
+      "license": "MIT",
+      "dependencies": {
+        "iceberg-js": "^0.8.1",
+        "tslib": "2.8.1"
+      },
+      "engines": {
+        "node": ">=20.0.0"
+      }
+    },
+    "node_modules/@supabase/supabase-js": {
+      "version": "2.87.1",
+      "resolved": "https://registry.npmjs.org/@supabase/supabase-js/-/supabase-js-2.87.1.tgz",
+      "integrity": "sha512-tVgqZqnHZVum584KuUKSQZgcy6ZkhVd6gG8QWg2QfIXH9HmXdamauxdVsLXwaNPJxEdOyfAfwIyi5XUsiVYWtg==",
+      "license": "MIT",
+      "dependencies": {
+        "@supabase/auth-js": "2.87.1",
+        "@supabase/functions-js": "2.87.1",
+        "@supabase/postgrest-js": "2.87.1",
+        "@supabase/realtime-js": "2.87.1",
+        "@supabase/storage-js": "2.87.1"
+      },
+      "engines": {
+        "node": ">=20.0.0"
+      }
+    },
+    "node_modules/@types/babel__core": {
+      "version": "7.20.5",
+      "resolved": "https://registry.npmjs.org/@types/babel__core/-/babel__core-7.20.5.tgz",
+      "integrity": "sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/parser": "^7.20.7",
+        "@babel/types": "^7.20.7",
+        "@types/babel__generator": "*",
+        "@types/babel__template": "*",
+        "@types/babel__traverse": "*"
+      }
+    },
+    "node_modules/@types/babel__generator": {
+      "version": "7.27.0",
+      "resolved": "https://registry.npmjs.org/@types/babel__generator/-/babel__generator-7.27.0.tgz",
+      "integrity": "sha512-ufFd2Xi92OAVPYsy+P4n7/U7e68fex0+Ee8gSG9KX7eo084CWiQ4sdxktvdl0bOPupXtVJPY19zk6EwWqUQ8lg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/types": "^7.0.0"
+      }
+    },
+    "node_modules/@types/babel__template": {
+      "version": "7.4.4",
+      "resolved": "https://registry.npmjs.org/@types/babel__template/-/babel__template-7.4.4.tgz",
+      "integrity": "sha512-h/NUaSyG5EyxBIp8YRxo4RMe2/qQgvyowRwVMzhYhBCONbW8PUsg4lkFMrhgZhUe5z3L3MiLDuvyJ/CaPa2A8A==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/parser": "^7.1.0",
+        "@babel/types": "^7.0.0"
+      }
+    },
+    "node_modules/@types/babel__traverse": {
+      "version": "7.28.0",
+      "resolved": "https://registry.npmjs.org/@types/babel__traverse/-/babel__traverse-7.28.0.tgz",
+      "integrity": "sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/types": "^7.28.2"
+      }
+    },
+    "node_modules/@types/estree": {
+      "version": "1.0.8",
+      "resolved": "https://registry.npmjs.org/@types/estree/-/estree-1.0.8.tgz",
+      "integrity": "sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/@types/json-schema": {
+      "version": "7.0.15",
+      "resolved": "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.15.tgz",
+      "integrity": "sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/@types/node": {
+      "version": "24.10.2",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-24.10.2.tgz",
+      "integrity": "sha512-WOhQTZ4G8xZ1tjJTvKOpyEVSGgOTvJAfDK3FNFgELyaTpzhdgHVHeqW8V+UJvzF5BT+/B54T/1S2K6gd9c7bbA==",
+      "license": "MIT",
+      "dependencies": {
+        "undici-types": "~7.16.0"
+      }
+    },
+    "node_modules/@types/phoenix": {
+      "version": "1.6.7",
+      "resolved": "https://registry.npmjs.org/@types/phoenix/-/phoenix-1.6.7.tgz",
+      "integrity": "sha512-oN9ive//QSBkf19rfDv45M7eZPi0eEXylht2OLEXicu5b4KoQ1OzXIw+xDSGWxSxe1JmepRR/ZH283vsu518/Q==",
+      "license": "MIT"
+    },
+    "node_modules/@types/ws": {
+      "version": "8.18.1",
+      "resolved": "https://registry.npmjs.org/@types/ws/-/ws-8.18.1.tgz",
+      "integrity": "sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==",
+      "license": "MIT",
+      "dependencies": {
+        "@types/node": "*"
+      }
+    },
+    "node_modules/@vitejs/plugin-react": {
+      "version": "5.1.1",
+      "resolved": "https://registry.npmjs.org/@vitejs/plugin-react/-/plugin-react-5.1.1.tgz",
+      "integrity": "sha512-WQfkSw0QbQ5aJ2CHYw23ZGkqnRwqKHD/KYsMeTkZzPT4Jcf0DcBxBtwMJxnu6E7oxw5+JC6ZAiePgh28uJ1HBA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/core": "^7.28.5",
+        "@babel/plugin-transform-react-jsx-self": "^7.27.1",
+        "@babel/plugin-transform-react-jsx-source": "^7.27.1",
+        "@rolldown/pluginutils": "1.0.0-beta.47",
+        "@types/babel__core": "^7.20.5",
+        "react-refresh": "^0.18.0"
+      },
+      "engines": {
+        "node": "^20.19.0 || >=22.12.0"
+      },
+      "peerDependencies": {
+        "vite": "^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0"
+      }
+    },
+    "node_modules/acorn": {
+      "version": "8.15.0",
+      "resolved": "https://registry.npmjs.org/acorn/-/acorn-8.15.0.tgz",
+      "integrity": "sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==",
+      "dev": true,
+      "license": "MIT",
+      "peer": true,
+      "bin": {
+        "acorn": "bin/acorn"
+      },
+      "engines": {
+        "node": ">=0.4.0"
+      }
+    },
+    "node_modules/acorn-jsx": {
+      "version": "5.3.2",
+      "resolved": "https://registry.npmjs.org/acorn-jsx/-/acorn-jsx-5.3.2.tgz",
+      "integrity": "sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==",
+      "dev": true,
+      "license": "MIT",
+      "peerDependencies": {
+        "acorn": "^6.0.0 || ^7.0.0 || ^8.0.0"
+      }
+    },
+    "node_modules/ajv": {
+      "version": "6.12.6",
+      "resolved": "https://registry.npmjs.org/ajv/-/ajv-6.12.6.tgz",
+      "integrity": "sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "fast-deep-equal": "^3.1.1",
+        "fast-json-stable-stringify": "^2.0.0",
+        "json-schema-traverse": "^0.4.1",
+        "uri-js": "^4.2.2"
+      },
+      "funding": {
+        "type": "github",
+        "url": "https://github.com/sponsors/epoberezkin"
+      }
+    },
+    "node_modules/ansi-styles": {
+      "version": "4.3.0",
+      "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-4.3.0.tgz",
+      "integrity": "sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "color-convert": "^2.0.1"
+      },
+      "engines": {
+        "node": ">=8"
+      },
+      "funding": {
+        "url": "https://github.com/chalk/ansi-styles?sponsor=1"
+      }
+    },
+    "node_modules/argparse": {
+      "version": "2.0.1",
+      "resolved": "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz",
+      "integrity": "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==",
+      "dev": true,
+      "license": "Python-2.0"
+    },
+    "node_modules/balanced-match": {
+      "version": "1.0.2",
+      "resolved": "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz",
+      "integrity": "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/baseline-browser-mapping": {
+      "version": "2.9.2",
+      "resolved": "https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.9.2.tgz",
+      "integrity": "sha512-PxSsosKQjI38iXkmb3d0Y32efqyA0uW4s41u4IVBsLlWLhCiYNpH/AfNOVWRqCQBlD8TFJTz6OUWNd4DFJCnmw==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "bin": {
+        "baseline-browser-mapping": "dist/cli.js"
+      }
+    },
+    "node_modules/brace-expansion": {
+      "version": "1.1.12",
+      "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.12.tgz",
+      "integrity": "sha512-9T9UjW3r0UW5c1Q7GTwllptXwhvYmEzFhzMfZ9H7FQWt+uZePjZPjBP/W1ZEyZ1twGWom5/56TF4lPcqjnDHcg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "balanced-match": "^1.0.0",
+        "concat-map": "0.0.1"
+      }
+    },
+    "node_modules/browserslist": {
+      "version": "4.28.1",
+      "resolved": "https://registry.npmjs.org/browserslist/-/browserslist-4.28.1.tgz",
+      "integrity": "sha512-ZC5Bd0LgJXgwGqUknZY/vkUQ04r8NXnJZ3yYi4vDmSiZmC/pdSN0NbNRPxZpbtO4uAfDUAFffO8IZoM3Gj8IkA==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/browserslist"
+        },
+        {
+          "type": "tidelift",
+          "url": "https://tidelift.com/funding/github/npm/browserslist"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "peer": true,
+      "dependencies": {
+        "baseline-browser-mapping": "^2.9.0",
+        "caniuse-lite": "^1.0.30001759",
+        "electron-to-chromium": "^1.5.263",
+        "node-releases": "^2.0.27",
+        "update-browserslist-db": "^1.2.0"
+      },
+      "bin": {
+        "browserslist": "cli.js"
+      },
+      "engines": {
+        "node": "^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7"
+      }
+    },
+    "node_modules/callsites": {
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/callsites/-/callsites-3.1.0.tgz",
+      "integrity": "sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6"
+      }
+    },
+    "node_modules/caniuse-lite": {
+      "version": "1.0.30001759",
+      "resolved": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001759.tgz",
+      "integrity": "sha512-Pzfx9fOKoKvevQf8oCXoyNRQ5QyxJj+3O0Rqx2V5oxT61KGx8+n6hV/IUyJeifUci2clnmmKVpvtiqRzgiWjSw==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/browserslist"
+        },
+        {
+          "type": "tidelift",
+          "url": "https://tidelift.com/funding/github/npm/caniuse-lite"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "CC-BY-4.0"
+    },
+    "node_modules/chalk": {
+      "version": "4.1.2",
+      "resolved": "https://registry.npmjs.org/chalk/-/chalk-4.1.2.tgz",
+      "integrity": "sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "ansi-styles": "^4.1.0",
+        "supports-color": "^7.1.0"
+      },
+      "engines": {
+        "node": ">=10"
+      },
+      "funding": {
+        "url": "https://github.com/chalk/chalk?sponsor=1"
+      }
+    },
+    "node_modules/color-convert": {
+      "version": "2.0.1",
+      "resolved": "https://registry.npmjs.org/color-convert/-/color-convert-2.0.1.tgz",
+      "integrity": "sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "color-name": "~1.1.4"
+      },
+      "engines": {
+        "node": ">=7.0.0"
+      }
+    },
+    "node_modules/color-name": {
+      "version": "1.1.4",
+      "resolved": "https://registry.npmjs.org/color-name/-/color-name-1.1.4.tgz",
+      "integrity": "sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/concat-map": {
+      "version": "0.0.1",
+      "resolved": "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz",
+      "integrity": "sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/convert-source-map": {
+      "version": "2.0.0",
+      "resolved": "https://registry.npmjs.org/convert-source-map/-/convert-source-map-2.0.0.tgz",
+      "integrity": "sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/cookie": {
+      "version": "1.1.1",
+      "resolved": "https://registry.npmjs.org/cookie/-/cookie-1.1.1.tgz",
+      "integrity": "sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ==",
+      "license": "MIT",
+      "engines": {
+        "node": ">=18"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/express"
+      }
+    },
+    "node_modules/cross-spawn": {
+      "version": "7.0.6",
+      "resolved": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.6.tgz",
+      "integrity": "sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "path-key": "^3.1.0",
+        "shebang-command": "^2.0.0",
+        "which": "^2.0.1"
+      },
+      "engines": {
+        "node": ">= 8"
+      }
+    },
+    "node_modules/debug": {
+      "version": "4.4.3",
+      "resolved": "https://registry.npmjs.org/debug/-/debug-4.4.3.tgz",
+      "integrity": "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "ms": "^2.1.3"
+      },
+      "engines": {
+        "node": ">=6.0"
+      },
+      "peerDependenciesMeta": {
+        "supports-color": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/deep-is": {
+      "version": "0.1.4",
+      "resolved": "https://registry.npmjs.org/deep-is/-/deep-is-0.1.4.tgz",
+      "integrity": "sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/electron-to-chromium": {
+      "version": "1.5.265",
+      "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.265.tgz",
+      "integrity": "sha512-B7IkLR1/AE+9jR2LtVF/1/6PFhY5TlnEHnlrKmGk7PvkJibg5jr+mLXLLzq3QYl6PA1T/vLDthQPqIPAlS/PPA==",
+      "dev": true,
+      "license": "ISC"
+    },
+    "node_modules/esbuild": {
+      "version": "0.25.12",
+      "resolved": "https://registry.npmjs.org/esbuild/-/esbuild-0.25.12.tgz",
+      "integrity": "sha512-bbPBYYrtZbkt6Os6FiTLCTFxvq4tt3JKall1vRwshA3fdVztsLAatFaZobhkBC8/BrPetoa0oksYoKXoG4ryJg==",
+      "dev": true,
+      "hasInstallScript": true,
+      "license": "MIT",
+      "bin": {
+        "esbuild": "bin/esbuild"
+      },
+      "engines": {
+        "node": ">=18"
+      },
+      "optionalDependencies": {
+        "@esbuild/aix-ppc64": "0.25.12",
+        "@esbuild/android-arm": "0.25.12",
+        "@esbuild/android-arm64": "0.25.12",
+        "@esbuild/android-x64": "0.25.12",
+        "@esbuild/darwin-arm64": "0.25.12",
+        "@esbuild/darwin-x64": "0.25.12",
+        "@esbuild/freebsd-arm64": "0.25.12",
+        "@esbuild/freebsd-x64": "0.25.12",
+        "@esbuild/linux-arm": "0.25.12",
+        "@esbuild/linux-arm64": "0.25.12",
+        "@esbuild/linux-ia32": "0.25.12",
+        "@esbuild/linux-loong64": "0.25.12",
+        "@esbuild/linux-mips64el": "0.25.12",
+        "@esbuild/linux-ppc64": "0.25.12",
+        "@esbuild/linux-riscv64": "0.25.12",
+        "@esbuild/linux-s390x": "0.25.12",
+        "@esbuild/linux-x64": "0.25.12",
+        "@esbuild/netbsd-arm64": "0.25.12",
+        "@esbuild/netbsd-x64": "0.25.12",
+        "@esbuild/openbsd-arm64": "0.25.12",
+        "@esbuild/openbsd-x64": "0.25.12",
+        "@esbuild/openharmony-arm64": "0.25.12",
+        "@esbuild/sunos-x64": "0.25.12",
+        "@esbuild/win32-arm64": "0.25.12",
+        "@esbuild/win32-ia32": "0.25.12",
+        "@esbuild/win32-x64": "0.25.12"
+      }
+    },
+    "node_modules/escalade": {
+      "version": "3.2.0",
+      "resolved": "https://registry.npmjs.org/escalade/-/escalade-3.2.0.tgz",
+      "integrity": "sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6"
+      }
+    },
+    "node_modules/escape-string-regexp": {
+      "version": "4.0.0",
+      "resolved": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz",
+      "integrity": "sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=10"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
+    "node_modules/eslint": {
+      "version": "9.39.1",
+      "resolved": "https://registry.npmjs.org/eslint/-/eslint-9.39.1.tgz",
+      "integrity": "sha512-BhHmn2yNOFA9H9JmmIVKJmd288g9hrVRDkdoIgRCRuSySRUHH7r/DI6aAXW9T1WwUuY3DFgrcaqB+deURBLR5g==",
+      "dev": true,
+      "license": "MIT",
+      "peer": true,
+      "dependencies": {
+        "@eslint-community/eslint-utils": "^4.8.0",
+        "@eslint-community/regexpp": "^4.12.1",
+        "@eslint/config-array": "^0.21.1",
+        "@eslint/config-helpers": "^0.4.2",
+        "@eslint/core": "^0.17.0",
+        "@eslint/eslintrc": "^3.3.1",
+        "@eslint/js": "9.39.1",
+        "@eslint/plugin-kit": "^0.4.1",
+        "@humanfs/node": "^0.16.6",
+        "@humanwhocodes/module-importer": "^1.0.1",
+        "@humanwhocodes/retry": "^0.4.2",
+        "@types/estree": "^1.0.6",
+        "ajv": "^6.12.4",
+        "chalk": "^4.0.0",
+        "cross-spawn": "^7.0.6",
+        "debug": "^4.3.2",
+        "escape-string-regexp": "^4.0.0",
+        "eslint-scope": "^8.4.0",
+        "eslint-visitor-keys": "^4.2.1",
+        "espree": "^10.4.0",
+        "esquery": "^1.5.0",
+        "esutils": "^2.0.2",
+        "fast-deep-equal": "^3.1.3",
+        "file-entry-cache": "^8.0.0",
+        "find-up": "^5.0.0",
+        "glob-parent": "^6.0.2",
+        "ignore": "^5.2.0",
+        "imurmurhash": "^0.1.4",
+        "is-glob": "^4.0.0",
+        "json-stable-stringify-without-jsonify": "^1.0.1",
+        "lodash.merge": "^4.6.2",
+        "minimatch": "^3.1.2",
+        "natural-compare": "^1.4.0",
+        "optionator": "^0.9.3"
+      },
+      "bin": {
+        "eslint": "bin/eslint.js"
+      },
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "funding": {
+        "url": "https://eslint.org/donate"
+      },
+      "peerDependencies": {
+        "jiti": "*"
+      },
+      "peerDependenciesMeta": {
+        "jiti": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/eslint-plugin-react-hooks": {
+      "version": "7.0.1",
+      "resolved": "https://registry.npmjs.org/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-7.0.1.tgz",
+      "integrity": "sha512-O0d0m04evaNzEPoSW+59Mezf8Qt0InfgGIBJnpC0h3NH/WjUAR7BIKUfysC6todmtiZ/A0oUVS8Gce0WhBrHsA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/core": "^7.24.4",
+        "@babel/parser": "^7.24.4",
+        "hermes-parser": "^0.25.1",
+        "zod": "^3.25.0 || ^4.0.0",
+        "zod-validation-error": "^3.5.0 || ^4.0.0"
+      },
+      "engines": {
+        "node": ">=18"
+      },
+      "peerDependencies": {
+        "eslint": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0"
+      }
+    },
+    "node_modules/eslint-plugin-react-refresh": {
+      "version": "0.4.24",
+      "resolved": "https://registry.npmjs.org/eslint-plugin-react-refresh/-/eslint-plugin-react-refresh-0.4.24.tgz",
+      "integrity": "sha512-nLHIW7TEq3aLrEYWpVaJ1dRgFR+wLDPN8e8FpYAql/bMV2oBEfC37K0gLEGgv9fy66juNShSMV8OkTqzltcG/w==",
+      "dev": true,
+      "license": "MIT",
+      "peerDependencies": {
+        "eslint": ">=8.40"
+      }
+    },
+    "node_modules/eslint-scope": {
+      "version": "8.4.0",
+      "resolved": "https://registry.npmjs.org/eslint-scope/-/eslint-scope-8.4.0.tgz",
+      "integrity": "sha512-sNXOfKCn74rt8RICKMvJS7XKV/Xk9kA7DyJr8mJik3S7Cwgy3qlkkmyS2uQB3jiJg6VNdZd/pDBJu0nvG2NlTg==",
+      "dev": true,
+      "license": "BSD-2-Clause",
+      "dependencies": {
+        "esrecurse": "^4.3.0",
+        "estraverse": "^5.2.0"
+      },
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "funding": {
+        "url": "https://opencollective.com/eslint"
+      }
+    },
+    "node_modules/eslint-visitor-keys": {
+      "version": "4.2.1",
+      "resolved": "https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-4.2.1.tgz",
+      "integrity": "sha512-Uhdk5sfqcee/9H/rCOJikYz67o0a2Tw2hGRPOG2Y1R2dg7brRe1uG0yaNQDHu+TO/uQPF/5eCapvYSmHUjt7JQ==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "funding": {
+        "url": "https://opencollective.com/eslint"
+      }
+    },
+    "node_modules/espree": {
+      "version": "10.4.0",
+      "resolved": "https://registry.npmjs.org/espree/-/espree-10.4.0.tgz",
+      "integrity": "sha512-j6PAQ2uUr79PZhBjP5C5fhl8e39FmRnOjsD5lGnWrFU8i2G776tBK7+nP8KuQUTTyAZUwfQqXAgrVH5MbH9CYQ==",
+      "dev": true,
+      "license": "BSD-2-Clause",
+      "dependencies": {
+        "acorn": "^8.15.0",
+        "acorn-jsx": "^5.3.2",
+        "eslint-visitor-keys": "^4.2.1"
+      },
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "funding": {
+        "url": "https://opencollective.com/eslint"
+      }
+    },
+    "node_modules/esquery": {
+      "version": "1.6.0",
+      "resolved": "https://registry.npmjs.org/esquery/-/esquery-1.6.0.tgz",
+      "integrity": "sha512-ca9pw9fomFcKPvFLXhBKUK90ZvGibiGOvRJNbjljY7s7uq/5YO4BOzcYtJqExdx99rF6aAcnRxHmcUHcz6sQsg==",
+      "dev": true,
+      "license": "BSD-3-Clause",
+      "dependencies": {
+        "estraverse": "^5.1.0"
+      },
+      "engines": {
+        "node": ">=0.10"
+      }
+    },
+    "node_modules/esrecurse": {
+      "version": "4.3.0",
+      "resolved": "https://registry.npmjs.org/esrecurse/-/esrecurse-4.3.0.tgz",
+      "integrity": "sha512-KmfKL3b6G+RXvP8N1vr3Tq1kL/oCFgn2NYXEtqP8/L3pKapUA4G8cFVaoF3SU323CD4XypR/ffioHmkti6/Tag==",
+      "dev": true,
+      "license": "BSD-2-Clause",
+      "dependencies": {
+        "estraverse": "^5.2.0"
+      },
+      "engines": {
+        "node": ">=4.0"
+      }
+    },
+    "node_modules/estraverse": {
+      "version": "5.3.0",
+      "resolved": "https://registry.npmjs.org/estraverse/-/estraverse-5.3.0.tgz",
+      "integrity": "sha512-MMdARuVEQziNTeJD8DgMqmhwR11BRQ/cBP+pLtYdSTnf3MIO8fFeiINEbX36ZdNlfU/7A9f3gUw49B3oQsvwBA==",
+      "dev": true,
+      "license": "BSD-2-Clause",
+      "engines": {
+        "node": ">=4.0"
+      }
+    },
+    "node_modules/esutils": {
+      "version": "2.0.3",
+      "resolved": "https://registry.npmjs.org/esutils/-/esutils-2.0.3.tgz",
+      "integrity": "sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==",
+      "dev": true,
+      "license": "BSD-2-Clause",
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/fast-deep-equal": {
+      "version": "3.1.3",
+      "resolved": "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz",
+      "integrity": "sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/fast-json-stable-stringify": {
+      "version": "2.1.0",
+      "resolved": "https://registry.npmjs.org/fast-json-stable-stringify/-/fast-json-stable-stringify-2.1.0.tgz",
+      "integrity": "sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/fast-levenshtein": {
+      "version": "2.0.6",
+      "resolved": "https://registry.npmjs.org/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz",
+      "integrity": "sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/fdir": {
+      "version": "6.5.0",
+      "resolved": "https://registry.npmjs.org/fdir/-/fdir-6.5.0.tgz",
+      "integrity": "sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=12.0.0"
+      },
+      "peerDependencies": {
+        "picomatch": "^3 || ^4"
+      },
+      "peerDependenciesMeta": {
+        "picomatch": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/file-entry-cache": {
+      "version": "8.0.0",
+      "resolved": "https://registry.npmjs.org/file-entry-cache/-/file-entry-cache-8.0.0.tgz",
+      "integrity": "sha512-XXTUwCvisa5oacNGRP9SfNtYBNAMi+RPwBFmblZEF7N7swHYQS6/Zfk7SRwx4D5j3CH211YNRco1DEMNVfZCnQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "flat-cache": "^4.0.0"
+      },
+      "engines": {
+        "node": ">=16.0.0"
+      }
+    },
+    "node_modules/find-up": {
+      "version": "5.0.0",
+      "resolved": "https://registry.npmjs.org/find-up/-/find-up-5.0.0.tgz",
+      "integrity": "sha512-78/PXT1wlLLDgTzDs7sjq9hzz0vXD+zn+7wypEe4fXQxCmdmqfGsEPQxmiCSQI3ajFV91bVSsvNtrJRiW6nGng==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "locate-path": "^6.0.0",
+        "path-exists": "^4.0.0"
+      },
+      "engines": {
+        "node": ">=10"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
+    "node_modules/flat-cache": {
+      "version": "4.0.1",
+      "resolved": "https://registry.npmjs.org/flat-cache/-/flat-cache-4.0.1.tgz",
+      "integrity": "sha512-f7ccFPK3SXFHpx15UIGyRJ/FJQctuKZ0zVuN3frBo4HnK3cay9VEW0R6yPYFHC0AgqhukPzKjq22t5DmAyqGyw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "flatted": "^3.2.9",
+        "keyv": "^4.5.4"
+      },
+      "engines": {
+        "node": ">=16"
+      }
+    },
+    "node_modules/flatted": {
+      "version": "3.3.3",
+      "resolved": "https://registry.npmjs.org/flatted/-/flatted-3.3.3.tgz",
+      "integrity": "sha512-GX+ysw4PBCz0PzosHDepZGANEuFCMLrnRTiEy9McGjmkCQYwRq4A/X786G/fjM/+OjsWSU1ZrY5qyARZmO/uwg==",
+      "dev": true,
+      "license": "ISC"
+    },
+    "node_modules/framer-motion": {
+      "version": "12.23.26",
+      "resolved": "https://registry.npmjs.org/framer-motion/-/framer-motion-12.23.26.tgz",
+      "integrity": "sha512-cPcIhgR42xBn1Uj+PzOyheMtZ73H927+uWPDVhUMqxy8UHt6Okavb6xIz9J/phFUHUj0OncR6UvMfJTXoc/LKA==",
+      "license": "MIT",
+      "dependencies": {
+        "motion-dom": "^12.23.23",
+        "motion-utils": "^12.23.6",
+        "tslib": "^2.4.0"
+      },
+      "peerDependencies": {
+        "@emotion/is-prop-valid": "*",
+        "react": "^18.0.0 || ^19.0.0",
+        "react-dom": "^18.0.0 || ^19.0.0"
+      },
+      "peerDependenciesMeta": {
+        "@emotion/is-prop-valid": {
+          "optional": true
+        },
+        "react": {
+          "optional": true
+        },
+        "react-dom": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/fsevents": {
+      "version": "2.3.3",
+      "resolved": "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz",
+      "integrity": "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==",
+      "dev": true,
+      "hasInstallScript": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "darwin"
+      ],
+      "engines": {
+        "node": "^8.16.0 || ^10.6.0 || >=11.0.0"
+      }
+    },
+    "node_modules/gensync": {
+      "version": "1.0.0-beta.2",
+      "resolved": "https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz",
+      "integrity": "sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/glob-parent": {
+      "version": "6.0.2",
+      "resolved": "https://registry.npmjs.org/glob-parent/-/glob-parent-6.0.2.tgz",
+      "integrity": "sha512-XxwI8EOhVQgWp6iDL+3b0r86f4d6AX6zSU55HfB4ydCEuXLXc5FcYeOu+nnGftS4TEju/11rt4KJPTMgbfmv4A==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "is-glob": "^4.0.3"
+      },
+      "engines": {
+        "node": ">=10.13.0"
+      }
+    },
+    "node_modules/globals": {
+      "version": "16.5.0",
+      "resolved": "https://registry.npmjs.org/globals/-/globals-16.5.0.tgz",
+      "integrity": "sha512-c/c15i26VrJ4IRt5Z89DnIzCGDn9EcebibhAOjw5ibqEHsE1wLUgkPn9RDmNcUKyU87GeaL633nyJ+pplFR2ZQ==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=18"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
+    "node_modules/has-flag": {
+      "version": "4.0.0",
+      "resolved": "https://registry.npmjs.org/has-flag/-/has-flag-4.0.0.tgz",
+      "integrity": "sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=8"
+      }
+    },
+    "node_modules/hermes-estree": {
+      "version": "0.25.1",
+      "resolved": "https://registry.npmjs.org/hermes-estree/-/hermes-estree-0.25.1.tgz",
+      "integrity": "sha512-0wUoCcLp+5Ev5pDW2OriHC2MJCbwLwuRx+gAqMTOkGKJJiBCLjtrvy4PWUGn6MIVefecRpzoOZ/UV6iGdOr+Cw==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/hermes-parser": {
+      "version": "0.25.1",
+      "resolved": "https://registry.npmjs.org/hermes-parser/-/hermes-parser-0.25.1.tgz",
+      "integrity": "sha512-6pEjquH3rqaI6cYAXYPcz9MS4rY6R4ngRgrgfDshRptUZIc3lw0MCIJIGDj9++mfySOuPTHB4nrSW99BCvOPIA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "hermes-estree": "0.25.1"
+      }
+    },
+    "node_modules/iceberg-js": {
+      "version": "0.8.1",
+      "resolved": "https://registry.npmjs.org/iceberg-js/-/iceberg-js-0.8.1.tgz",
+      "integrity": "sha512-1dhVQZXhcHje7798IVM+xoo/1ZdVfzOMIc8/rgVSijRK38EDqOJoGula9N/8ZI5RD8QTxNQtK/Gozpr+qUqRRA==",
+      "license": "MIT",
+      "engines": {
+        "node": ">=20.0.0"
+      }
+    },
+    "node_modules/ignore": {
+      "version": "5.3.2",
+      "resolved": "https://registry.npmjs.org/ignore/-/ignore-5.3.2.tgz",
+      "integrity": "sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">= 4"
+      }
+    },
+    "node_modules/import-fresh": {
+      "version": "3.3.1",
+      "resolved": "https://registry.npmjs.org/import-fresh/-/import-fresh-3.3.1.tgz",
+      "integrity": "sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "parent-module": "^1.0.0",
+        "resolve-from": "^4.0.0"
+      },
+      "engines": {
+        "node": ">=6"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
+    "node_modules/imurmurhash": {
+      "version": "0.1.4",
+      "resolved": "https://registry.npmjs.org/imurmurhash/-/imurmurhash-0.1.4.tgz",
+      "integrity": "sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=0.8.19"
+      }
+    },
+    "node_modules/is-extglob": {
+      "version": "2.1.1",
+      "resolved": "https://registry.npmjs.org/is-extglob/-/is-extglob-2.1.1.tgz",
+      "integrity": "sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/is-glob": {
+      "version": "4.0.3",
+      "resolved": "https://registry.npmjs.org/is-glob/-/is-glob-4.0.3.tgz",
+      "integrity": "sha512-xelSayHH36ZgE7ZWhli7pW34hNbNl8Ojv5KVmkJD4hBdD3th8Tfk9vYasLM+mXWOZhFkgZfxhLSnrwRr4elSSg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "is-extglob": "^2.1.1"
+      },
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/isexe": {
+      "version": "2.0.0",
+      "resolved": "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz",
+      "integrity": "sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==",
+      "dev": true,
+      "license": "ISC"
+    },
+    "node_modules/js-tokens": {
+      "version": "4.0.0",
+      "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz",
+      "integrity": "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/js-yaml": {
+      "version": "4.1.1",
+      "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.1.tgz",
+      "integrity": "sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "argparse": "^2.0.1"
+      },
+      "bin": {
+        "js-yaml": "bin/js-yaml.js"
+      }
+    },
+    "node_modules/jsesc": {
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/jsesc/-/jsesc-3.1.0.tgz",
+      "integrity": "sha512-/sM3dO2FOzXjKQhJuo0Q173wf2KOo8t4I8vHy6lF9poUp7bKT0/NHE8fPX23PwfhnykfqnC2xRxOnVw5XuGIaA==",
+      "dev": true,
+      "license": "MIT",
+      "bin": {
+        "jsesc": "bin/jsesc"
+      },
+      "engines": {
+        "node": ">=6"
+      }
+    },
+    "node_modules/json-buffer": {
+      "version": "3.0.1",
+      "resolved": "https://registry.npmjs.org/json-buffer/-/json-buffer-3.0.1.tgz",
+      "integrity": "sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/json-schema-traverse": {
+      "version": "0.4.1",
+      "resolved": "https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-0.4.1.tgz",
+      "integrity": "sha512-xbbCH5dCYU5T8LcEhhuh7HJ88HXuW3qsI3Y0zOZFKfZEHcpWiHU/Jxzk629Brsab/mMiHQti9wMP+845RPe3Vg==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/json-stable-stringify-without-jsonify": {
+      "version": "1.0.1",
+      "resolved": "https://registry.npmjs.org/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz",
+      "integrity": "sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/json5": {
+      "version": "2.2.3",
+      "resolved": "https://registry.npmjs.org/json5/-/json5-2.2.3.tgz",
+      "integrity": "sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==",
+      "dev": true,
+      "license": "MIT",
+      "bin": {
+        "json5": "lib/cli.js"
+      },
+      "engines": {
+        "node": ">=6"
+      }
+    },
+    "node_modules/keyv": {
+      "version": "4.5.4",
+      "resolved": "https://registry.npmjs.org/keyv/-/keyv-4.5.4.tgz",
+      "integrity": "sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "json-buffer": "3.0.1"
+      }
+    },
+    "node_modules/levn": {
+      "version": "0.4.1",
+      "resolved": "https://registry.npmjs.org/levn/-/levn-0.4.1.tgz",
+      "integrity": "sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "prelude-ls": "^1.2.1",
+        "type-check": "~0.4.0"
+      },
+      "engines": {
+        "node": ">= 0.8.0"
+      }
+    },
+    "node_modules/locate-path": {
+      "version": "6.0.0",
+      "resolved": "https://registry.npmjs.org/locate-path/-/locate-path-6.0.0.tgz",
+      "integrity": "sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "p-locate": "^5.0.0"
+      },
+      "engines": {
+        "node": ">=10"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
+    "node_modules/lodash.merge": {
+      "version": "4.6.2",
+      "resolved": "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz",
+      "integrity": "sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/lru-cache": {
+      "version": "5.1.1",
+      "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-5.1.1.tgz",
+      "integrity": "sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "yallist": "^3.0.2"
+      }
+    },
+    "node_modules/minimatch": {
+      "version": "3.1.2",
+      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-3.1.2.tgz",
+      "integrity": "sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "brace-expansion": "^1.1.7"
+      },
+      "engines": {
+        "node": "*"
+      }
+    },
+    "node_modules/motion-dom": {
+      "version": "12.23.23",
+      "resolved": "https://registry.npmjs.org/motion-dom/-/motion-dom-12.23.23.tgz",
+      "integrity": "sha512-n5yolOs0TQQBRUFImrRfs/+6X4p3Q4n1dUEqt/H58Vx7OW6RF+foWEgmTVDhIWJIMXOuNNL0apKH2S16en9eiA==",
+      "license": "MIT",
+      "dependencies": {
+        "motion-utils": "^12.23.6"
+      }
+    },
+    "node_modules/motion-utils": {
+      "version": "12.23.6",
+      "resolved": "https://registry.npmjs.org/motion-utils/-/motion-utils-12.23.6.tgz",
+      "integrity": "sha512-eAWoPgr4eFEOFfg2WjIsMoqJTW6Z8MTUCgn/GZ3VRpClWBdnbjryiA3ZSNLyxCTmCQx4RmYX6jX1iWHbenUPNQ==",
+      "license": "MIT"
+    },
+    "node_modules/ms": {
+      "version": "2.1.3",
+      "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
+      "integrity": "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/nanoid": {
+      "version": "3.3.11",
+      "resolved": "https://registry.npmjs.org/nanoid/-/nanoid-3.3.11.tgz",
+      "integrity": "sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "bin": {
+        "nanoid": "bin/nanoid.cjs"
+      },
+      "engines": {
+        "node": "^10 || ^12 || ^13.7 || ^14 || >=15.0.1"
+      }
+    },
+    "node_modules/natural-compare": {
+      "version": "1.4.0",
+      "resolved": "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz",
+      "integrity": "sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/node-releases": {
+      "version": "2.0.27",
+      "resolved": "https://registry.npmjs.org/node-releases/-/node-releases-2.0.27.tgz",
+      "integrity": "sha512-nmh3lCkYZ3grZvqcCH+fjmQ7X+H0OeZgP40OierEaAptX4XofMh5kwNbWh7lBduUzCcV/8kZ+NDLCwm2iorIlA==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/optionator": {
+      "version": "0.9.4",
+      "resolved": "https://registry.npmjs.org/optionator/-/optionator-0.9.4.tgz",
+      "integrity": "sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "deep-is": "^0.1.3",
+        "fast-levenshtein": "^2.0.6",
+        "levn": "^0.4.1",
+        "prelude-ls": "^1.2.1",
+        "type-check": "^0.4.0",
+        "word-wrap": "^1.2.5"
+      },
+      "engines": {
+        "node": ">= 0.8.0"
+      }
+    },
+    "node_modules/p-limit": {
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/p-limit/-/p-limit-3.1.0.tgz",
+      "integrity": "sha512-TYOanM3wGwNGsZN2cVTYPArw454xnXj5qmWF1bEoAc4+cU/ol7GVh7odevjp1FNHduHc3KZMcFduxU5Xc6uJRQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "yocto-queue": "^0.1.0"
+      },
+      "engines": {
+        "node": ">=10"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
+    "node_modules/p-locate": {
+      "version": "5.0.0",
+      "resolved": "https://registry.npmjs.org/p-locate/-/p-locate-5.0.0.tgz",
+      "integrity": "sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "p-limit": "^3.0.2"
+      },
+      "engines": {
+        "node": ">=10"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
+    "node_modules/parent-module": {
+      "version": "1.0.1",
+      "resolved": "https://registry.npmjs.org/parent-module/-/parent-module-1.0.1.tgz",
+      "integrity": "sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "callsites": "^3.0.0"
+      },
+      "engines": {
+        "node": ">=6"
+      }
+    },
+    "node_modules/path-exists": {
+      "version": "4.0.0",
+      "resolved": "https://registry.npmjs.org/path-exists/-/path-exists-4.0.0.tgz",
+      "integrity": "sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=8"
+      }
+    },
+    "node_modules/path-key": {
+      "version": "3.1.1",
+      "resolved": "https://registry.npmjs.org/path-key/-/path-key-3.1.1.tgz",
+      "integrity": "sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=8"
+      }
+    },
+    "node_modules/picocolors": {
+      "version": "1.1.1",
+      "resolved": "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz",
+      "integrity": "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==",
+      "dev": true,
+      "license": "ISC"
+    },
+    "node_modules/picomatch": {
+      "version": "4.0.3",
+      "resolved": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.3.tgz",
+      "integrity": "sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==",
+      "dev": true,
+      "license": "MIT",
+      "peer": true,
+      "engines": {
+        "node": ">=12"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/jonschlinkert"
+      }
+    },
+    "node_modules/postcss": {
+      "version": "8.5.6",
+      "resolved": "https://registry.npmjs.org/postcss/-/postcss-8.5.6.tgz",
+      "integrity": "sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/postcss/"
+        },
+        {
+          "type": "tidelift",
+          "url": "https://tidelift.com/funding/github/npm/postcss"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "dependencies": {
+        "nanoid": "^3.3.11",
+        "picocolors": "^1.1.1",
+        "source-map-js": "^1.2.1"
+      },
+      "engines": {
+        "node": "^10 || ^12 || >=14"
+      }
+    },
+    "node_modules/prelude-ls": {
+      "version": "1.2.1",
+      "resolved": "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz",
+      "integrity": "sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">= 0.8.0"
+      }
+    },
+    "node_modules/punycode": {
+      "version": "2.3.1",
+      "resolved": "https://registry.npmjs.org/punycode/-/punycode-2.3.1.tgz",
+      "integrity": "sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6"
+      }
+    },
+    "node_modules/react": {
+      "version": "19.2.1",
+      "resolved": "https://registry.npmjs.org/react/-/react-19.2.1.tgz",
+      "integrity": "sha512-DGrYcCWK7tvYMnWh79yrPHt+vdx9tY+1gPZa7nJQtO/p8bLTDaHp4dzwEhQB7pZ4Xe3ok4XKuEPrVuc+wlpkmw==",
+      "license": "MIT",
+      "peer": true,
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/react-dom": {
+      "version": "19.2.1",
+      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-19.2.1.tgz",
+      "integrity": "sha512-ibrK8llX2a4eOskq1mXKu/TGZj9qzomO+sNfO98M6d9zIPOEhlBkMkBUBLd1vgS0gQsLDBzA+8jJBVXDnfHmJg==",
+      "license": "MIT",
+      "peer": true,
+      "dependencies": {
+        "scheduler": "^0.27.0"
+      },
+      "peerDependencies": {
+        "react": "^19.2.1"
+      }
+    },
+    "node_modules/react-icons": {
+      "version": "5.5.0",
+      "resolved": "https://registry.npmjs.org/react-icons/-/react-icons-5.5.0.tgz",
+      "integrity": "sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==",
+      "license": "MIT",
+      "peerDependencies": {
+        "react": "*"
+      }
+    },
+    "node_modules/react-refresh": {
+      "version": "0.18.0",
+      "resolved": "https://registry.npmjs.org/react-refresh/-/react-refresh-0.18.0.tgz",
+      "integrity": "sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/react-router": {
+      "version": "7.10.1",
+      "resolved": "https://registry.npmjs.org/react-router/-/react-router-7.10.1.tgz",
+      "integrity": "sha512-gHL89dRa3kwlUYtRQ+m8NmxGI6CgqN+k4XyGjwcFoQwwCWF6xXpOCUlDovkXClS0d0XJN/5q7kc5W3kiFEd0Yw==",
+      "license": "MIT",
+      "dependencies": {
+        "cookie": "^1.0.1",
+        "set-cookie-parser": "^2.6.0"
+      },
+      "engines": {
+        "node": ">=20.0.0"
+      },
+      "peerDependencies": {
+        "react": ">=18",
+        "react-dom": ">=18"
+      },
+      "peerDependenciesMeta": {
+        "react-dom": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/react-router-dom": {
+      "version": "7.10.1",
+      "resolved": "https://registry.npmjs.org/react-router-dom/-/react-router-dom-7.10.1.tgz",
+      "integrity": "sha512-JNBANI6ChGVjA5bwsUIwJk7LHKmqB4JYnYfzFwyp2t12Izva11elds2jx7Yfoup2zssedntwU0oZ5DEmk5Sdaw==",
+      "license": "MIT",
+      "dependencies": {
+        "react-router": "7.10.1"
+      },
+      "engines": {
+        "node": ">=20.0.0"
+      },
+      "peerDependencies": {
+        "react": ">=18",
+        "react-dom": ">=18"
+      }
+    },
+    "node_modules/resolve-from": {
+      "version": "4.0.0",
+      "resolved": "https://registry.npmjs.org/resolve-from/-/resolve-from-4.0.0.tgz",
+      "integrity": "sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=4"
+      }
+    },
+    "node_modules/rollup": {
+      "version": "4.53.3",
+      "resolved": "https://registry.npmjs.org/rollup/-/rollup-4.53.3.tgz",
+      "integrity": "sha512-w8GmOxZfBmKknvdXU1sdM9NHcoQejwF/4mNgj2JuEEdRaHwwF12K7e9eXn1nLZ07ad+du76mkVsyeb2rKGllsA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@types/estree": "1.0.8"
+      },
+      "bin": {
+        "rollup": "dist/bin/rollup"
+      },
+      "engines": {
+        "node": ">=18.0.0",
+        "npm": ">=8.0.0"
+      },
+      "optionalDependencies": {
+        "@rollup/rollup-android-arm-eabi": "4.53.3",
+        "@rollup/rollup-android-arm64": "4.53.3",
+        "@rollup/rollup-darwin-arm64": "4.53.3",
+        "@rollup/rollup-darwin-x64": "4.53.3",
+        "@rollup/rollup-freebsd-arm64": "4.53.3",
+        "@rollup/rollup-freebsd-x64": "4.53.3",
+        "@rollup/rollup-linux-arm-gnueabihf": "4.53.3",
+        "@rollup/rollup-linux-arm-musleabihf": "4.53.3",
+        "@rollup/rollup-linux-arm64-gnu": "4.53.3",
+        "@rollup/rollup-linux-arm64-musl": "4.53.3",
+        "@rollup/rollup-linux-loong64-gnu": "4.53.3",
+        "@rollup/rollup-linux-ppc64-gnu": "4.53.3",
+        "@rollup/rollup-linux-riscv64-gnu": "4.53.3",
+        "@rollup/rollup-linux-riscv64-musl": "4.53.3",
+        "@rollup/rollup-linux-s390x-gnu": "4.53.3",
+        "@rollup/rollup-linux-x64-gnu": "4.53.3",
+        "@rollup/rollup-linux-x64-musl": "4.53.3",
+        "@rollup/rollup-openharmony-arm64": "4.53.3",
+        "@rollup/rollup-win32-arm64-msvc": "4.53.3",
+        "@rollup/rollup-win32-ia32-msvc": "4.53.3",
+        "@rollup/rollup-win32-x64-gnu": "4.53.3",
+        "@rollup/rollup-win32-x64-msvc": "4.53.3",
+        "fsevents": "~2.3.2"
+      }
+    },
+    "node_modules/scheduler": {
+      "version": "0.27.0",
+      "resolved": "https://registry.npmjs.org/scheduler/-/scheduler-0.27.0.tgz",
+      "integrity": "sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==",
+      "license": "MIT"
+    },
+    "node_modules/semver": {
+      "version": "6.3.1",
+      "resolved": "https://registry.npmjs.org/semver/-/semver-6.3.1.tgz",
+      "integrity": "sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==",
+      "dev": true,
+      "license": "ISC",
+      "bin": {
+        "semver": "bin/semver.js"
+      }
+    },
+    "node_modules/set-cookie-parser": {
+      "version": "2.7.2",
+      "resolved": "https://registry.npmjs.org/set-cookie-parser/-/set-cookie-parser-2.7.2.tgz",
+      "integrity": "sha512-oeM1lpU/UvhTxw+g3cIfxXHyJRc/uidd3yK1P242gzHds0udQBYzs3y8j4gCCW+ZJ7ad0yctld8RYO+bdurlvw==",
+      "license": "MIT"
+    },
+    "node_modules/shebang-command": {
+      "version": "2.0.0",
+      "resolved": "https://registry.npmjs.org/shebang-command/-/shebang-command-2.0.0.tgz",
+      "integrity": "sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "shebang-regex": "^3.0.0"
+      },
+      "engines": {
+        "node": ">=8"
+      }
+    },
+    "node_modules/shebang-regex": {
+      "version": "3.0.0",
+      "resolved": "https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz",
+      "integrity": "sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=8"
+      }
+    },
+    "node_modules/source-map-js": {
+      "version": "1.2.1",
+      "resolved": "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.1.tgz",
+      "integrity": "sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==",
+      "dev": true,
+      "license": "BSD-3-Clause",
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/strip-json-comments": {
+      "version": "3.1.1",
+      "resolved": "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-3.1.1.tgz",
+      "integrity": "sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=8"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
+    "node_modules/supports-color": {
+      "version": "7.2.0",
+      "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-7.2.0.tgz",
+      "integrity": "sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "has-flag": "^4.0.0"
+      },
+      "engines": {
+        "node": ">=8"
+      }
+    },
+    "node_modules/tinyglobby": {
+      "version": "0.2.15",
+      "resolved": "https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.15.tgz",
+      "integrity": "sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "fdir": "^6.5.0",
+        "picomatch": "^4.0.3"
+      },
+      "engines": {
+        "node": ">=12.0.0"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/SuperchupuDev"
+      }
+    },
+    "node_modules/tslib": {
+      "version": "2.8.1",
+      "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz",
+      "integrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==",
+      "license": "0BSD"
+    },
+    "node_modules/type-check": {
+      "version": "0.4.0",
+      "resolved": "https://registry.npmjs.org/type-check/-/type-check-0.4.0.tgz",
+      "integrity": "sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "prelude-ls": "^1.2.1"
+      },
+      "engines": {
+        "node": ">= 0.8.0"
+      }
+    },
+    "node_modules/undici-types": {
+      "version": "7.16.0",
+      "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-7.16.0.tgz",
+      "integrity": "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==",
+      "license": "MIT"
+    },
+    "node_modules/update-browserslist-db": {
+      "version": "1.2.2",
+      "resolved": "https://registry.npmjs.org/update-browserslist-db/-/update-browserslist-db-1.2.2.tgz",
+      "integrity": "sha512-E85pfNzMQ9jpKkA7+TJAi4TJN+tBCuWh5rUcS/sv6cFi+1q9LYDwDI5dpUL0u/73EElyQ8d3TEaeW4sPedBqYA==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/browserslist"
+        },
+        {
+          "type": "tidelift",
+          "url": "https://tidelift.com/funding/github/npm/browserslist"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "dependencies": {
+        "escalade": "^3.2.0",
+        "picocolors": "^1.1.1"
+      },
+      "bin": {
+        "update-browserslist-db": "cli.js"
+      },
+      "peerDependencies": {
+        "browserslist": ">= 4.21.0"
+      }
+    },
+    "node_modules/uri-js": {
+      "version": "4.4.1",
+      "resolved": "https://registry.npmjs.org/uri-js/-/uri-js-4.4.1.tgz",
+      "integrity": "sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==",
+      "dev": true,
+      "license": "BSD-2-Clause",
+      "dependencies": {
+        "punycode": "^2.1.0"
+      }
+    },
+    "node_modules/vite": {
+      "version": "7.2.6",
+      "resolved": "https://registry.npmjs.org/vite/-/vite-7.2.6.tgz",
+      "integrity": "sha512-tI2l/nFHC5rLh7+5+o7QjKjSR04ivXDF4jcgV0f/bTQ+OJiITy5S6gaynVsEM+7RqzufMnVbIon6Sr5x1SDYaQ==",
+      "dev": true,
+      "license": "MIT",
+      "peer": true,
+      "dependencies": {
+        "esbuild": "^0.25.0",
+        "fdir": "^6.5.0",
+        "picomatch": "^4.0.3",
+        "postcss": "^8.5.6",
+        "rollup": "^4.43.0",
+        "tinyglobby": "^0.2.15"
+      },
+      "bin": {
+        "vite": "bin/vite.js"
+      },
+      "engines": {
+        "node": "^20.19.0 || >=22.12.0"
+      },
+      "funding": {
+        "url": "https://github.com/vitejs/vite?sponsor=1"
+      },
+      "optionalDependencies": {
+        "fsevents": "~2.3.3"
+      },
+      "peerDependencies": {
+        "@types/node": "^20.19.0 || >=22.12.0",
+        "jiti": ">=1.21.0",
+        "less": "^4.0.0",
+        "lightningcss": "^1.21.0",
+        "sass": "^1.70.0",
+        "sass-embedded": "^1.70.0",
+        "stylus": ">=0.54.8",
+        "sugarss": "^5.0.0",
+        "terser": "^5.16.0",
+        "tsx": "^4.8.1",
+        "yaml": "^2.4.2"
+      },
+      "peerDependenciesMeta": {
+        "@types/node": {
+          "optional": true
+        },
+        "jiti": {
+          "optional": true
+        },
+        "less": {
+          "optional": true
+        },
+        "lightningcss": {
+          "optional": true
+        },
+        "sass": {
+          "optional": true
+        },
+        "sass-embedded": {
+          "optional": true
+        },
+        "stylus": {
+          "optional": true
+        },
+        "sugarss": {
+          "optional": true
+        },
+        "terser": {
+          "optional": true
+        },
+        "tsx": {
+          "optional": true
+        },
+        "yaml": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/which": {
+      "version": "2.0.2",
+      "resolved": "https://registry.npmjs.org/which/-/which-2.0.2.tgz",
+      "integrity": "sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "isexe": "^2.0.0"
+      },
+      "bin": {
+        "node-which": "bin/node-which"
+      },
+      "engines": {
+        "node": ">= 8"
+      }
+    },
+    "node_modules/word-wrap": {
+      "version": "1.2.5",
+      "resolved": "https://registry.npmjs.org/word-wrap/-/word-wrap-1.2.5.tgz",
+      "integrity": "sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/ws": {
+      "version": "8.18.3",
+      "resolved": "https://registry.npmjs.org/ws/-/ws-8.18.3.tgz",
+      "integrity": "sha512-PEIGCY5tSlUt50cqyMXfCzX+oOPqN0vuGqWzbcJ2xvnkzkq46oOpz7dQaTDBdfICb4N14+GARUDw2XV2N4tvzg==",
+      "license": "MIT",
+      "engines": {
+        "node": ">=10.0.0"
+      },
+      "peerDependencies": {
+        "bufferutil": "^4.0.1",
+        "utf-8-validate": ">=5.0.2"
+      },
+      "peerDependenciesMeta": {
+        "bufferutil": {
+          "optional": true
+        },
+        "utf-8-validate": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/yallist": {
+      "version": "3.1.1",
+      "resolved": "https://registry.npmjs.org/yallist/-/yallist-3.1.1.tgz",
+      "integrity": "sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==",
+      "dev": true,
+      "license": "ISC"
+    },
+    "node_modules/yocto-queue": {
+      "version": "0.1.0",
+      "resolved": "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz",
+      "integrity": "sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=10"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
+    "node_modules/zod": {
+      "version": "4.1.13",
+      "resolved": "https://registry.npmjs.org/zod/-/zod-4.1.13.tgz",
+      "integrity": "sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==",
+      "dev": true,
+      "license": "MIT",
+      "peer": true,
+      "funding": {
+        "url": "https://github.com/sponsors/colinhacks"
+      }
+    },
+    "node_modules/zod-validation-error": {
+      "version": "4.0.2",
+      "resolved": "https://registry.npmjs.org/zod-validation-error/-/zod-validation-error-4.0.2.tgz",
+      "integrity": "sha512-Q6/nZLe6jxuU80qb/4uJ4t5v2VEZ44lzQjPDhYJNztRQ4wyWc6VF3D3Kb/fAuPetZQnhS3hnajCf9CsWesghLQ==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=18.0.0"
+      },
+      "peerDependencies": {
+        "zod": "^3.25.0 || ^4.0.0"
+      }
+    }
+  }
+}
+
+```
+
+## File: .gitignore
+
+- Extension: 
+- Language: unknown
+- Size: 1802 bytes
+- Created: 2025-12-28 00:53:01
+- Modified: 2025-12-28 00:53:01
+
+### Code
+
+```unknown
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Directory for instrumented libs generated by jscoverage/JSCover
+lib-cov
+
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# Bower dependency directory (https://bower.io/)
+bower_components
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# TypeScript v1 declaration files
+typings/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.test
+.env.production
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+out
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+# Comment in the public line in if your project uses Gatsby and not Next.js
+# public
+
+# vuepress build output
+.vuepress/dist
+
+# Serverless directories
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Mac OS
+.DS_Store
+
+# Vite
+dist
+.vite
+
+```
+
+## File: VERCEL_DEPLOYMENT_GUIDE.md
+
+- Extension: .md
+- Language: markdown
+- Size: 16284 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-11 15:36:27
+
+### Code
+
+```markdown
+# Vercel Deployment Guide - Complete Step-by-Step Instructions
+
+Complete illustrated guide for deploying your passport status check system to Vercel.
+
+---
+
+## Table of Contents
+
+1. [Prerequisites](#prerequisites)
+2. [Step 1: Create Vercel Account](#step-1-create-vercel-account)
+3. [Step 2: Prepare Your Project](#step-2-prepare-your-project)
+4. [Step 3: Deploy to Vercel](#step-3-deploy-to-vercel)
+5. [Step 4: Configure Environment Variables](#step-4-configure-environment-variables)
+6. [Step 5: Set Up Database](#step-5-set-up-database)
+7. [Step 6: Test Your Deployment](#step-6-test-your-deployment)
+8. [Troubleshooting](#troubleshooting)
+
+---
+
+## Prerequisites
+
+Before starting, ensure you have:
+
+- ✅ **GitHub account** (free - [github.com](https://github.com))
+- ✅ **Vercel account** (free - we'll create it in Step 1)
+- ✅ **Supabase account** (already set up)
+- ✅ **Node.js installed** (version 18 or higher)
+- ✅ **Git installed** on your computer
+
+**Why these are needed:**
+- **GitHub**: Vercel works best with Git repositories for automatic deployments
+- **Vercel**: Hosting platform for your application
+- **Supabase**: Database for storing passport data
+- **Node.js**: Required to build and run the project
+
+---
+
+## Step 1: Create Vercel Account
+
+### Visual Guide: Account Creation
+
+**Location:** [https://vercel.com](https://vercel.com)
+
+**What you'll see:**
+- Vercel homepage with a prominent "Sign Up" button in the top right corner
+- Multiple sign-up options available
+
+### Detailed Steps:
+
+1. **Navigate to Vercel**
+   - Open your web browser
+   - Go to: `https://vercel.com`
+   - You'll see the Vercel homepage
+
+2. **Click Sign Up**
+   - Look for the **"Sign Up"** button in the top right corner of the page
+   - It's usually next to a "Log In" button
+   - Click on it
+
+3. **Choose Sign-Up Method**
+   You'll see three options:
+   
+   **Option A: Sign up with GitHub (Recommended)**
+   - Click the **"Continue with GitHub"** button
+   - This is the easiest method and recommended for developers
+   - You'll be redirected to GitHub to authorize
+   - Click **"Authorize Vercel"** on the GitHub page
+   - Your Vercel account will be created automatically
+   
+   **Option B: Sign up with GitLab**
+   - Similar to GitHub, click **"Continue with GitLab"**
+   - Authorize the connection
+   
+   **Option C: Sign up with Email**
+   - Click **"Sign up with Email"**
+   - Enter your email address
+   - Create a password
+   - Verify your email address
+
+4. **Complete Setup**
+   - After signing up, you'll be taken to the Vercel dashboard
+   - You might see a welcome screen or onboarding flow
+   - Follow any prompts to complete your profile (optional)
+
+**What you'll see after signup:**
+- Vercel dashboard with a sidebar on the left
+- "Add New..." button or "Import Project" button
+- Empty project list (if this is your first project)
+
+**Free Tier Benefits:**
+- ✅ Unlimited personal projects
+- ✅ 100GB bandwidth per month
+- ✅ Automatic HTTPS
+- ✅ Global CDN
+- ✅ Preview deployments for every commit
+- ✅ Perfect for your needs (<30 users/month)
+
+---
+
+## Step 2: Prepare Your Project
+
+### Option A: Using GitHub (Recommended)
+
+**Why GitHub?**
+- Automatic deployments on every push
+- Preview deployments for pull requests
+- Easy collaboration
+- Version control
+
+#### 2.1: Create GitHub Repository
+
+**Visual Guide:**
+- GitHub homepage: [https://github.com](https://github.com)
+- Look for a **"+"** icon in the top right corner
+- Click it to see a dropdown menu
+
+**Steps:**
+
+1. **Go to GitHub**
+   - Navigate to [https://github.com](https://github.com)
+   - Log in to your account
+
+2. **Create New Repository**
+   - Click the **"+"** icon in the top right corner
+   - Select **"New repository"** from the dropdown menu
+   - You'll see a "Create a new repository" page
+
+3. **Configure Repository**
+   - **Repository name**: Enter a name (e.g., `alnajm-visa-status`)
+   - **Description**: Optional - "Passport status check system"
+   - **Visibility**: Choose **"Public"** (required for free Vercel)
+   - **DO NOT** check "Initialize with README" (we already have files)
+   - **DO NOT** add .gitignore or license (we have them)
+
+4. **Create Repository**
+   - Click the green **"Create repository"** button at the bottom
+   - You'll see a page with setup instructions
+
+#### 2.2: Push Your Code to GitHub
+
+**Visual Guide:**
+- You'll see a page with commands like "git init", "git add", etc.
+- These are instructions for pushing your code
+
+**Steps (in your terminal):**
+
+```bash
+# Navigate to your project directory
+cd /home/eissa/Desktop/ubutnu_github_najm_1
+
+# Initialize git (if not already done)
+git init
+
+# Add all files
+git add .
+
+# Create initial commit
+git commit -m "Initial commit - Vercel migration"
+
+# Add GitHub repository as remote
+# Replace YOUR_USERNAME and YOUR_REPO_NAME with your actual values
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+
+# Push to GitHub
+git branch -M main
+git push -u origin main
+```
+
+**What happens:**
+- Your code is uploaded to GitHub
+- You can see it in your GitHub repository
+- Files are now version controlled
+
+### Option B: Using Vercel CLI (Alternative)
+
+**When to use:**
+- If you don't want to use GitHub
+- For quick testing
+- For one-time deployments
+
+**Steps:**
+
+1. **Install Vercel CLI**
+   ```bash
+   npm install -g vercel
+   ```
+
+2. **Login to Vercel**
+   ```bash
+   vercel login
+   ```
+   - This opens a browser window
+   - Authorize Vercel CLI
+
+3. **Deploy**
+   ```bash
+   vercel
+   ```
+   - Follow the prompts
+   - Answer questions about your project
+
+---
+
+## Step 3: Deploy to Vercel
+
+### Visual Guide: Importing Project
+
+**Location:** Vercel Dashboard
+- After logging in, you'll see the main dashboard
+- Look for **"Add New..."** button or **"Import Project"** button
+- Usually in the top right or center of the page
+
+### Detailed Steps:
+
+1. **Open Vercel Dashboard**
+   - Go to [https://vercel.com/dashboard](https://vercel.com/dashboard)
+   - You should see your dashboard with projects list
+
+2. **Start Import Process**
+   - Click the **"Add New..."** button (top right)
+   - Or click **"Import Project"** button (if visible)
+   - A modal or new page will appear
+
+3. **Connect GitHub (if using GitHub)**
+   - You'll see options to connect Git providers
+   - Click **"Import Git Repository"**
+   - If this is your first time, you'll need to install Vercel GitHub App
+   - Click **"Install"** and authorize
+   - Select your repository from the list
+   - Click **"Import"**
+
+4. **Configure Project Settings**
+
+   **What you'll see:**
+   - A configuration page with project settings
+   - Fields for project name, framework, build settings
+
+   **Configure these settings:**
+
+   **Project Name:**
+   - Auto-filled from repository name
+   - You can change it if needed
+   - Example: `alnajm-visa-status`
+
+   **Framework Preset:**
+   - Vercel should auto-detect "Vite"
+   - If not, select **"Vite"** from the dropdown
+
+   **Root Directory:**
+   - Leave as **"."** (current directory)
+   - Unless your project is in a subfolder
+
+   **Build Command:**
+   - Should show: `npm run build`
+   - If empty, enter: `npm run build`
+
+   **Output Directory:**
+   - Should show: `dist`
+   - If empty, enter: `dist`
+
+   **Install Command:**
+   - Should show: `npm install`
+   - Leave as is
+
+5. **Environment Variables (Skip for Now)**
+   - You'll see a section for "Environment Variables"
+   - **Skip this step** - we'll add them after deployment
+   - Click **"Skip"** or **"Deploy"** button
+
+6. **Deploy**
+   - Click the **"Deploy"** button (usually large and prominent)
+   - You'll see a deployment progress screen
+
+**What happens during deployment:**
+- Vercel installs dependencies (`npm install`)
+- Builds your project (`npm run build`)
+- Deploys to their CDN
+- Provides you with a URL
+
+**Deployment Progress Indicators:**
+- "Installing dependencies..." (green checkmark when done)
+- "Building..." (green checkmark when done)
+- "Deploying..." (green checkmark when done)
+- "Ready" - Your site is live!
+
+**After Deployment:**
+- You'll see a success message
+- A URL like: `https://your-project-name.vercel.app`
+- Click the URL to visit your site
+
+---
+
+## Step 4: Configure Environment Variables
+
+**Why needed:**
+- Your API routes need Supabase credentials
+- These are stored securely in Vercel
+- Never commit them to Git
+
+### Visual Guide: Environment Variables
+
+**Location:** Vercel Dashboard → Your Project → Settings
+
+**Navigation Path:**
+1. Dashboard → Click on your project name
+2. Click **"Settings"** tab (top navigation)
+3. Click **"Environment Variables"** (left sidebar)
+
+### Detailed Steps:
+
+1. **Navigate to Project Settings**
+   - In Vercel dashboard, click on your project name
+   - You'll see project overview page
+   - Click **"Settings"** tab at the top
+
+2. **Open Environment Variables**
+   - In the left sidebar, find **"Environment Variables"**
+   - Click on it
+   - You'll see a page with a table/list of variables
+
+3. **Add First Variable: SUPABASE_URL**
+
+   **What you'll see:**
+   - A form or button to add new variable
+   - Fields for: Key, Value, Environment
+
+   **Steps:**
+   - Click **"Add New"** or **"Add Environment Variable"** button
+   - **Key field**: Type `SUPABASE_URL`
+   - **Value field**: Enter `https://tqnalzuyvprpkpbzylvc.supabase.co`
+   - **Environment**: Select **"Production"**, **"Preview"**, and **"Development"** (check all three)
+   - Click **"Save"** or **"Add"**
+
+4. **Add Second Variable: SUPABASE_SERVICE_KEY**
+
+   **Steps:**
+   - Click **"Add New"** again
+   - **Key field**: Type `SUPABASE_SERVICE_KEY`
+   - **Value field**: Enter your service role key:
+     ```
+     eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxbmFsenV5dnBycGtwYnp5bHZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NTM2NjQ3MCwiZXhwIjoyMDgwOTQyNDcwfQ.R9MmoIKNL7ceGq-Kz7morECNOeZN6iqBwu5LHmcgU9c
+     ```
+   - **Environment**: Select all three (Production, Preview, Development)
+   - **Important**: This is a secret key - be careful not to share it
+   - Click **"Save"**
+
+5. **Verify Variables**
+   - You should see both variables in the list
+   - `SUPABASE_URL` should be visible
+   - `SUPABASE_SERVICE_KEY` should show as dots (••••••••) for security
+
+6. **Redeploy**
+   - After adding variables, you need to redeploy
+   - Go to **"Deployments"** tab (top navigation)
+   - Find your latest deployment
+   - Click the **"..."** (three dots) menu
+   - Select **"Redeploy"**
+   - Confirm the redeployment
+   - Wait for it to complete
+
+**Why redeploy?**
+- Environment variables are only available during build/deployment
+- Redeploying makes them available to your API routes
+
+---
+
+## Step 5: Set Up Database
+
+**Note:** If you already set up Supabase from previous instructions, you can skip this step.
+
+### Quick Reference:
+
+1. **Go to Supabase Dashboard**
+   - [https://supabase.com/dashboard](https://supabase.com/dashboard)
+   - Select your project
+
+2. **Create Table**
+   - Click **"Table Editor"** (left sidebar)
+   - Click **"New Table"**
+   - Name: `visa_status`
+
+3. **Add Columns**
+   - `id` (uuid, primary key, default: `gen_random_uuid()`)
+   - `passport_number` (text, unique)
+   - `status` (text, default: `'pending'`)
+   - `created_at` (timestamp, default: `now()`)
+   - `updated_at` (timestamp, default: `now()`)
+   - `admin_notes` (text, nullable)
+
+4. **Save Table**
+
+**For detailed instructions, see:** `SUPABASE_SETUP.md`
+
+---
+
+## Step 6: Test Your Deployment
+
+### Test 1: Homepage
+
+**Steps:**
+1. Open your Vercel URL (e.g., `https://your-project.vercel.app`)
+2. Scroll down to find the passport check section
+3. **What to look for:**
+   - Section title: **"التحقق من حالة التأشيرة"** (in Arabic)
+   - Input field with placeholder: **"أدخل رقم جواز سفرك"**
+   - Button: **"التحقق من الحالة"**
+   - All text should be in Arabic
+
+### Test 2: Add Test Data
+
+**Steps:**
+1. Go to Supabase Dashboard
+2. Table Editor → `visa_status` table
+3. Click **"Insert row"** button
+4. Fill in:
+   - `passport_number`: `TEST123`
+   - `status`: Select `ready` from dropdown
+   - `admin_notes`: `Test entry` (optional)
+5. Click **"Save"**
+
+### Test 3: Public Check Form
+
+**Steps:**
+1. On your website, enter `TEST123` in the passport field
+2. Click **"التحقق من الحالة"** button
+3. **Expected result:**
+   - Should show: **"جاهزة"** (Ready status)
+   - Green/teal colored status card
+   - Message in Arabic
+
+### Test 4: Admin Panel
+
+**Steps:**
+1. Go to: `https://your-project.vercel.app/admin`
+2. **What to look for:**
+   - Admin panel loads
+   - Form to add entries
+   - Table showing entries (if any)
+
+3. **Test Adding Entry:**
+   - Fill passport number: `TEST456`
+   - Select status: `processing`
+   - Click **"Add Entry"**
+   - Entry should appear in table
+
+4. **Test Editing:**
+   - Click **"Edit"** on any entry
+   - Change status
+   - Click **"Update Entry"**
+   - Verify changes saved
+
+---
+
+## Troubleshooting
+
+### Problem: Build Fails
+
+**Symptoms:**
+- Deployment shows "Build Failed"
+- Error messages in build logs
+
+**Solutions:**
+1. **Check Build Logs**
+   - Go to Deployments tab
+   - Click on failed deployment
+   - Scroll to see error messages
+
+2. **Common Issues:**
+   - **Missing dependencies**: Check `package.json` has all required packages
+   - **Build command wrong**: Verify it's `npm run build`
+   - **Output directory wrong**: Should be `dist`
+
+3. **Fix:**
+   - Update `vercel.json` if needed
+   - Check `package.json` scripts
+   - Redeploy
+
+### Problem: API Routes Return 500 Error
+
+**Symptoms:**
+- Passport check doesn't work
+- Admin panel shows errors
+- Browser console shows 500 errors
+
+**Solutions:**
+1. **Check Environment Variables**
+   - Go to Settings → Environment Variables
+   - Verify both variables exist
+   - Check values are correct (no extra spaces)
+
+2. **Check Function Logs**
+   - Go to Deployments tab
+   - Click on deployment
+   - Click "Functions" tab
+   - Check for error messages
+
+3. **Verify Supabase Connection**
+   - Check Supabase URL is correct
+   - Verify service key is correct (not anon key)
+   - Check Supabase project is active
+
+4. **Redeploy**
+   - After fixing variables, redeploy
+   - Wait for deployment to complete
+
+### Problem: "Function not found" or 404
+
+**Symptoms:**
+- API calls return 404
+- Routes don't work
+
+**Solutions:**
+1. **Check API Routes Exist**
+   - Verify `api/` folder exists in your project
+   - Check files are in correct location:
+     - `api/check-visa-status.js`
+     - `api/admin/create-entry.js`
+     - etc.
+
+2. **Check File Names**
+   - Must be exact: `check-visa-status.js` (not `check_visa_status.js`)
+   - Case-sensitive
+
+3. **Redeploy**
+   - Push changes to GitHub
+   - Vercel will auto-deploy
+   - Or manually redeploy
+
+### Problem: Database Errors
+
+**Symptoms:**
+- "Table does not exist" errors
+- "Permission denied" errors
+
+**Solutions:**
+1. **Verify Table Exists**
+   - Go to Supabase → Table Editor
+   - Check `visa_status` table exists
+   - Verify table name is exactly `visa_status` (case-sensitive)
+
+2. **Check Table Structure**
+   - Verify all columns exist
+   - Check column names match exactly
+   - Verify data types
+
+3. **Check Environment Variables**
+   - Verify `SUPABASE_URL` is correct
+   - Verify `SUPABASE_SERVICE_KEY` is service_role key (not anon key)
+
+---
+
+## Quick Reference
+
+### Important URLs
+- **Vercel Dashboard**: [https://vercel.com/dashboard](https://vercel.com/dashboard)
+- **Supabase Dashboard**: [https://supabase.com/dashboard](https://supabase.com/dashboard)
+- **Your Site**: `https://your-project.vercel.app`
+- **Admin Panel**: `https://your-project.vercel.app/admin`
+
+### Environment Variables
+- `SUPABASE_URL`: `https://tqnalzuyvprpkpbzylvc.supabase.co`
+- `SUPABASE_SERVICE_KEY`: (your service role key)
+
+### API Endpoints
+- Public: `/api/check-visa-status?passport_number=XXX`
+- Admin: `/api/admin/create-entry`, `/api/admin/update-status`, etc.
+
+### Build Commands
+- Build: `npm run build`
+- Dev: `npm run dev`
+- Preview: `npm run preview`
+
+---
+
+## Next Steps
+
+After successful deployment:
+1. ✅ Test all functionality
+2. ✅ Add real passport entries
+3. ✅ Monitor usage in Vercel dashboard
+4. ✅ Set up custom domain (optional)
+5. ✅ Consider adding authentication for admin panel
+
+**Your system is now live on Vercel! 🚀**
+
+
+
+```
+
+## File: PASSPORT_STATUS_README.md
+
+- Extension: .md
+- Language: markdown
+- Size: 5135 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-10 17:23:43
+
+### Code
+
+```markdown
+# Passport Status Check System
+
+A complete passport status checking system integrated into your travel agency website.
+
+## Features
+
+✅ **Public Passport Check**
+- Users can enter their passport number on the homepage
+- Real-time status checking (Ready, Processing, Pending, Rejected)
+- Beautiful, responsive UI with status indicators
+- Error handling and validation
+
+✅ **Admin Panel**
+- Accessible at `/admin` route
+- Add new passport entries
+- Update visa statuses
+- Search and filter entries
+- Delete entries
+- View all entries in a table format
+
+✅ **Backend API**
+- Serverless Netlify Functions
+- Secure database connection via Supabase
+- Input validation and sanitization
+- CORS handling
+- Error handling
+
+## Quick Start
+
+### 1. Set Up Supabase
+
+Follow the detailed guide in `SUPABASE_SETUP.md` to:
+- Create a Supabase account
+- Create the database table
+- Get your API credentials
+
+### 2. Configure Netlify
+
+1. Add environment variables in Netlify dashboard:
+   - `SUPABASE_URL`: Your Supabase project URL
+   - `SUPABASE_SERVICE_KEY`: Your Supabase service_role key
+
+2. Deploy your site (see `DEPLOYMENT_GUIDE.md`)
+
+### 3. Test the System
+
+1. Add a test entry via Supabase dashboard or admin panel
+2. Test the public check form on your homepage
+3. Access admin panel at `/admin`
+
+## File Structure
+
+```
+project/
+├── netlify/
+│   └── functions/
+│       ├── check-visa-status.js          # Public API: Check passport status
+│       ├── admin-create-entry.js         # Admin API: Create entry
+│       ├── admin-update-status.js        # Admin API: Update entry
+│       ├── admin-list-entries.js         # Admin API: List all entries
+│       └── admin-delete-entry.js         # Admin API: Delete entry
+├── src/
+│   ├── components/
+│   │   └── sections/
+│   │       └── PassportCheck/            # Public check component
+│   │           ├── index.jsx
+│   │           ├── PassportCheck.css
+│   │           └── StatusResult.jsx
+│   │   └── admin/                        # Admin components
+│   │       ├── PassportTable.jsx
+│   │       ├── AddEntryForm.jsx
+│   │       ├── EditEntryModal.jsx
+│   │       └── Admin.css
+│   └── pages/
+│       ├── Admin.jsx                     # Admin page
+│       └── Admin.css
+├── SUPABASE_SETUP.md                     # Supabase setup guide
+└── DEPLOYMENT_GUIDE.md                  # Deployment instructions
+```
+
+## API Endpoints
+
+All endpoints are Netlify Functions accessible at `/.netlify/functions/[function-name]`
+
+### Public Endpoints
+
+- **GET** `/.netlify/functions/check-visa-status?passport_number=XXX`
+  - Returns visa status for a passport number
+
+### Admin Endpoints
+
+- **POST** `/.netlify/functions/admin-create-entry`
+  - Body: `{ passport_number, status, admin_notes }`
+  - Creates a new entry
+
+- **PUT** `/.netlify/functions/admin-update-status`
+  - Body: `{ id, status, admin_notes }`
+  - Updates an existing entry
+
+- **GET** `/.netlify/functions/admin-list-entries?page=1&limit=50&status=ready&search=XXX`
+  - Returns paginated list of entries
+
+- **DELETE** `/.netlify/functions/admin-delete-entry?id=XXX`
+  - Deletes an entry
+
+## Status Values
+
+- `pending`: Application is pending
+- `processing`: Application is being processed
+- `ready`: Visa is ready
+- `rejected`: Application was rejected
+
+## Security Features
+
+- ✅ Input validation and sanitization
+- ✅ SQL injection protection (via Supabase client)
+- ✅ CORS handling
+- ✅ Environment variables for sensitive data
+- ✅ Error boundaries
+- ✅ Rate limiting (via Netlify Functions limits)
+
+## Usage
+
+### For Users
+
+1. Visit the homepage
+2. Find the "Check Your Visa Status" section
+3. Enter passport number
+4. Click "Check Status"
+5. View the status result
+
+### For Admins
+
+1. Visit `/admin` route
+2. Use "Add New Passport Entry" form to add entries
+3. Use the table to view all entries
+4. Click "Edit" to update status
+5. Use search and filter to find specific entries
+6. Click "Delete" to remove entries (with confirmation)
+
+## Troubleshooting
+
+### Passport check not working
+- Verify Supabase environment variables are set
+- Check Netlify function logs
+- Verify database table exists
+
+### Admin panel not loading
+- Check browser console for errors
+- Verify all functions are deployed
+- Check Netlify function logs
+
+### Database errors
+- Verify Supabase credentials
+- Check table structure matches schema
+- Verify RLS policies (if enabled)
+
+## Cost
+
+**100% Free** for your use case (<30 users/month):
+- Netlify: Free tier (100GB bandwidth/month)
+- Supabase: Free tier (500MB database, 50K MAU)
+
+## Support
+
+For issues:
+1. Check `SUPABASE_SETUP.md` for database setup
+2. Check `DEPLOYMENT_GUIDE.md` for deployment issues
+3. Review Netlify function logs
+4. Check Supabase dashboard
+
+## Next Steps
+
+After setup:
+1. ✅ Add real passport entries
+2. ✅ Test with real users
+3. ⚠️ Consider adding authentication for admin panel
+4. ⚠️ Set up monitoring and alerts
+5. ⚠️ Consider adding email notifications
+
+
+```
+
+## File: api/check-visa-status.js
+
+- Extension: .js
+- Language: javascript
+- Size: 2419 bytes
+- Created: 2025-12-27 17:55:22
+- Modified: 2025-12-27 17:55:22
+
+### Code
+
+```javascript
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Missing Supabase environment variables');
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// CORS headers helper
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export default async function handler(req, res) {
+  // Set CORS headers for all responses
+  Object.keys(corsHeaders).forEach(key => {
+    res.setHeader(key, corsHeaders[key]);
+  });
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // Only allow GET requests
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    // Get passport number from query string
+    const passportNumber = req.query?.passport_number;
+
+    if (!passportNumber || passportNumber.trim() === '') {
+      return res.status(400).json({ error: 'Passport number is required' });
+    }
+
+    // Sanitize input (basic validation)
+    const sanitizedPassport = passportNumber.trim().toUpperCase();
+
+    // Query database
+    const { data, error } = await supabase
+      .from('visa_status')
+      .select('id, passport_number, status, created_at, updated_at, admin_notes, first_name, last_name')
+      .eq('passport_number', sanitizedPassport)
+      .single();
+
+    if (error) {
+      // If no record found, return not found status
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({
+          found: false,
+          message: 'Passport number not found in our system',
+        });
+      }
+
+      // Other database errors
+      console.error('Database error:', error);
+      return res.status(500).json({ error: 'Database error occurred' });
+    }
+
+    // Return the status
+    return res.status(200).json({
+      found: true,
+      passport_number: data.passport_number,
+      status: data.status,
+      updated_at: data.updated_at,
+      admin_notes: data.admin_notes || null,
+      first_name: data.first_name || null,
+      last_name: data.last_name || null,
+    });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+
+```
+
+## File: src/App.css
+
+- Extension: .css
+- Language: unknown
+- Size: 1063 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```unknown
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color var(--transition-base);
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Theme Toggle Button */
+/* .theme-toggle {
+  position: fixed;
+  bottom: var(--spacing-xl);
+  left: var(--spacing-xl);
+  z-index: var(--z-fixed);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: var(--gradient-primary);
+  color: white;
+  font-size: var(--font-2xl);
+  cursor: pointer;
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1) rotate(20deg);
+  box-shadow: 0 8px 30px rgba(62, 146, 204, 0.4);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .theme-toggle {
+    bottom: var(--spacing-lg);
+    left: var(--spacing-lg);
+    width: 48px;
+    height: 48px;
+    font-size: var(--font-xl);
+  }
+} */
+```
+
+## File: src/main.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 744 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+
+// Register Service Worker for offline support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        if (import.meta.env.DEV) {
+          console.log('SW registered: ', registration);
+        }
+      })
+      .catch((registrationError) => {
+        if (import.meta.env.DEV) {
+          console.error('SW registration failed: ', registrationError);
+        }
+      });
+  });
+}
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+
+```
+
+## File: src/index.css
+
+- Extension: .css
+- Language: unknown
+- Size: 8638 bytes
+- Created: 2025-12-28 00:00:01
+- Modified: 2025-12-28 00:00:01
+
+### Code
+
+```unknown
+/* ========================================
+   النجم الأزرق - Modern Design System 
+   Brand Identity: Deep Cerulean (#004B87)
+======================================== */
+
+/* ============ CSS Variables ============ */
+:root {
+  /* Brand Primary Color (Extracted from your image) */
+  --primary-blue: #004B87;
+  /* Deep Cerulean - Main Identity */
+  --primary-dark: #003661;
+  /* Darker Navy - Hover/Active states */
+  --primary-light: #1E6EB0;
+  /* Lighter Blue - Subtle accents */
+
+  /* Tropical Sunset Palette (Balanced for deep blue) */
+  --accent-amber: #F59E0B;
+  /* Sunset Orange - Highlights/Buttons */
+  --accent-coral: #FB7185;
+  /* Soft Vibrant Coral - Special Accents */
+  --secondary-teal: #0D9488;
+  /* Dark Teal - Success/Nature */
+
+  /* Neutral Colors (Modern & Clean) */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  /* Slate 50 */
+  --bg-tertiary: #F1F5F9;
+  /* Slate 100 */
+  --text-primary: #0F172A;
+  /* Slate 900 - High Contrast */
+  --text-secondary: #475569;
+  /* Slate 600 - Readable Body */
+  --text-muted: #94A3B8;
+  /* Slate 400 */
+
+  /* Modern Glassmorphism (Tinted with brand blue) */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 75, 135, 0.12);
+  --glass-blur: blur(12px);
+
+  /* Gradients */
+  --gradient-ocean: linear-gradient(135deg, #004B87 0%, #0E7490 100%);
+  --gradient-sunset: linear-gradient(135deg, #F59E0B 0%, #EA580C 100%);
+  --gradient-tropical: linear-gradient(135deg, #004B87 0%, #0D9488 100%);
+  --gradient-overlay: linear-gradient(180deg, rgba(0, 75, 135, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
+
+  /* Shadows (Tinted for a high-end feel) */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 75, 135, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 75, 135, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 75, 135, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 20px rgba(0, 75, 135, 0.25);
+
+  /* Spacing (Mobile-First) */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --spacing-2xl: 5rem;
+
+  /* Border Radius (More Rounded) */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Typography Scale */
+  --font-xs: clamp(0.75rem, 2vw, 0.875rem);
+  --font-sm: clamp(0.875rem, 2.5vw, 1rem);
+  --font-base: clamp(1rem, 3vw, 1.125rem);
+  --font-lg: clamp(1.125rem, 3.5vw, 1.25rem);
+  --font-xl: clamp(1.25rem, 4vw, 1.5rem);
+  --font-2xl: clamp(1.5rem, 5vw, 2rem);
+  --font-3xl: clamp(2rem, 6vw, 3rem);
+  --font-4xl: clamp(2.5rem, 8vw, 4.5rem);
+
+  /* Font Families */
+  --font-heading: 'Tajawal', sans-serif;
+  --font-body: 'IBM Plex Sans Arabic', sans-serif;
+
+  /* Z-index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+}
+
+/* ============ Global Reset ============ */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--font-base);
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  direction: rtl;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ============ Typography ============ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: var(--font-4xl);
+}
+
+h2 {
+  font-size: var(--font-3xl);
+}
+
+h3 {
+  font-size: var(--font-2xl);
+}
+
+h4 {
+  font-size: var(--font-xl);
+}
+
+h5 {
+  font-size: var(--font-lg);
+}
+
+h6 {
+  font-size: var(--font-base);
+}
+
+p {
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--primary-blue);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  font-weight: 500;
+}
+
+a:hover {
+  color: var(--primary-light);
+}
+
+/* ============ Layout Utilities ============ */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+}
+
+.section {
+  padding: var(--spacing-2xl) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ============ Button Styles ============ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: 16px 32px;
+  min-height: 52px;
+  font-family: var(--font-heading);
+  font-size: var(--font-base);
+  font-weight: 700;
+  text-align: center;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-primary {
+  background: var(--primary-blue);
+  color: white;
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-accent {
+  background: var(--gradient-sunset);
+  color: white;
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-accent:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary-blue);
+  border: 2px solid var(--primary-blue);
+}
+
+.btn-outline:hover {
+  background: var(--primary-blue);
+  color: white;
+  transform: translateY(-3px);
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ============ Card Styles ============ */
+.card {
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+  border: 1px solid rgba(0, 75, 135, 0.05);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-xl);
+}
+
+.card-glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* ============ Utilities ============ */
+.text-gradient {
+  background: var(--gradient-ocean);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gradient {
+  background: var(--gradient-ocean);
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.grid {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+/* ============ Animations ============ */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 75, 135, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 20px rgba(0, 75, 135, 0);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-pulse {
+  animation: pulse-glow 2s infinite;
+}
+
+/* ============ Form Styles ============ */
+.form-input,
+.form-textarea {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 20px;
+  font-family: var(--font-body);
+  font-size: var(--font-base);
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  background-color: var(--bg-primary);
+  box-shadow: 0 0 0 4px rgba(0, 75, 135, 0.1);
+}
+
+/* ============ Mobile Optimizations ============ */
+@media (max-width: 768px) {
+  .section {
+    padding: var(--spacing-xl) 0;
+  }
+
+  h1 {
+    line-height: 1.1;
+  }
+
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+}
+```
+
+## File: src/App.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 2690 bytes
+- Created: 2025-12-27 23:56:17
+- Modified: 2025-12-27 23:56:17
+
+### Code
+
+```javascript
+import { useState, lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Navbar, Footer } from './components/layout';
+import ErrorBoundary from './components/common/ErrorBoundary';
+import Analytics from './components/common/Analytics';
+import './App.css';
+
+// Lazy load pages for performance
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Services = lazy(() => import('./pages/Services'));
+const Destinations = lazy(() => import('./pages/Destinations'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Admin = lazy(() => import('./pages/Admin'));
+
+// Loading fallback component
+const PageLoader = () => (
+  <div className="page-loader" style={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    height: '60vh',
+    flexDirection: 'column',
+    gap: '20px'
+  }}>
+    <div className="spinner" style={{
+      width: '40px',
+      height: '40px',
+      border: '3px solid rgba(8, 145, 178, 0.1)',
+      borderTopColor: '#0891b2',
+      borderRadius: '50%',
+      animation: 'spin 1s linear infinite'
+    }}></div>
+    <style>{`
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    `}</style>
+  </div>
+);
+
+function App() {
+  const [theme, setTheme] = useState('light');
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+  };
+
+  return (
+    <ErrorBoundary>
+      <Router>
+        <Analytics />
+        <div className="app" data-theme={theme}>
+          <Navbar />
+
+          {/* Theme Toggle Button */}
+          {/* <button
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button> */}
+
+          <main className="main-content">
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/destinations" element={<Destinations />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/admin" element={<Admin />} />
+              </Routes>
+            </Suspense>
+          </main>
+
+          <Footer />
+        </div>
+      </Router>
+    </ErrorBoundary>
+  );
+}
+
+export default App;
+
+```
+
+## File: public/logo_svg.svg
+
+- Extension: .svg
+- Language: unknown
+- Size: 19401 bytes
+- Created: 2025-12-28 00:28:19
+- Modified: 2025-12-28 00:27:42
+
+### Code
+
+```unknown
+<svg width="1140" height="1024" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <g>
+  <title>Layer 1</title>
+  <g y="366.33067" x="382.0417" transform="matrix(5.33799 0 0 8.90619 -2223.31 -4291.33)" stroke="null" id="svg_4">
+   <svg stroke="null" y="396.56343" x="386.78462" id="svg_5" xmlns="http://www.w3.org/2000/svg">
+    <defs stroke="null">
+     <clipPath stroke="null" id="svg_1">
+      <rect stroke="null" id="svg_6" fill="none" height="2048" width="1795" transform="scale(0.1465,0.14648)" y="0" x="0"/>
+     </clipPath>
+     <linearGradient stroke="null" id="svg_3" y2="0.1736" x2="0.07261" y1="0.6168" x1="1.04841">
+      <stop stroke="null" stop-color="#b57808" offset="0"/>
+      <stop stroke="null" stop-color="#cca037" offset="1"/>
+     </linearGradient>
+     <linearGradient stroke="null" id="svg_2" y2="-0.10718" x2="0.54489" y1="0.87015" x1="0.47427">
+      <stop stroke="null" stop-color="#d1aa42" offset="0"/>
+      <stop stroke="null" stop-color="#edd679" offset="1"/>
+     </linearGradient>
+    </defs>
+    <g stroke="null" id="svg_7" text-anchor="none" font-size="none" font-weight="none" font-family="none" stroke-dashoffset="0" stroke-miterlimit="10" fill-rule="nonzero" fill="none" clip-path="url(#svg_1)">
+     <path stroke="null" id="svg_8" fill="#36488d" d="m172.9514,126.37793c0.9962,-3.20786 1.85323,-6.58784 2.76007,-9.83672l5.55677,-20.0146c0.50982,-1.8353 2.21949,-8.78643 2.96371,-10.00723l0.16115,0.02622c0.71346,0.92563 1.88546,5.57388 2.30006,6.95508l7.07305,23.43882c0.85556,2.86143 2.27955,8.92485 3.57901,11.41934c3.15416,0.02769 5.87175,-0.12876 8.95119,-0.16509l20.91151,-0.16128c3.20837,-0.01567 8.74023,-0.26777 11.78452,0.03237c-2.56523,1.92319 -6.87967,5.99868 -9.46981,8.24604l-22.68417,19.83853c0.90977,3.78662 2.51395,8.71436 3.65226,12.5127l5.88347,19.81934c0.92442,3.10986 2.54911,7.99658 3.19518,11.03174c-1.9968,-1.07959 -6.48998,-5.22363 -8.60692,-6.84375c-2.71612,-2.24707 -5.62123,-4.3418 -8.25678,-6.67969c-0.92442,-0.78076 -2.0261,-2.82129 -3.00326,-3.42041c-4.90777,-3.00732 -9.22515,-6.80859 -13.69049,-10.45752c-3.119,2.40088 -25.00767,23.67773 -26.15916,24.03223c1.89132,-2.9209 3.9438,-5.34668 6.05927,-8.09619l9.51962,-12.43359l6.49438,-8.51074c1.07092,-1.41797 2.84651,-3.93018 3.99654,-5.16357c5.8571,4.87061 11.76108,9.68408 17.71193,14.43896c-0.40874,-1.8501 -1.36832,-4.37549 -1.90597,-6.26367c-1.55291,-5.44922 -3.72844,-11.24414 -5.16122,-16.69189c1.40787,-1.51172 3.0311,-2.73926 4.51076,-4.12793c3.86029,-3.62124 9.10795,-7.62964 12.67231,-11.41099l-14.88154,0.01904c-2.25318,0.02388 -4.31884,0.23979 -6.62769,0.20903c-0.45415,-1.70347 -1.13538,-3.56104 -1.72871,-5.23623c-2.09935,-5.94214 -3.90131,-12.08174 -6.14277,-17.96499c-0.8248,3.47798 -2.17993,7.26035 -3.2655,10.68501c-1.3522,4.26211 -2.63994,8.60112 -4.06246,12.83262c-0.90977,-0.54653 -2.31178,-1.67666 -3.22741,-2.34419c-1.39469,-0.99844 -2.81867,-1.95483 -4.2705,-2.86772c-26.44953,-16.69819 -62.0325,-20.28604 -92.16432,-13.64824c-3.48261,0.76714 -10.70085,2.2541 -13.82263,3.82441c-1.50954,0.67075 -5.31754,1.177 -6.13252,2.04741c-0.50059,0.11792 -0.8267,0.19307 -1.3084,0.36577c-0.24055,0.0832 -0.6972,0.15937 -0.96368,0.21357c-0.01992,0.44004 1.40904,2.66792 1.73779,3.20303c-0.82128,-0.35244 -2.51498,-1.53223 -3.30095,-2.07451c-2.52523,1.41094 -6.41761,3.03384 -9.1059,4.18213c0.781,1.09805 5.94588,7.67959 5.8215,8.36689l-0.29769,0.03164c-0.9316,-0.37412 -7.61144,-6.30776 -8.76118,-7.35498c-2.69561,0.75835 -6.46376,2.61577 -9.14311,2.42563c-2.48231,-0.17622 -1.09084,-2.35254 0.61413,-3.12554c2.59336,-1.17568 5.11668,-1.88452 7.81156,-2.72842c1.02697,-1.69468 4.00284,-9.82236 5.28618,-10.27617c0.47906,1.04077 -1.56463,7.34927 -1.90553,9.13169c1.95198,-0.56807 7.6321,-1.74756 9.52548,-1.87778c0.53443,-1.16733 1.23339,-2.45215 1.80855,-3.6375c0.01948,0.95479 -0.33593,2.83008 0.24363,3.46626l0.52711,-0.06152c0.45723,-0.34702 1.89689,-0.97397 2.18389,-1.23442c1.65956,-1.50659 15.618,-6.28989 15.97517,-6.67778l-0.04249,-0.49775c0.65486,-0.37529 1.84576,-0.18911 2.6206,-0.40825c4.05382,-1.14624 8.15599,-2.19155 12.29741,-2.98184c21.53809,-4.27207 43.81924,-2.83403 64.62937,4.171c7.08038,2.43354 12.62983,4.99585 19.27363,8.31621l0,-0.00002z"/>
+     <path stroke="null" id="svg_9" fill="url(#svg_3)" d="m135.467,124.02012c2.2482,0.39946 5.18246,1.35059 7.36869,2.05488c9.41077,2.98931 18.44986,7.03975 26.94543,12.07324c2.21363,1.31616 4.38916,2.6959 6.52368,4.1373c0.95665,0.63296 2.70001,1.85903 3.64933,2.34639c1.68622,-5.28486 3.33582,-10.5813 4.94879,-15.88887l2.90804,20.05576c0.40141,2.73193 0.76766,6.01758 1.25551,8.67188c-15.13645,-11.07202 -31.9811,-19.59624 -49.86767,-25.23501c-0.12804,-0.2584 -0.10885,-0.22471 -0.18562,-0.50112c0.55656,-1.6938 1.09246,-4.11709 1.56521,-5.90654c-0.75023,-0.8959 -3.93706,-0.8499 -5.11141,-1.80791l0.00002,0z"/>
+     <path stroke="null" id="svg_10" fill="#36488d" d="m151.56816,145.47451c0.19338,0.00879 0.08644,-0.01743 0.30326,0.1355c0.12306,1.56138 0.04395,3.82603 0.03809,5.44175c-0.0337,3.59912 -0.02344,7.19971 0.03077,10.79883l-17.71501,0.0542c-0.01055,0.69287 0.08922,0.95215 -0.43071,1.42236l-0.29637,-0.06592c-0.46748,-0.43799 -0.53253,-0.79395 -0.7517,-1.39893l-15.07917,0.01318c-1.53928,2.06396 -3.41347,3.11572 -5.98953,1.87646c-0.93775,-0.45117 -1.54954,-1.36523 -2.48685,-1.81494c-2.72447,0.20801 -0.00015,4.05615 -0.13991,5.0918c-0.41885,0.16699 -1.10183,0.104 -1.57693,0.09668c-0.68782,-1.67871 -1.65326,-3.70605 -1.89044,-5.47705c-0.37988,-2.8374 1.71391,-3.15088 3.83524,-3.31934l0.06285,-0.11133c0.59919,-1.05322 0.69939,-1.26709 1.50002,-2.18555c0.30428,-0.26367 0.62776,-0.50391 0.96764,-0.71924c2.68463,-1.7168 4.61023,1.01953 5.79806,3.06738c3.86835,0.23145 9.41326,0.01172 13.39104,-0.04834c-0.54806,-0.6709 -1.2706,-1.73145 -2.20806,-1.73437c-0.64299,-0.00146 -1.03752,0.66064 -1.55935,1.04883l-0.33007,-0.08057c-0.76986,-0.80566 -1.40348,-2.00977 -1.01671,-3.14063c0.18444,-0.54639 0.58044,-0.99609 1.09919,-1.24805c0.68621,-0.3252 1.5321,-0.22119 2.21055,0.06006c2.17554,0.89941 3.01542,3.15527 3.8682,5.12402c2.4388,0.12598 6.3029,0.04102 8.75444,-0.03516c0.0375,-0.67676 0.19558,-1.76367 -0.16056,-2.2749c-0.32582,0.06445 -0.47686,0.13916 -0.77792,0.02051c-0.14694,-0.4834 -0.16437,-0.25635 0.0419,-0.70605c0.90288,-0.7793 3.15313,-1.18799 4.39238,-1.5c0.0961,1.28613 0.0501,3.16406 0.05274,4.50293l2.88973,-0.02783c-0.01612,-2.14893 -0.02051,-4.29785 -0.01319,-6.44531c0.0044,-0.53613 -0.0337,-1.94092 0.01758,-2.41699c0.18752,-1.77686 -0.79257,-1.28906 -1.08118,-2.15771c0.48785,-0.82617 3.16295,-1.48213 4.24999,-1.84629l-0.00001,0.00001zm-37.70298,15.26719c1.29345,-0.93896 0.90332,-2.29834 -0.58586,-2.60889c-1.01422,1.14551 -1.37095,2.42432 0.58586,2.60889z"/>
+     <path stroke="null" id="svg_11" fill="url(#svg_2)" d="m89.85298,119.79639c1.48537,-0.26968 3.33978,-0.04043 4.85621,-0.12114c4.28485,-0.22837 9.04876,-0.16743 13.35237,0.04746c7.72982,0.38613 15.6577,1.75313 23.24263,3.23613c1.30195,0.27275 2.89778,0.65889 4.16282,1.06128c1.17435,0.95801 4.36118,0.91201 5.11141,1.80791c-0.47276,1.78945 -1.00866,4.21274 -1.56521,5.90654c0.07677,0.27642 0.05757,0.24272 0.18562,0.50112c-12.78248,-4.20835 -26.01838,-6.88843 -39.4311,-7.98442c-4.03023,-0.34907 -8.67284,-0.67251 -12.7104,-0.59678c0.46646,-0.51094 1.4067,0.14692 1.7167,-0.70312c0.60988,-1.67256 -1.1679,-2.03291 1.07898,-3.15498l-0.00003,0z"/>
+     <path stroke="null" id="svg_12" fill="#d7b34c" d="m57.90176,184.98193c2.78791,-0.43945 5.69141,-0.41162 8.51301,-0.57568c3.46035,-0.20215 6.95834,-0.14502 10.42543,-0.1377l22.95974,0.03369l28.74725,-0.0293c6.47621,-0.00879 13.34856,-0.18018 19.76866,0.33252c0.70027,0.14941 1.22768,0.08496 1.54705,0.49658c-9.76442,0.89502 -22.1868,0.36182 -32.09361,0.42041c-15.94308,0.09521 -31.96425,-0.01611 -47.9151,0.01318c-3.74573,0.00586 -8.03571,-0.49072 -11.95241,-0.55371l-0.00002,0.00001z"/>
+     <path stroke="null" id="svg_13" fill="#36488d" d="m63.08598,150.01465l0.57838,-0.04248l0.18415,0.2373c0.13463,2.09473 0.36772,11.93994 -0.39541,13.32275c-0.63142,1.14258 -3.21906,3.01465 -4.49274,3.3501c-1.44376,0.38086 -4.04166,-1.44434 -4.89503,-2.5752c-0.50689,-0.66943 -0.84707,-1.97021 -1.60433,-2.36133c-0.0775,-0.04102 -0.15837,-0.07324 -0.23748,-0.10986l-0.05508,-0.30615c0.30838,-0.68115 0.90303,-1.21289 1.42897,-1.7666c0.51978,-0.59033 1.13333,-1.37842 1.85543,-1.64062c0.8144,0.38672 -0.05626,3.53174 0.78056,4.18945c5.10643,4.01953 4.45787,-3.0835 4.43677,-5.12109c-0.99577,-0.01465 -2.28204,0.04102 -3.18566,-0.36621c-1.18373,-0.52588 -1.23134,-2.31299 -0.63493,-3.29297c1.2101,-1.98779 4.15461,-2.92236 6.23639,-3.51709l0.00001,0z"/>
+     <path stroke="null" id="svg_14" fill="#36488d" d="m92.73611,146.49902c0.3686,0.54932 0.21287,7.92334 0.17902,9.12158l-1.3292,0.66797c0.86421,0.79102 1.05041,0.91699 1.70395,1.88525c0.02373,1.23193 0.02505,2.46387 0.0041,3.69434c-2.44202,0.01465 -4.88419,0.00586 -7.32606,-0.0249c-0.20657,-0.66504 -0.40522,-1.33301 -0.59567,-2.00244c-0.76195,-2.7627 1.02155,-1.80322 1.68461,-2.98535c-0.10402,-0.47461 -0.15456,-0.36768 -0.68416,-0.75146l-0.24378,-0.11865c-0.52989,-0.80273 -0.22034,-3.88623 -0.31351,-5.2002c-0.34545,-0.35596 -0.26443,-0.24316 -0.89263,-0.3208l-0.12174,-0.19922c0.41269,-1.13818 3.3616,-1.91895 4.52878,-2.34814c0.08277,2.16064 -0.0356,4.54102 0.04058,6.71338c0.01333,0.38379 0.32992,0.56689 0.58278,0.74268c0.56124,-0.0293 0.32259,0.06738 0.74364,-0.2959c0.27059,-0.60645 0.22561,-5.56348 0.069,-6.35596c-0.61208,-0.49512 -0.68299,-0.46582 -0.4042,-1.19238c0.53019,-0.40869 1.70102,-0.78076 2.37448,-1.02979l0.00001,-0.00001z"/>
+     <path stroke="null" id="svg_15" fill="#bb8922" d="m63.55684,123.39316c2.78073,-0.15557 6.50624,-1.65586 9.60166,-1.84731l0.23601,-0.01377c0.09449,-0.10371 0.45357,-0.46538 0.59772,-0.46025c0.76371,0.0271 1.75083,0.21562 2.4993,0.10532c4.41377,-0.65024 8.90153,-1.18345 13.36145,-1.38076c-2.24688,1.12207 -0.4691,1.48242 -1.07898,3.15498c-0.31,0.85005 -1.25024,0.19219 -1.7167,0.70313c-1.74863,0.46245 -5.25674,-0.03237 -7.21472,-0.02402c-6.95512,0.02915 -13.80066,0.76948 -20.69073,1.65894c-0.58776,0.07573 -1.13113,0.16611 -1.72754,0.15117c0.81498,-0.87041 4.62298,-1.37666 6.13252,-2.04741l0.00001,-0.00002z"/>
+     <path stroke="null" id="svg_16" fill="#36488d" d="m89.70619,169.84863l0.33563,0.13477c0.36889,0.65625 0.53824,1.0708 0.81659,1.75488l-0.046,0.16113c-0.51319,1.88525 -0.09698,2.43311 -0.37109,4.16309c-0.44668,2.81836 -3.7009,2.39063 -5.82516,1.77686c-2.04881,0.7207 -2.71334,-0.13623 -4.81885,0.49805c-1.94729,-0.64893 -2.44422,0.07764 -3.98042,-0.16406c-2.73356,-0.43066 -4.99084,0.12598 -7.59972,0.07617c-0.82524,3.55957 -5.30875,3.1582 -5.85886,1.91455l0.27615,-0.12451c1.51262,0.36182 3.82147,-0.37354 4.36133,-1.89697c-0.0712,-0.5127 -0.64094,-1.18066 -0.96661,-1.63477c-0.01714,-0.45996 0.05757,-0.71631 0.39482,-1.00342c0.61354,-0.00879 1.88034,1.45166 2.6814,1.52637c0.24554,0.04248 1.69413,-0.07617 1.61063,-0.50684c-0.48917,-2.52246 2.51996,-4.93066 4.16751,-2.53271c0.53942,0.78516 0.21477,1.94824 -0.15998,2.94141c1.522,0.10254 2.18769,0.11426 3.66413,-0.23877c0.45195,-0.56689 0.9817,-1.22461 1.73721,-1.2627c-0.00952,-0.0293 -0.07515,0.99023 -0.03326,1.35059c0.87813,0.65479 1.58455,-0.78369 1.98274,-1.31982c0.52828,-0.21533 0.25813,-0.17578 0.84414,-0.09082c0.21462,0.49072 -0.32465,0.81445 -0.11105,1.49707c1.14373,0.38232 1.42618,-0.81885 1.95857,-1.59082c0.48155,-0.22852 0.24495,-0.20947 0.7262,-0.11865c0.02915,0.16846 0.05816,0.32373 0.01524,0.49512c-0.48462,1.94678 2.59643,1.2583 3.58546,1.08398c0.09171,-1.98779 -0.14079,-3.70605 -0.12335,-5.65137c0.00571,-0.62695 0.27791,-0.8584 0.73661,-1.23779l-0.00001,-0.00002zm-16.64776,6.65332c0.52154,-0.16846 0.63977,-0.16113 0.96207,-0.56689c0.15148,-0.58447 0.15485,-0.30029 -0.01377,-0.88184c-0.43672,-0.479 -0.60432,-0.59619 -1.29023,-0.62109c-0.53751,0.42773 -0.73382,0.50684 -0.97057,1.11621c0.08687,0.8042 0.54952,0.8833 1.3125,0.95361z"/>
+     <path stroke="null" id="svg_17" fill="#36488d" d="m122.54637,169.89111c1.16116,0.26221 -0.07721,5.9165 0.92955,6.87451c1.30151,1.23779 3.1924,-0.79102 4.1259,-1.66553l0.1572,0.10547c-0.0145,0.43506 -0.13009,1.2085 0.22048,1.46338c0.84033,0.60791 2.47835,0.21826 3.40585,0.06445c0.58029,-0.70166 0.69353,-0.79834 1.41095,-1.33154l0.37387,0.06738l0,-0.01611c-0.04161,0.67822 -0.17683,0.92285 0.10826,1.42383c1.59862,0.34277 1.07649,-1.67871 2.67217,-1.5c0.21638,0.55371 -0.20701,0.54785 -0.17097,1.4165c1.09832,0.5625 1.54661,-0.73828 1.97087,-1.46631c0.49151,-0.27979 0.23836,-0.23584 0.78114,-0.15967c0.03238,0.66064 -0.09288,0.94922 0.29564,1.49561c0.70994,0.46875 1.49782,0.38379 2.21494,0.26367c2.14199,-0.35742 -0.29344,-4.80176 1.10388,-6.81592c0.47173,-0.21094 0.23499,-0.19043 0.73499,-0.06006c0.97379,1.09424 -0.3557,4.61133 0.63156,6.54053c0.32596,0.33252 0.52975,0.30615 0.99782,0.36621l0.17038,0.02051c0.27777,-0.00879 1.16527,-0.07764 1.36392,-0.21387c1.73926,-1.19678 -1.43541,-6.23877 1.12835,-6.83936l0.29154,0.21973c0.10841,0.24902 0.44536,1.04736 0.43511,1.30518c-0.16115,4.1499 0.53033,8.36865 -5.46081,6.34131c-2.08207,0.72363 -2.75788,0.52002 -4.88404,0.05127c-0.50045,0.20361 -1.04558,0.41895 -1.57737,0.32959c-2.22403,-0.37354 -7.14967,0.54932 -8.92512,-0.43066c-6.25148,2.13867 -5.1747,-2.11084 -5.3672,-6.93457c-0.01465,-0.36621 0.57194,-0.6958 0.86113,-0.91553l0.00001,0z"/>
+     <path stroke="null" id="svg_18" fill="#36488d" d="m158.05667,146.50781l0.3223,0c0.39848,0.58447 0.15236,13.61719 0.14797,15.33984c-0.73983,0.01611 -3.10435,0.14795 -3.5878,-0.14209c-0.03956,-2.70996 -0.01465,-5.43311 -0.0337,-8.14893c-0.0293,-1.27588 0.09962,-2.58838 -0.02491,-3.85547c-0.04981,-0.51123 -0.62995,-0.83496 -1.02111,-1.06787c0.00293,-0.17578 -0.03223,-0.39697 0.07032,-0.50684c0.58747,-0.62842 3.34461,-1.41943 4.12692,-1.61865l0.00001,0.00001z"/>
+     <path stroke="null" id="svg_19" fill="#36488d" d="m99.54195,146.49756c0.2051,0.00586 0.09405,-0.02314 0.30838,0.15234c0.22166,4.17041 0.27396,11.07861 0.03003,15.24023c-1.15633,0.01172 -2.37067,0.05127 -3.51792,-0.04834l0.01773,-8.84766c0.00718,-1.08984 0.09772,-2.1958 0.03868,-3.27832c-0.03868,-0.70752 -0.79843,-0.77051 -1.08279,-1.34473l0.15851,-0.39844c0.8563,-0.52002 3.04018,-1.16895 4.04737,-1.4751l0.00001,0.00002z"/>
+     <path stroke="null" id="svg_20" fill="#36488d" d="m80.55648,154.60986c4.23079,2.23682 4.36352,14.17676 -4.15857,11.55908c-0.51598,-0.34131 -1.05158,-0.6123 -1.25068,-1.16602c0.53854,-0.33252 1.76255,-0.12598 2.46224,-0.30322c2.13906,-0.58594 2.5308,-3.31494 2.12265,-5.18408c-0.26502,-1.21436 -2.0513,-0.60645 -1.81544,-1.25098c0.41709,-1.14111 1.77222,-2.77441 2.6398,-3.65479l0,0.00001z"/>
+     <path stroke="null" id="svg_21" fill="#36488d" d="m70.85623,154.59668c4.53845,2.06104 4.16663,14.42578 -3.98409,11.59277c-0.83725,-0.52588 -1.21596,-0.86279 -1.96531,-1.51904c4.55471,0.43506 6.08505,-1.16455 5.11302,-5.79346c-0.59596,-0.11426 -1.37447,-0.2124 -1.98743,-0.30469c0.59303,-1.12207 2.01937,-2.91211 2.8238,-3.97559l0.00001,0.00001z"/>
+     <path stroke="null" id="svg_22" fill="#36488d" d="m108.91213,171.94482c0.52535,0.39258 0.38779,3.61377 0.57663,4.86914c2.74923,0.5332 4.86514,-0.13037 7.41953,-1.11035c-1.0318,-0.22559 -2.03563,-0.49658 -3.09585,-0.46143c-1.31836,0.04541 -0.72298,0.62402 -1.53064,1.5542c-0.60197,-0.28711 -0.84487,-1.41797 -0.52887,-1.87646c1.18094,-1.71533 5.01457,-0.31494 6.58565,-0.08203l0.14738,0.02051l1.71787,0.19043l0.05347,0.21533c-0.64783,1.21143 -0.90054,0.56396 -1.94187,0.95215c-1.05246,0.375 -2.0661,1.00635 -3.12413,1.34912c-2.22139,0.72217 -5.02219,1.36963 -6.99438,-0.23438c-0.91753,0.1333 -4.1801,0.67529 -4.02218,-1.18066c0.11647,-1.36963 2.69957,-2.14893 3.54664,-2.86084c0.48433,-0.40723 0.20862,-0.72656 1.19076,-1.34473l-0.00001,0z"/>
+     <path stroke="null" id="svg_23" fill="#36488d" d="m97.77515,173.73633c2.38708,-0.11865 2.66104,1.30078 3.07065,3.25928c-0.92354,3.70166 -3.88227,4.26416 -7.02061,2.77295c0.07545,-0.26074 0.00601,-0.14062 0.23162,-0.34424c1.48127,0.15527 4.59206,-0.01611 5.18026,-1.69775c-0.62702,-0.63135 -2.8969,-0.19922 -3.27517,-1.32861c-0.45547,-1.35938 0.70027,-2.25146 1.81324,-2.66162l0.00001,-0.00001z"/>
+     <path stroke="null" id="svg_24" fill="#36488d" d="m93.42159,170.0127l0.27147,0.2373c0.39936,1.73145 0.425,4.24365 0.28817,6.04834c-0.08497,1.11914 -0.30106,1.57178 -1.14183,2.25146c-0.17873,-0.25195 -0.51685,-6.78369 -0.48345,-7.54248c0.23865,-0.51562 0.58703,-0.67236 1.06565,-0.99463l-0.00001,0.00001z"/>
+     <path stroke="null" id="svg_25" fill="#36488d" d="m79.17601,150.31055c0.92149,-0.29736 1.90846,0.21387 2.19751,1.13818c0.28905,0.92285 -0.23074,1.90576 -1.15721,2.18701c-0.91519,0.27686 -1.88283,-0.23437 -2.16836,-1.14697c-0.28553,-0.9126 0.21799,-1.88525 1.12806,-2.17822z"/>
+     <path stroke="null" id="svg_26" fill="#36488d" d="m142.91729,150.02783c0.61398,-0.15234 1.26196,0.04248 1.69164,0.50684c0.42954,0.46436 0.57282,1.125 0.37402,1.72559c-0.1988,0.60059 -0.70818,1.0459 -1.32993,1.16162c-0.92427,0.17285 -1.81837,-0.42041 -2.01746,-1.34033c-0.19924,-0.91846 0.36874,-1.82813 1.28173,-2.05371l0,-0.00001z"/>
+     <path stroke="null" id="svg_27" fill="#36488d" d="m61.33003,146.10542c0.57663,-0.25049 1.24379,-0.16904 1.74321,0.2127c0.49957,0.38159 0.75316,1.00415 0.66292,1.62671c-0.09039,0.62109 -0.51055,1.14551 -1.09817,1.36963c-0.88018,0.33545 -1.8673,-0.09229 -2.22271,-0.96533c-0.35556,-0.87158 0.05069,-1.86841 0.91475,-2.2437l0,-0.00001z"/>
+     <path stroke="null" id="svg_28" fill="#36488d" d="m56.46166,146.14102c0.54791,-0.29971 1.21478,-0.28169 1.7457,0.04746c0.53077,0.32959 0.84355,0.91846 0.81879,1.54248c-0.02476,0.62402 -0.38339,1.18652 -0.93863,1.47217c-0.8437,0.43359 -1.8799,0.10986 -2.32482,-0.72803c-0.44507,-0.83789 -0.13346,-1.87793 0.69895,-2.33408l0.00001,0z"/>
+     <path stroke="null" id="svg_29" fill="#36488d" d="m128.59187,163.27295c0.55363,-0.29736 1.22504,-0.27246 1.7542,0.06738c0.52916,0.33838 0.83315,0.9375 0.79433,1.56445c-0.03882,0.62695 -0.41445,1.18359 -0.98141,1.45605c-0.84868,0.40576 -1.86613,0.06006 -2.29186,-0.7793c-0.42558,-0.83936 -0.10387,-1.86328 0.72474,-2.30859l0,0.00001z"/>
+     <path stroke="null" id="svg_30" fill="#36488d" d="m108.54691,169.58057c0.47583,0.19775 1.15882,0.57568 1.32788,1.0708c-0.1572,0.4292 -0.22796,0.43066 -0.58776,0.70898c-0.56593,0.05566 -0.49122,-0.04248 -1.10564,-0.40723c-0.52037,0.03955 -0.64123,0.25049 -1.11516,0.59766c-0.63845,-0.23291 -1.49812,-0.55371 -1.40406,-1.33887c0.39277,-0.24316 1.19911,-0.2373 1.63216,-0.12451c0.67888,0.17432 0.69339,-0.0498 1.25258,-0.50684l0,0.00001z"/>
+     <path stroke="null" id="svg_31" fill="#36488d" d="m127.55464,179.4375c0.48799,0.18896 1.1868,0.57422 1.36451,1.09131c-0.11354,0.58008 0.03282,0.375 -0.35497,0.69727c-0.7199,0.06445 -0.94039,-0.27539 -1.67143,-0.46729l-0.71273,0.66064c-0.67581,-0.2915 -2.2104,-0.84668 -0.97657,-1.66699c1.47687,-0.07764 0.85146,1.0415 2.35119,-0.31494z"/>
+     <path stroke="null" id="svg_32" fill="#36488d" d="m72.67431,170.33203c0.64665,0.27246 1.22826,0.37646 1.4045,1.10449c-0.1424,0.43945 -0.38911,0.53613 -0.77909,0.80127c-0.62717,-0.29297 -1.1137,-0.4248 -1.41578,-0.9873c0.20598,-0.56982 0.24729,-0.46289 0.79037,-0.91846z"/>
+     <path stroke="null" id="svg_33" fill="#bb8922" fill-opacity="0.94902" d="m148.31584,184.60547c1.56316,-0.03076 3.12339,0.07764 4.66605,0.32666c-0.99327,0.07617 -2.20777,0.07764 -3.119,0.16992c-0.31937,-0.41162 -0.84677,-0.34717 -1.54705,-0.49658z"/>
+    </g>
+   </svg>
+  </g>
+ </g>
+</svg>
+```
+
+## File: public/manifest.json
+
+- Extension: .json
+- Language: json
+- Size: 717 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```json
+{
+  "name": "النجم الأزرق للسفريات والسياحة",
+  "short_name": "النجم الأزرق",
+  "description": "وكالة سفر متكاملة تقدم جميع خدمات السفر والسياحة",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0891b2",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo_svg.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/new_logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["travel", "tourism"],
+  "lang": "ar",
+  "dir": "rtl"
+}
+
+
+```
+
+## File: public/_redirects
+
+- Extension: 
+- Language: unknown
+- Size: 27 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```unknown
+/*    /index.html   200
+
+
+```
+
+## File: public/sw.js
+
+- Extension: .js
+- Language: javascript
+- Size: 2262 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+// Service Worker for offline support
+const CACHE_NAME = 'alnajm-travel-v2';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/logo_svg.svg',
+  '/manifest.json'
+];
+
+// Install event - cache resources
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        return cache.addAll(urlsToCache);
+      })
+      .catch((error) => {
+        // Silently fail in production
+        if (typeof console !== 'undefined' && console.error) {
+          console.error('Cache install failed:', error);
+        }
+      })
+  );
+  self.skipWaiting(); // Activate immediately
+});
+
+// Activate event - clean up old caches
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+  return self.clients.claim(); // Take control immediately
+});
+
+// Fetch event - serve from cache, fallback to network
+self.addEventListener('fetch', (event) => {
+  // Skip non-GET requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  // Skip cross-origin requests
+  if (!event.request.url.startsWith(self.location.origin)) {
+    return;
+  }
+
+  event.respondWith(
+    caches.match(event.request)
+      .then((response) => {
+        // Return cached version or fetch from network
+        return response || fetch(event.request)
+          .then((response) => {
+            // Don't cache if not a valid response
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+
+            // Clone the response
+            const responseToCache = response.clone();
+
+            caches.open(CACHE_NAME)
+              .then((cache) => {
+                cache.put(event.request, responseToCache);
+              });
+
+            return response;
+          })
+          .catch(() => {
+            // If fetch fails and it's a navigation request, return offline page
+            if (event.request.mode === 'navigate') {
+              return caches.match('/index.html');
+            }
+          });
+      })
+  );
+});
+
+
+```
+
+## File: api/admin/delete-entry.js
+
+- Extension: .js
+- Language: javascript
+- Size: 1904 bytes
+- Created: 2025-12-27 17:37:59
+- Modified: 2025-12-11 17:37:58
+
+### Code
+
+```javascript
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Missing Supabase environment variables');
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// CORS headers helper
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export default async function handler(req, res) {
+  // Set CORS headers for all responses
+  Object.keys(corsHeaders).forEach(key => {
+    res.setHeader(key, corsHeaders[key]);
+  });
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // Only allow DELETE requests
+  if (req.method !== 'DELETE') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    // Get ID from query string or body
+    const id = req.query?.id || req.body?.id;
+
+    if (!id) {
+      return res.status(400).json({ error: 'Entry ID is required' });
+    }
+
+    // Delete from database
+    const { data, error } = await supabase
+      .from('visa_status')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({ error: 'Entry not found' });
+      }
+
+      console.error('Database error:', error);
+      return res.status(500).json({ error: 'Failed to delete entry' });
+    }
+
+    // Return success
+    return res.status(200).json({
+      success: true,
+      message: 'Entry deleted successfully',
+      data: {
+        id: data.id,
+        passport_number: data.passport_number,
+      },
+    });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+
+```
+
+## File: api/admin/create-entry.js
+
+- Extension: .js
+- Language: javascript
+- Size: 2998 bytes
+- Created: 2025-12-27 17:55:18
+- Modified: 2025-12-27 17:55:18
+
+### Code
+
+```javascript
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Missing Supabase environment variables');
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// CORS headers helper
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export default async function handler(req, res) {
+  // Set CORS headers for all responses
+  Object.keys(corsHeaders).forEach(key => {
+    res.setHeader(key, corsHeaders[key]);
+  });
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // Only allow POST requests
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    // Parse request body
+    const { passport_number, status, admin_notes, first_name, last_name } = req.body;
+
+    // Validation
+    if (!passport_number || passport_number.trim() === '') {
+      return res.status(400).json({ error: 'Passport number is required' });
+    }
+
+    const validStatuses = ['pending', 'in_embassy', 'ready', 'rejected'];
+    const entryStatus = status || 'pending';
+
+    if (!validStatuses.includes(entryStatus)) {
+      return res.status(400).json({
+        error: 'Invalid status. Must be: pending, in_embassy, ready, or rejected',
+      });
+    }
+
+    // Sanitize input
+    const sanitizedPassport = passport_number.trim().toUpperCase();
+    const sanitizedNotes = admin_notes ? admin_notes.trim() : null;
+    const sanitizedFirstName = first_name ? first_name.trim() : null;
+    const sanitizedLastName = last_name ? last_name.trim() : null;
+
+    // Insert into database
+    const { data, error } = await supabase
+      .from('visa_status')
+      .insert({
+        passport_number: sanitizedPassport,
+        status: entryStatus,
+        admin_notes: sanitizedNotes,
+        first_name: sanitizedFirstName,
+        last_name: sanitizedLastName,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      // Check if passport number already exists
+      if (error.code === '23505') {
+        return res.status(409).json({
+          error: 'Passport number already exists in the system',
+        });
+      }
+
+      console.error('Database error:', error);
+      return res.status(500).json({ error: 'Failed to create entry' });
+    }
+
+    // Return success
+    return res.status(201).json({
+      success: true,
+      data: {
+        id: data.id,
+        passport_number: data.passport_number,
+        status: data.status,
+        admin_notes: data.admin_notes,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        created_at: data.created_at,
+      },
+    });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+
+```
+
+## File: api/admin/list-entries.js
+
+- Extension: .js
+- Language: javascript
+- Size: 2687 bytes
+- Created: 2025-12-27 17:55:20
+- Modified: 2025-12-27 17:55:20
+
+### Code
+
+```javascript
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Missing Supabase environment variables');
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// CORS headers helper
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export default async function handler(req, res) {
+  // Set CORS headers for all responses
+  Object.keys(corsHeaders).forEach(key => {
+    res.setHeader(key, corsHeaders[key]);
+  });
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // Only allow GET requests
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    // Get query parameters for pagination and filtering
+    const page = parseInt(req.query?.page || '1', 10);
+    const limit = parseInt(req.query?.limit || '50', 10);
+    const statusFilter = req.query?.status;
+    const search = req.query?.search;
+
+    // Validate pagination
+    const pageNum = Math.max(1, page);
+    const limitNum = Math.min(100, Math.max(1, limit)); // Max 100 per page
+    const offset = (pageNum - 1) * limitNum;
+
+    // Build query
+    let query = supabase
+      .from('visa_status')
+      .select('id, passport_number, status, created_at, updated_at, admin_notes, first_name, last_name', {
+        count: 'exact',
+      })
+      .order('updated_at', { ascending: false });
+
+    // Apply status filter
+    if (statusFilter && ['pending', 'in_embassy', 'ready', 'rejected'].includes(statusFilter)) {
+      query = query.eq('status', statusFilter);
+    }
+
+    // Apply search filter (search in passport number)
+    if (search && search.trim() !== '') {
+      query = query.ilike('passport_number', `%${search.trim()}%`);
+    }
+
+    // Apply pagination
+    query = query.range(offset, offset + limitNum - 1);
+
+    // Execute query
+    const { data, error, count } = await query;
+
+    if (error) {
+      console.error('Database error:', error);
+      return res.status(500).json({ error: 'Failed to fetch entries' });
+    }
+
+    // Return results
+    return res.status(200).json({
+      success: true,
+      data: data || [],
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total: count || 0,
+        totalPages: Math.ceil((count || 0) / limitNum),
+      },
+    });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+
+```
+
+## File: api/admin/update-status.js
+
+- Extension: .js
+- Language: javascript
+- Size: 2825 bytes
+- Created: 2025-12-27 17:55:16
+- Modified: 2025-12-27 17:55:16
+
+### Code
+
+```javascript
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Missing Supabase environment variables');
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// CORS headers helper
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'PUT, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export default async function handler(req, res) {
+  // Set CORS headers for all responses
+  Object.keys(corsHeaders).forEach(key => {
+    res.setHeader(key, corsHeaders[key]);
+  });
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // Only allow PUT requests
+  if (req.method !== 'PUT') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    // Parse request body
+    const { id, status, admin_notes, first_name, last_name } = req.body;
+
+    // Validation
+    if (!id) {
+      return res.status(400).json({ error: 'Entry ID is required' });
+    }
+
+    const validStatuses = ['pending', 'in_embassy', 'ready', 'rejected'];
+    if (status && !validStatuses.includes(status)) {
+      return res.status(400).json({
+        error: 'Invalid status. Must be: pending, in_embassy, ready, or rejected',
+      });
+    }
+
+    // Build update object
+    const updateData = {
+      updated_at: new Date().toISOString(),
+    };
+
+    if (status) {
+      updateData.status = status;
+    }
+
+    if (admin_notes !== undefined) {
+      updateData.admin_notes = admin_notes ? admin_notes.trim() : null;
+    }
+
+    if (first_name !== undefined) {
+      updateData.first_name = first_name ? first_name.trim() : null;
+    }
+
+    if (last_name !== undefined) {
+      updateData.last_name = last_name ? last_name.trim() : null;
+    }
+
+    // Update database
+    const { data, error } = await supabase
+      .from('visa_status')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({ error: 'Entry not found' });
+      }
+
+      console.error('Database error:', error);
+      return res.status(500).json({ error: 'Failed to update entry' });
+    }
+
+    // Return success
+    return res.status(200).json({
+      success: true,
+      data: {
+        id: data.id,
+        passport_number: data.passport_number,
+        status: data.status,
+        admin_notes: data.admin_notes,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        updated_at: data.updated_at,
+      },
+    });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+
+```
+
+## File: src/components/index.js
+
+- Extension: .js
+- Language: javascript
+- Size: 147 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+// Master components barrel export
+export * from './common';
+export * from './layout';
+export * from './sections';
+export * from './widgets';
+
+```
+
+## File: src/pages/About.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 15659 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-27 16:16:24
+
+### Code
+
+```javascript
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { 
+    FiArrowLeft,
+    FiTarget,
+    FiAward,
+    FiUsers,
+    FiTrendingUp,
+    FiMapPin,
+    FiSmile,
+    FiCheckCircle
+} from 'react-icons/fi';
+import LazyImage from '../components/common/LazyImage';
+import './About.css';
+
+const About = () => {
+    const containerRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start start", "end end"]
+    });
+
+    const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+
+    // Stagger animation variants
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.2
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+        }
+    };
+
+    const scrollToContent = () => {
+        const storySection = document.querySelector('.story-section');
+        if (storySection) {
+            storySection.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    return (
+        <div className="about-modern" ref={containerRef}>
+            {/* --- Section 1: Parallax Hero --- */}
+            <header className="about-hero-modern">
+                <motion.div style={{ y }} className="hero-bg-parallax">
+                    <LazyImage 
+                        src="/hero-bg.jpg" 
+                        alt="خلفية النجم الأزرق" 
+                        className="parallax-img" 
+                    />
+                    <div className="hero-overlay-gradient"></div>
+                </motion.div>
+
+                <div className="container hero-content-modern">
+                    <motion.div 
+                        initial="hidden"
+                        animate="visible"
+                        variants={containerVariants}
+                        className="hero-text-wrapper"
+                    >
+                        <motion.span variants={itemVariants} className="hero-badge-glass">
+                            منذ 2008
+                        </motion.span>
+                        <motion.h1 variants={itemVariants} className="hero-title-modern">
+                            لسنا مجرد وكالة سفر، <br />
+                            <span className="text-gradient">نحن رفقاء رحلتك.</span>
+                        </motion.h1>
+                        <motion.p variants={itemVariants} className="hero-desc-modern">
+                            في "النجم الأزرق"، نؤمن أن السفر ليس مجرد انتقال من مكان لآخر، بل هو فن صناعة الذكريات. 
+                            نجمع بين الخبرة العريقة والرؤية العصرية لنقدم لك تجربة لا تُنسى.
+                        </motion.p>
+                    </motion.div>
+                </div>
+                
+                {/* Scroll Indicator */}
+                <motion.div 
+                    className="scroll-mouse"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1, duration: 1 }}
+                    onClick={scrollToContent}
+                    style={{ cursor: 'pointer' }}
+                >
+                    <div className="wheel"></div>
+                </motion.div>
+            </header>
+
+            {/* --- Section 2: The Story (Image Collage) --- */}
+            <section className="section story-section">
+                <div className="container">
+                    <div className="story-grid">
+                        <motion.div 
+                            className="story-content"
+                            initial={{ opacity: 0, x: 50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{ duration: 0.8 }}
+                        >
+                            <span className="section-label">قصتنا</span>
+                            <h2 className="section-heading">
+                                من مكتب صغير إلى <br/>
+                                <span className="highlight-underline">نافذة على العالم</span>
+                            </h2>
+                            <p className="story-text">
+                                بدأت حكايتنا بشغف بسيط: كيف يمكننا جعل السفر أسهل وأكثر متعة؟ 
+                                انطلقنا من صنعاء برؤية واضحة، ورغم التحديات، استطعنا أن نبني جسراً من الثقة مع عملائنا.
+                            </p>
+                            <p className="story-text">
+                                اليوم، وبعد مرور أكثر من 15 عاماً، نفخر بأننا لسنا مجرد مقدمي خدمة، بل مستشارين مؤتمنين 
+                                لأحلام آلاف المسافرين، نفتح لهم أبواب العالم بمصداقية واحترافية.
+                            </p>
+                            
+                            <div className="story-stats">
+                                <div className="story-stat-item">
+                                    <span className="stat-num">15+</span>
+                                    <span className="stat-label">سنة خبرة</span>
+                                </div>
+                                <div className="story-stat-item">
+                                    <span className="stat-num">50k+</span>
+                                    <span className="stat-label">عميل سعيد</span>
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        <motion.div 
+                            className="story-visuals"
+                            initial={{ opacity: 0, x: -50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{ duration: 0.8 }}
+                        >
+                            <div className="collage-wrapper">
+                                <div className="collage-img-lg">
+                                    <LazyImage src="/dubai.jpg" alt="سفر وسياحة" />
+                                </div>
+                                <div className="collage-img-sm glass-card">
+                                    <LazyImage src="/london.jpeg" alt="وجهات عالمية" />
+                                    <div className="collage-badge">
+                                        <FiTrendingUp />
+                                        <span>نمو مستمر</span>
+                                    </div>
+                                </div>
+                                {/* Decorative elements */}
+                                <div className="circle-decor"></div>
+                                <div className="dots-decor"></div>
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* --- Section 3: Values (Modern Bento Grid) --- */}
+            <section className="section values-section-modern">
+                <div className="container">
+                    <div className="section-header-center mb-5">
+                        <motion.span 
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            className="section-tag"
+                        >
+                            لماذا تختارنا؟
+                        </motion.span>
+                        <motion.h2 
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 }}
+                            className="section-heading"
+                        >
+                            قيمٌ نلتزم بها في كل رحلة
+                        </motion.h2>
+                    </div>
+
+                    <div className="bento-grid-modern">
+                        {/* 1. Vision Card (Featured) */}
+                        <motion.div 
+                            className="bento-item vision-card"
+                            whileHover={{ y: -5 }}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                        >
+                            <div className="card-overlay"></div>
+                            <div className="bento-content relative z-10">
+                                <div className="icon-wrapper glass-icon mb-4">
+                                    <FiTarget />
+                                </div>
+                                <h3>رؤيتنا للمستقبل</h3>
+                                <p>أن نكون الخيار الأول للمسافر العربي، عبر تقديم حلول سفر مبتكرة تجمع بين الفخامة، السهولة، والسعر المناسب.</p>
+                            </div>
+                            <div className="bg-pattern"></div>
+                        </motion.div>
+
+                        {/* 2. Trust Card (Vertical) */}
+                        <motion.div 
+                            className="bento-item trust-card"
+                            whileHover={{ y: -5 }}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1 }}
+                        >
+                            <div className="trust-badge">
+                                <FiCheckCircle /> 100% شفافية
+                            </div>
+                            <div className="bento-content mt-auto">
+                                <div className="icon-wrapper mb-3 text-amber-500">
+                                    <FiAward size={32} />
+                                </div>
+                                <h3>المصداقية أولاً</h3>
+                                <p>لا رسوم خفية، ولا وعود زائفة. الشفافية هي عملتنا، وما نتفق عليه هو ما تحصل عليه بالضبط.</p>
+                            </div>
+                        </motion.div>
+
+                        {/* 3. Team Card */}
+                        <motion.div 
+                            className="bento-item team-card"
+                            whileHover={{ scale: 1.02 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="icon-wrapper text-blue-600">
+                                    <FiUsers />
+                                </div>
+                                <span className="tiny-tag">دعم 24/7</span>
+                            </div>
+                            <h3>فريق محترف</h3>
+                            <p>مستشارون ذوو خبرة عالية جاهزون لخدمتك في أي وقت.</p>
+                        </motion.div>
+
+                        {/* 4. Global Coverage */}
+                        <motion.div 
+                            className="bento-item map-card"
+                            whileHover={{ scale: 1.02 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.3 }}
+                        >
+                            <div className="bento-content">
+                                <div className="icon-wrapper text-teal-600 mb-3">
+                                    <FiMapPin />
+                                </div>
+                                <h3>تغطية عالمية</h3>
+                                <p>شبكة واسعة من الشركاء في أكثر من 50 دولة.</p>
+                            </div>
+                            <div className="map-dots-decoration"></div>
+                        </motion.div>
+
+                        {/* 5. Comfort/Service */}
+                        <motion.div 
+                            className="bento-item service-card"
+                            whileHover={{ scale: 1.02 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.4 }}
+                        >
+                            <div className="bento-content">
+                                <div className="icon-wrapper text-rose-500 mb-3">
+                                    <FiSmile />
+                                </div>
+                                <h3>راحة بالك</h3>
+                                <p>نهتم بأدق التفاصيل الصغيرة لتستمتع برحلتك دون قلق.</p>
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* --- Section 4: Modern CTA --- */}
+            <section className="cta-modern-section">
+                <div className="container">
+                    <div className="cta-modern-card">
+                        <div className="cta-modern-content">
+                            <h2>هل أنت مستعد لمغامرتك القادمة؟</h2>
+                            <p>دعنا نخطط لرحلتك بينما تتفرغ أنت لتجهيز حقائبك.</p>
+                            <div className="cta-buttons">
+                                <Link to="/contact" className="btn btn-primary btn-lg border-white">
+                                    ابدأ التخطيط الآن <FiArrowLeft />
+                                </Link>
+                                <Link to="/services" className="btn btn-outline btn-lg text-white border-white hover-white">
+                                    استكشف خدماتنا
+                                </Link>
+                            </div>
+                        </div>
+                        <div className="cta-pattern-overlay"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+};
+
+export default About;
+```
+
+## File: src/pages/Destinations.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 7790 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-20 13:11:32
+
+### Code
+
+```javascript
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { allDestinations } from '../data';
+import LazyImage from '../components/common/LazyImage';
+import { FiMapPin, FiArrowLeft } from 'react-icons/fi';
+import './Destinations.css';
+
+const Destinations = () => {
+    // Sliding text animation words - popular destinations
+    const slidingWords = ["مكة المكرمة", "دبي", "باريس", "مالديف", "إسطنبول", "لندن", "طوكيو", "نيويورك"];
+
+    return (
+            <div className="destinations-page">
+                {/* Enhanced Hero Section */}
+                <section className="destinations-hero" aria-label="وجهاتنا السياحية">
+                    <div className="destinations-hero-overlay"></div>
+                    <div className="destinations-hero-pattern"></div>
+                    
+                    <div className="container destinations-hero-content">
+                        {/* Badge */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            className="destinations-hero-badge"
+                        >
+                            <FiMapPin aria-hidden="true" />
+                            <span>اكتشف العالم</span>
+                        </motion.div>
+
+                        {/* Main Title with Animated Underline */}
+                        <div className="destinations-title-wrapper">
+                            <motion.h1
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.3 }}
+                                className="destinations-hero-title"
+                            >
+                                وجهاتنا السياحية
+                                <motion.span
+                                    className="destinations-title-underline"
+                                    initial={{ scaleX: 0 }}
+                                    animate={{ scaleX: 1 }}
+                                    transition={{ duration: 0.8, delay: 1.1, ease: "easeOut" }}
+                                />
+                            </motion.h1>
+                        </div>
+
+                        {/* Sliding Text Animation (RTL) */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.6, delay: 0.6 }}
+                            className="destinations-sliding-text-wrapper"
+                            aria-label="وجهاتنا المميزة"
+                        >
+                            <div className="destinations-sliding-text">
+                                {[...slidingWords, ...slidingWords].map((word, index) => (
+                                    <span key={`${word}-${index}`} className="sliding-word">
+                                        {word}
+                                    </span>
+                                ))}
+                            </div>
+                        </motion.div>
+
+                        {/* Subtitle */}
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.8 }}
+                            className="destinations-hero-subtitle"
+                        >
+                            اختر وجهتك القادمة من بين أجمل مدن العالم
+                        </motion.p>
+
+                        {/* CTA Button */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 1 }}
+                            className="destinations-hero-cta"
+                        >
+                            <Link 
+                                to="/contact" 
+                                className="destinations-cta-button"
+                                aria-label="تواصل معنا لحجز رحلتك"
+                            >
+                                <span>احجز رحلتك الآن</span>
+                                <FiArrowLeft aria-hidden="true" />
+                            </Link>
+                        </motion.div>
+                    </div>
+                </section>
+
+                <div className="container section">
+                    <div className="destinations-grid-layout">
+                        {allDestinations.map((dest, index) => {
+                            const isSpecial = dest.name === "مكة المكرمة" || dest.name === "المدينة المنورة";
+                            return (
+                            <motion.div
+                                key={dest.id || index}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                className="destination-card-full"
+                                data-special={isSpecial}
+                            >
+                                <div className="dest-img-wrapper">
+                                    <LazyImage src={dest.image} alt={dest.name} className="dest-full-img" />
+                                    <div className="dest-overlay-gradient"></div>
+                                    <div className="dest-duration-badge">
+                                        <FiMapPin className="dest-badge-icon" />
+                                        <span>{dest.duration}</span>
+                                    </div>
+                                </div>
+
+                                <div className="dest-content">
+                                    <div className="dest-header">
+                                        <div>
+                                            <h3 className="dest-title">{dest.name}</h3>
+                                            <span className="dest-country">{dest.country}</span>
+                                        </div>
+                                    </div>
+
+                                    <p className="dest-desc">{dest.description}</p>
+
+                                    <div className="dest-features">
+                                        {dest.features.map((feature, i) => (
+                                            <span key={i} className="dest-feature-tag">{feature}</span>
+                                        ))}
+                                    </div>
+
+                                    <Link 
+                                        to="/contact" 
+                                        className="btn btn-primary w-full mt-md dest-cta-btn"
+                                        state={{ destination: dest.name }}
+                                    >
+                                        <span>احجز الآن</span>
+                                        <FiArrowLeft className="dest-btn-icon" />
+                                    </Link>
+                                </div>
+                            </motion.div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+    );
+};
+
+export default Destinations;
+
+```
+
+## File: src/pages/Admin.css
+
+- Extension: .css
+- Language: unknown
+- Size: 11053 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-16 21:17:11
+
+### Code
+
+```unknown
+.admin-page {
+  min-height: 100vh;
+  padding: var(--spacing-2xl) 0;
+  background: var(--bg-secondary);
+}
+
+.admin-header {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  padding-top: var(--spacing-lg); /* Add some padding at the top */
+}
+
+.admin-header h1 {
+  font-size: var(--font-3xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.admin-header p {
+  font-size: var(--font-lg);
+  color: var(--text-secondary);
+  margin-top: var(--spacing-sm); /* Adjust margin to move it a little down */
+}
+
+.admin-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+}
+
+/* Add Entry Form */
+.add-entry-form {
+  background: var(--bg-primary);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.add-entry-form h3 {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.form-group label {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: var(--spacing-md);
+  font-size: var(--font-base);
+  border: 2px solid var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-cyan);
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+}
+
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+  background: var(--bg-tertiary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.btn-primary {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: white;
+  background: var(--gradient-ocean);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  padding: var(--spacing-md);
+  background: rgba(236, 72, 153, 0.1);
+  border: 1px solid var(--accent-coral);
+  border-radius: var(--radius-md);
+  color: var(--accent-coral);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  margin-top: var(--spacing-md);
+}
+
+/* Filters */
+.admin-filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  background: var(--bg-primary);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.filter-group label {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.filter-group input,
+.filter-group select {
+  padding: var(--spacing-md);
+  font-size: var(--font-base);
+  border: 2px solid var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+  outline: none;
+  border-color: var(--primary-cyan);
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+}
+
+/* Table */
+.table-container {
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow-x: auto;
+}
+
+.passport-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.passport-table thead {
+  background: var(--bg-secondary);
+}
+
+.passport-table th {
+  padding: var(--spacing-md) var(--spacing-lg);
+  text-align: left;
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--bg-tertiary);
+}
+
+.passport-table td {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--bg-tertiary);
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+}
+
+.passport-table tbody tr:hover {
+  background: var(--bg-secondary);
+}
+
+.passport-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-success {
+  background: rgba(20, 184, 166, 0.1);
+  color: var(--secondary-teal);
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--accent-amber);
+}
+
+.badge-info {
+  background: rgba(71, 85, 105, 0.1);
+  color: var(--text-secondary);
+}
+
+.badge-error {
+  background: rgba(236, 72, 153, 0.1);
+  color: var(--accent-coral);
+}
+
+.notes-cell {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-muted {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.action-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.btn-edit,
+.btn-delete {
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-edit {
+  background: rgba(8, 145, 178, 0.1);
+  color: var(--primary-cyan);
+}
+
+.btn-edit:hover {
+  background: var(--primary-cyan);
+  color: white;
+}
+
+.btn-delete {
+  background: rgba(236, 72, 153, 0.1);
+  color: var(--accent-coral);
+}
+
+.btn-delete:hover:not(:disabled) {
+  background: var(--accent-coral);
+  color: white;
+}
+
+.btn-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-lg);
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+  background: var(--bg-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-bottom: 1px solid var(--bg-tertiary);
+}
+
+.modal-header h3 {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: var(--font-3xl);
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: var(--spacing-xl);
+}
+
+.entry-info {
+  background: var(--bg-secondary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.entry-info p {
+  margin: var(--spacing-xs) 0;
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+}
+
+.entry-info strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+  margin-top: var(--spacing-lg);
+}
+
+.btn-secondary {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  border: 2px solid var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Loading and Empty States */
+.loading-state {
+  text-align: center;
+  padding: var(--spacing-3xl);
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.spinner-large {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--bg-tertiary);
+  border-top-color: var(--primary-cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto var(--spacing-md);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-state p {
+  color: var(--text-secondary);
+  font-size: var(--font-base);
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-3xl);
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.empty-state p {
+  color: var(--text-secondary);
+  font-size: var(--font-base);
+}
+
+.error-banner {
+  background: rgba(236, 72, 153, 0.1);
+  border: 1px solid var(--accent-coral);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  color: var(--accent-coral);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.error-banner button {
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: var(--accent-coral);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-sm);
+  font-weight: 600;
+}
+
+.error-banner button:hover {
+  opacity: 0.9;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.pagination-info {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.btn-pagination {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--primary-cyan);
+  background: transparent;
+  border: 2px solid var(--primary-cyan);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-pagination:hover:not(:disabled) {
+  background: var(--primary-cyan);
+  color: white;
+}
+
+.btn-pagination:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .passport-table {
+    font-size: var(--font-xs);
+  }
+
+  .passport-table th,
+  .passport-table td {
+    padding: var(--spacing-sm);
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .modal-content {
+    margin: var(--spacing-md);
+    max-height: calc(100vh - 2rem);
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+}
+
+
+```
+
+## File: src/pages/Admin.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 5099 bytes
+- Created: 2025-12-27 17:55:58
+- Modified: 2025-12-27 17:55:58
+
+### Code
+
+```javascript
+import { useState, useEffect } from 'react';
+import AddEntryForm from '../components/admin/AddEntryForm';
+import PassportTable from '../components/admin/PassportTable';
+import './Admin.css';
+
+const Admin = () => {
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState(null);
+
+  const fetchEntries = async (page = 1, search = '', status = 'all') => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: '50',
+      });
+
+      if (search.trim()) {
+        params.append('search', search.trim());
+      }
+
+      if (status !== 'all') {
+        params.append('status', status);
+      }
+
+      const response = await fetch(`/api/admin/list-entries?${params.toString()}`);
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || 'فشل في جلب البيانات');
+        return;
+      }
+
+      setEntries(data.data || []);
+      setPagination(data.pagination);
+    } catch (err) {
+      console.error('Error fetching entries:', err);
+      setError('حدث خطأ أثناء جلب البيانات');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEntries(currentPage, searchTerm, statusFilter);
+  }, [currentPage, searchTerm, statusFilter]);
+
+  const handleRefresh = () => {
+    fetchEntries(currentPage, searchTerm, statusFilter);
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page on new search
+  };
+
+  const handleStatusFilter = (e) => {
+    setStatusFilter(e.target.value);
+    setCurrentPage(1); // Reset to first page on filter change
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <div className="admin-page">
+      <div className="container">
+        <div className="admin-header">
+          <h1>لوحة الإدارة - إدارة حالة الفيزا</h1>
+          <p>إدارة مدخلات جوازات السفر وحالات الفيزا</p>
+        </div>
+
+        <div className="admin-content">
+          <AddEntryForm onSuccess={handleRefresh} />
+
+          <div className="admin-filters">
+            <div className="filter-group">
+              <label htmlFor="search">ابحث عن الجواز</label>
+              <input
+                type="text"
+                id="search"
+                placeholder="أدخل رقم الجواز..."
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+            </div>
+
+            <div className="filter-group">
+              <label htmlFor="status-filter">فرز حسب الحاله</label>
+              <select id="status-filter" value={statusFilter} onChange={handleStatusFilter}>
+                <option value="all">الكل</option>
+                <option value="pending">في الانتظار</option>
+                <option value="in_embassy">في السفارة</option>
+                <option value="ready">جاهز</option>
+                <option value="rejected">مرفوض</option>
+              </select>
+            </div>
+          </div>
+
+          {error && (
+            <div className="error-banner">
+              {error}
+              <button onClick={handleRefresh}>إعادة المحاولة</button>
+            </div>
+          )}
+
+          {loading ? (
+            <div className="loading-state">
+              <div className="spinner-large"></div>
+              <p>جاري تحميل البيانات...</p>
+            </div>
+          ) : (
+            <>
+              <PassportTable
+                entries={entries}
+                onRefresh={handleRefresh}
+                onDelete={handleRefresh}
+              />
+
+              {pagination && pagination.totalPages > 1 && (
+                <div className="pagination">
+                  <button
+                    className="btn-pagination"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    السابق
+                  </button>
+                  <span className="pagination-info">
+                    صفحة {pagination.page} من {pagination.totalPages} (الكل {pagination.total})
+                  </span>
+                  <button
+                    className="btn-pagination"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === pagination.totalPages}
+                  >
+                    التالي
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Admin;
+```
+
+## File: src/pages/Contact.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 11544 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-27 00:26:50
+
+### Code
+
+```javascript
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FiPhone, FiMail, FiMapPin, FiClock, FiCheckCircle } from 'react-icons/fi';
+import { CONTACT_INFO } from '../constants/company';
+import LazyImage from '../components/common/LazyImage';
+import './Contact.css';
+
+const Contact = () => {
+    // Contact methods for floating icons
+    const handleMapClick = (e) => {
+        e.preventDefault();
+        const mapSection = document.querySelector('.contact-map-wrapper');
+        if (mapSection) {
+            mapSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
+    const contactMethods = [
+        { icon: <FiPhone />, label: 'اتصل بنا', method: `tel:${CONTACT_INFO.phone.replace(/\s/g, '')}` },
+        { icon: <FiMail />, label: 'راسلنا', method: `mailto:${CONTACT_INFO.email}` },
+        { 
+            icon: <FiMapPin />, 
+            label: 'موقعنا', 
+            method: 'https://maps.google.com/?q=صنعاء+شارع+القدس+مقابل+السفارة+السعودية', 
+            onClick: handleMapClick 
+        }
+    ];
+
+    return (
+        <div className="contact-page">
+            {/* Enhanced Hero Section */}
+            <section className="contact-hero" aria-label="تواصل معنا">
+                <div className="contact-hero-background">
+                    <LazyImage 
+                        src="/dubai.jpg" 
+                        alt="دبي - خلفية" 
+                        className="contact-hero-image"
+                    />
+                    <div className="contact-hero-overlay"></div>
+                    <div className="contact-hero-pattern"></div>
+                </div>
+                
+                <div className="container contact-hero-content">
+                    {/* Badge */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="contact-hero-badge"
+                    >
+                        <FiMapPin aria-hidden="true" />
+                        <span>زورنا في صنعاء</span>
+                    </motion.div>
+
+                    {/* Main Title with Animated Underline */}
+                    <div className="contact-title-wrapper">
+                        <motion.h1
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.3 }}
+                            className="contact-hero-title"
+                        >
+                            تواصل معنا
+                            <motion.span
+                                className="contact-title-underline"
+                                initial={{ scaleX: 0 }}
+                                animate={{ scaleX: 1 }}
+                                transition={{ duration: 0.8, delay: 1.1, ease: "easeOut" }}
+                            />
+                        </motion.h1>
+                    </div>
+
+                    {/* Floating Contact Methods */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.6, delay: 0.6 }}
+                        className="contact-methods-floating"
+                        aria-label="طرق التواصل"
+                    >
+                        {contactMethods.map((method, index) => (
+                            <motion.a
+                                key={index}
+                                href={method.method}
+                                className="contact-method-icon"
+                                onClick={method.onClick}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.8 + index * 0.1 }}
+                                whileHover={{ y: -5, scale: 1.1 }}
+                                aria-label={method.label}
+                                target={method.method.startsWith('http') ? '_blank' : undefined}
+                                rel={method.method.startsWith('http') ? 'noopener noreferrer' : undefined}
+                            >
+                                {method.icon}
+                            </motion.a>
+                        ))}
+                    </motion.div>
+
+                    {/* Subtitle */}
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.8 }}
+                        className="contact-hero-subtitle"
+                    >
+                        نحن هنا للإجابة على استفساراتك ومساعدتك في تخطيط رحلتك القادمة
+                    </motion.p>
+                </div>
+            </section>
+
+            <div className="container section">
+                <div className="contact-grid">
+                    {/* Contact Info */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        className="contact-info-wrapper"
+                    >
+                        <h2 className="contact-title">معلومات الاتصال</h2>
+                        <p className="contact-desc">يمكنك التواصل معنا عبر القنوات التالية أو زيارة مقرنا الرئيسي.</p>
+
+                        <div className="contact-cards-grid">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.1 }}
+                                className="contact-card"
+                            >
+                                <div className="contact-card-icon">
+                                    <FiPhone />
+                                </div>
+                                <h4 className="contact-card-title">الهاتف</h4>
+                                <div className="contact-card-content">
+                                    <a href={`tel:${CONTACT_INFO.phone.replace(/\s/g, '')}`} className="contact-link">{CONTACT_INFO.phone}</a>
+                                </div>
+                            </motion.div>
+
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.2 }}
+                                className="contact-card"
+                            >
+                                <div className="contact-card-icon">
+                                    <FiMail />
+                                </div>
+                                <h4 className="contact-card-title">البريد الإلكتروني</h4>
+                                <div className="contact-card-content">
+                                    <a href={`mailto:${CONTACT_INFO.email}`} className="contact-link">{CONTACT_INFO.email}</a>
+                                </div>
+                            </motion.div>
+
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.3 }}
+                                className="contact-card"
+                            >
+                                <div className="contact-card-icon">
+                                    <FiMapPin />
+                                </div>
+                                <h4 className="contact-card-title">العنوان</h4>
+                                <div className="contact-card-content">
+                                    <p>{CONTACT_INFO.address}</p>
+                                </div>
+                            </motion.div>
+
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.4 }}
+                                className="contact-card"
+                            >
+                                <div className="contact-card-icon">
+                                    <FiClock />
+                                </div>
+                                <h4 className="contact-card-title">ساعات العمل</h4>
+                                <div className="contact-card-content">
+                                    <p>{CONTACT_INFO.workingHours}</p>
+                                </div>
+                            </motion.div>
+                        </div>
+                    </motion.div>
+
+                    {/* Interactive Map Section */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="contact-map-wrapper"
+                    >
+                        <h2 className="contact-title">موقعنا على الخريطة</h2>
+                        <div className="map-container">
+                            <iframe
+                            src="https://maps.google.com/maps?q=Sana'a+Al+Quds+Street+Opposite+Saudi+Embassy&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                            width="100%"
+                            height="450"
+                            style={{ border: 0, borderRadius: 'var(--radius-lg)' }}
+                            allowFullScreen=""
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            title="موقعنا في شارع القدس، صنعاء، مقابل السفارة السعودية"
+                            ></iframe>
+                        </div>
+                        <div className="map-info">
+                            <div className="map-pin-icon">
+                                <FiMapPin />
+                            </div>
+                            <div>
+                                <h4>شارع القدس، صنعاء</h4>
+                                <p>مقابل السفارة السعودية</p>
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Contact;
+
+```
+
+## File: src/pages/Home.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 570 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-10 17:23:43
+
+### Code
+
+```javascript
+import Hero from '../components/sections/Hero';
+import HomeServices from '../components/sections/HomeServices';
+import DestinationsCarousel from '../components/sections/DestinationsCarousel';
+import AboutUs from '../components/sections/AboutUs';
+import PassportCheck from '../components/sections/PassportCheck';
+
+const Home = () => {
+    return (
+        <main>
+            <Hero />
+            <PassportCheck />
+            <HomeServices />
+            <DestinationsCarousel />
+            <AboutUs />
+        </main>
+    );
+};
+
+export default Home;
+
+```
+
+## File: src/pages/Home.css
+
+- Extension: .css
+- Language: unknown
+- Size: 3106 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```unknown
+.section-header {
+    margin-bottom: var(--spacing-2xl);
+    text-align: center;
+}
+
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: var(--font-lg);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.mt-xl {
+    margin-top: var(--spacing-xl);
+}
+
+.bg-secondary {
+    background-color: var(--bg-secondary);
+}
+
+/* Destinations Grid */
+.destinations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.destination-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    height: 300px;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+}
+
+.dest-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.destination-card:hover .dest-img {
+    transform: scale(1.1);
+}
+
+.dest-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: var(--spacing-lg);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: white;
+}
+
+.dest-name {
+    font-size: var(--font-xl);
+    margin-bottom: 4px;
+    color: white;
+}
+
+.dest-price {
+    font-size: var(--font-sm);
+    color: var(--accent-amber);
+    font-weight: bold;
+}
+
+/* Features Section */
+.features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2xl);
+    align-items: center;
+}
+
+@media (min-width: 992px) {
+    .features-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.feature-list {
+    list-style: none;
+    margin-top: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+}
+
+.feature-list .icon {
+    width: 48px;
+    height: 48px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.feature-image-wrapper {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+}
+
+.feature-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.experience-badge {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    right: var(--spacing-lg);
+    /* RTL: right side */
+    background: white;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.experience-badge .years {
+    font-size: var(--font-2xl);
+    font-weight: 800;
+    color: var(--primary-cyan);
+    line-height: 1;
+}
+
+.experience-badge span:last-child {
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+```
+
+## File: src/pages/Services.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 11277 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-27 16:38:34
+
+### Code
+
+```javascript
+import { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import ExpandableServiceCard from '../components/common/ExpandableServiceCard';
+import { allServices } from '../data/services';
+import { 
+    FiAward, FiUsers, FiClock, FiChevronDown, FiGlobe, 
+    FiFileText, FiMap, FiSearch, FiPhone, FiSmile 
+} from 'react-icons/fi';
+import { 
+    TbPlane, TbBuilding, TbMap, TbBus, TbShip, 
+    TbLanguage, TbBuildingMosque, TbTicket 
+} from 'react-icons/tb';
+import LazyImage from '../components/common/LazyImage';
+import './Services.css';
+
+const Services = () => {
+    const [activeFilter, setActiveFilter] = useState('all');
+    const [expandedCardTitle, setExpandedCardTitle] = useState(null);
+
+    // Filter Categories
+    const filters = useMemo(() => ([
+        { id: 'all', label: 'جميع الخدمات', icon: <FiAward /> },
+        { id: 'flights', label: 'حجوزات طيران', icon: <TbPlane /> },
+        { id: 'hotels', label: 'فنادق وإقامة', icon: <TbBuilding /> },
+        { id: 'visa', label: 'تأشيرات', icon: <FiGlobe /> },
+        { id: 'tours', label: 'برامج سياحية', icon: <TbMap /> },
+        { id: 'hajj', label: 'حج وعمرة', icon: <TbBuildingMosque /> },
+        { id: 'transport', label: 'نقل ومواصلات', icon: <TbBus /> },
+        { id: 'other', label: 'خدمات أخرى', icon: <TbTicket /> } // Grouped smaller cats
+    ]), []);
+
+    // Helper to group specific categories into 'other' if needed
+    const getCategory = (cat) => {
+        const mainCats = ['flights', 'hotels', 'visa', 'tours', 'hajj', 'transport'];
+        return mainCats.includes(cat) ? cat : 'other';
+    };
+
+    const filteredServices = useMemo(() => {
+        const data = Array.isArray(allServices) ? allServices : [];
+        if (activeFilter === 'all') return data;
+        return data.filter(service => getCategory(service.category) === activeFilter);
+    }, [activeFilter]);
+
+    const handleCardToggle = (title) => {
+        setExpandedCardTitle(expandedCardTitle === title ? null : title);
+    };
+
+    // Animation Variants
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.1 }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 }
+    };
+
+    return (
+        <div className="services-page-premium">
+            {/* --- Hero Section --- */}
+            <div className="services-hero-modern">
+                <div className="hero-bg-layer">
+                    <div className="hero-blob blob-1"></div>
+                    <div className="hero-blob blob-2"></div>
+                </div>
+                
+                <div className="container relative z-10">
+                    <div className="hero-content-center">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8 }}
+                            className="text-center"
+                        >
+                            <span className="hero-badge-pill">خدمات متكاملة</span>
+                            <h1 className="hero-title-lg">
+                                وجهتك الأولى <br />
+                                <span className="text-gradient-gold">لكل تفاصيل السفر</span>
+                            </h1>
+                            <p className="hero-desc-lg">
+                                نجمع لك العالم في مكان واحد. من تذاكر الطيران إلى أدق تفاصيل إقامتك، 
+                                نحن نعتني بكل خطوة لتستمتع بالرحلة.
+                            </p>
+                        </motion.div>
+                    </div>
+                </div>
+                
+                {/* Decorative Wave */}
+                <div className="hero-wave">
+                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="shape-fill"></path>
+                    </svg>
+                </div>
+            </div>
+
+            {/* --- Sticky Filter Bar --- */}
+            <div className="filter-sticky-wrapper">
+                <div className="container">
+                    <div className="filter-glass-bar">
+                        <div className="filter-scroll-container">
+                            {filters.map((filter) => (
+                                <button
+                                    key={filter.id}
+                                    className={`filter-pill ${activeFilter === filter.id ? 'active' : ''}`}
+                                    onClick={() => setActiveFilter(filter.id)}
+                                >
+                                    <span className="filter-icon">{filter.icon}</span>
+                                    <span>{filter.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* --- Services Grid --- */}
+            <section className="section services-grid-section">
+                <div className="container">
+                    <div className="results-header">
+                        <h3>عرض {filteredServices.length} خدمة متاحة</h3>
+                        {activeFilter !== 'all' && (
+                            <button className="clear-filter" onClick={() => setActiveFilter('all')}>
+                                عرض الكل
+                            </button>
+                        )}
+                    </div>
+
+                    <motion.div 
+                        className="services-grid-layout"
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                        key={activeFilter} // Re-trigger animation on filter change
+                    >
+                        <AnimatePresence mode='popLayout'>
+                            {filteredServices.map((service, index) => (
+                                <motion.div key={service.title + index} variants={itemVariants} layout>
+                                    <ExpandableServiceCard
+                                        title={service.title}
+                                        tagline={service.tagline}
+                                        icon={service.icon}
+                                        detailedDescription={service.detailedDescription}
+                                        features={service.features}
+                                        isExpanded={expandedCardTitle === service.title}
+                                        onToggle={() => handleCardToggle(service.title)}
+                                    />
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                    </motion.div>
+
+                    {filteredServices.length === 0 && (
+                        <div className="empty-state-modern">
+                            <FiSearch size={48} />
+                            <h3>لا توجد خدمات مطابقة</h3>
+                            <p>جرب اختيار تصنيف آخر</p>
+                        </div>
+                    )}
+                </div>
+            </section>
+
+            {/* --- Process Section (How it works) --- */}
+            <section className="section process-section">
+                <div className="container">
+                    <div className="section-header text-center">
+                        <span className="section-tag">كيف نعمل</span>
+                        <h2 className="section-title">رحلتك تبدأ بخطوات بسيطة</h2>
+                    </div>
+
+                    <div className="process-steps">
+                        <div className="process-step">
+                            <div className="step-number">01</div>
+                            <div className="step-icon"><FiSearch /></div>
+                            <h3>اختر خدمتك</h3>
+                            <p>تصفح قائمة خدماتنا الشاملة واختر ما يناسب احتياجات سفرك.</p>
+                        </div>
+                        <div className="process-line"></div>
+                        <div className="process-step">
+                            <div className="step-number">02</div>
+                            <div className="step-icon"><FiPhone /></div>
+                            <h3>تواصل معنا</h3>
+                            <p>تحدث مع مستشارينا عبر الواتساب أو الهاتف لتأكيد التفاصيل.</p>
+                        </div>
+                        <div className="process-line"></div>
+                        <div className="process-step">
+                            <div className="step-number">03</div>
+                            <div className="step-icon"><FiSmile /></div>
+                            <h3>سافر باطمئنان</h3>
+                            <p>استلم حجوزاتك وانطلق في رحلتك ونحن معك في كل خطوة.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* --- Premium CTA --- */}
+            <section className="premium-cta-wrapper">
+                <div className="container">
+                    <div className="premium-cta-card">
+                        <div className="cta-bg-image">
+                            <LazyImage src="/hero-bg.jpg" alt="Travel" />
+                            <div className="cta-overlay"></div>
+                        </div>
+                        <div className="cta-content-inner">
+                            <h2>لم تجد ما تبحث عنه؟</h2>
+                            <p>نحن متخصصون في تصميم الرحلات المخصصة. أخبرنا عن حلمك، ونحن سنحوله إلى حقيقة.</p>
+                            <div className="cta-actions">
+                                <Link to="/contact" className="btn btn-primary btn-lg border-white">
+                                    تواصل مع مستشار سياحي
+                                </Link>
+                                <a href="https://wa.me/967779717177" target="_blank" rel="noreferrer" className="btn btn-outline text-white border-white hover-white">
+                                    راسلنا عبر واتساب
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+};
+
+export default Services;
+```
+
+## File: src/pages/Contact.css
+
+- Extension: .css
+- Language: unknown
+- Size: 12371 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-20 18:26:44
+
+### Code
+
+```unknown
+.contact-page {
+    /* Removed padding-top for full screen hero */
+    overflow-x: hidden;
+}
+
+/* ========================================
+   ENHANCED CONTACT HERO SECTION
+   ======================================== */
+
+.contact-hero {
+    position: relative;
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    /* Increased top padding for navbar clearance */
+    padding: max(8rem, env(safe-area-inset-top)) var(--spacing-md) max(3rem, env(safe-area-inset-bottom));
+    contain: layout style paint;
+}
+
+.contact-hero-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.contact-hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.contact-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.4) 0%,
+            rgba(0, 0, 0, 0.5) 50%,
+            rgba(0, 54, 97, 0.8) 100%);
+    z-index: 1;
+}
+
+.contact-hero-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.4;
+    z-index: 1;
+}
+
+.contact-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 900px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+/* Hero Badge */
+.contact-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    font-weight: 600;
+    font-family: var(--font-heading);
+    min-height: 44px;
+}
+
+.contact-hero-badge svg {
+    font-size: 1.1em;
+}
+
+/* Hero Title with Animated Underline */
+.contact-title-wrapper {
+    position: relative;
+    margin: var(--spacing-sm) 0;
+}
+
+.contact-hero-title {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-weight: 800;
+    color: white;
+    line-height: 1.2;
+    margin: 0;
+    font-family: var(--font-heading);
+    position: relative;
+    display: inline-block;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.contact-title-underline {
+    position: absolute;
+    bottom: -0.5rem;
+    right: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--accent-amber), transparent);
+    transform-origin: right;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+/* Floating Contact Methods */
+.contact-methods-floating {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: var(--spacing-md) 0;
+}
+
+.contact-method-icon {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    color: white;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: all var(--transition-base);
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.contact-method-icon:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Hero Subtitle */
+.contact-hero-subtitle {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0;
+    font-family: var(--font-body);
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* ========================================
+   CONTACT CONTENT SECTION
+   ======================================== */
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2xl);
+    margin-top: var(--spacing-2xl);
+}
+
+@media (min-width: 992px) {
+    .contact-grid {
+        grid-template-columns: 1fr 1.5fr;
+        gap: var(--spacing-2xl);
+        align-items: start;
+    }
+
+    .contact-info-wrapper {
+        position: sticky;
+        top: 100px;
+    }
+
+    .contact-map-wrapper {
+        padding: var(--spacing-2xl);
+        max-width: 100%;
+    }
+}
+
+/* Contact Info Section */
+.contact-info-wrapper {
+    background: var(--bg-secondary);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    height: fit-content;
+}
+
+.contact-title {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+}
+
+.contact-desc {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xl);
+    font-size: var(--font-base);
+    line-height: 1.6;
+}
+
+/* Contact Cards Grid */
+.contact-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+    .contact-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.contact-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--spacing-sm);
+}
+
+/* Enhanced Contact Cards for Desktop */
+@media (min-width: 992px) {
+    .contact-card {
+        padding: var(--spacing-xl);
+    }
+
+    .contact-card-icon {
+        width: 72px;
+        height: 72px;
+        min-width: 72px;
+        min-height: 72px;
+        font-size: 2rem;
+    }
+}
+
+.contact-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+    border-color: rgba(8, 145, 178, 0.2);
+}
+
+.contact-card-icon {
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    min-height: 64px;
+    background: rgba(8, 145, 178, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: var(--primary-cyan);
+    margin-bottom: var(--spacing-xs);
+    transition: all var(--transition-base);
+}
+
+.contact-card:hover .contact-card-icon {
+    background: var(--gradient-ocean);
+    color: white;
+    transform: scale(1.1);
+}
+
+.contact-card-title {
+    font-size: var(--font-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    font-family: var(--font-heading);
+}
+
+.contact-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.contact-card-content p {
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.contact-link {
+    font-size: var(--font-sm);
+    color: var(--primary-cyan);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    display: block;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+}
+
+.contact-link:hover {
+    color: var(--accent-amber);
+    background: rgba(8, 145, 178, 0.05);
+}
+
+/* ========================================
+   RESPONSIVE MAP SECTION
+   ======================================== */
+
+.contact-map-wrapper {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--glass-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-map-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(8, 145, 178, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(50%, -50%);
+    pointer-events: none;
+}
+
+.map-container {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-lg);
+    height: 400px;
+}
+
+@media (min-width: 768px) {
+    .map-container {
+        height: 450px;
+    }
+}
+
+@media (min-width: 992px) {
+    .map-container {
+        height: 500px;
+    }
+}
+
+.map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    transition: transform 0.3s ease;
+}
+
+.map-container:hover iframe {
+    transform: scale(1.02);
+}
+
+.map-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(10px);
+}
+
+.map-pin-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--primary-cyan);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.map-info h4 {
+    margin: 0 0 var(--spacing-xs) 0;
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-size: var(--font-lg);
+}
+
+.map-info p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: var(--font-sm);
+}
+
+/* ========================================
+   MOBILE OPTIMIZATIONS
+   ======================================== */
+
+@media (max-width: 767px) {
+    .contact-hero {
+        min-height: 60vh;
+        padding: max(2rem, env(safe-area-inset-top)) var(--spacing-sm) max(2rem, env(safe-area-inset-bottom));
+    }
+
+    .contact-hero-content {
+        gap: var(--spacing-sm);
+    }
+
+    .contact-methods-floating {
+        gap: 0.75rem;
+    }
+
+    .contact-method-icon {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        min-height: 48px;
+        font-size: 1.25rem;
+    }
+
+    .contact-info-wrapper,
+    .contact-map-wrapper {
+        padding: var(--spacing-lg);
+    }
+
+    .contact-cards-grid {
+        gap: var(--spacing-sm);
+    }
+
+    .map-info {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+
+    .contact-method-icon,
+    .contact-link {
+        min-height: 44px;
+    }
+
+    .contact-card {
+        min-height: 44px;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .contact-title-underline {
+        animation: none;
+        transform: scaleX(1);
+    }
+
+    .contact-card:hover {
+        transform: none;
+    }
+
+    .contact-card-icon {
+        transition: none;
+    }
+
+    .map-container:hover iframe {
+        transform: none;
+    }
+}
+
+/* Performance Optimizations */
+.contact-hero * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+.contact-method-icon,
+.contact-card {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Desktop-Specific Enhancements */
+@media (min-width: 1200px) {
+
+
+    .contact-hero {
+        min-height: 80vh;
+    }
+
+    .contact-grid {
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .contact-map-wrapper {
+        box-shadow: var(--shadow-xl);
+    }
+
+    .contact-info-wrapper {
+        box-shadow: var(--shadow-lg);
+    }
+}
+
+/* Better Container Width */
+@media (min-width: 992px) {
+    .container {
+        max-width: 1400px;
+    }
+}
+```
+
+## File: src/pages/About.css
+
+- Extension: .css
+- Language: unknown
+- Size: 11866 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-27 16:14:56
+
+### Code
+
+```unknown
+/* ========================================
+   MODERN ABOUT PAGE
+   ======================================== */
+
+.about-modern {
+    overflow-x: hidden;
+    background-color: var(--bg-primary);
+}
+
+/* --- Hero Section --- */
+.about-hero-modern {
+    position: relative;
+    height: 90vh;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.hero-bg-parallax {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    height: 120%; /* Taller for parallax effect */
+    top: -10%;
+}
+
+.parallax-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-overlay-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg, 
+        rgba(0, 54, 97, 0.4) 0%, 
+        rgba(0, 54, 97, 0.7) 60%,
+        var(--bg-primary) 100%
+    );
+    z-index: 1;
+}
+
+.hero-content-modern {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 900px;
+}
+
+.hero-badge-glass {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.hero-title-modern {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.2;
+    color: white;
+    margin-bottom: 1.5rem;
+}
+
+.hero-title-modern .text-gradient {
+    background: linear-gradient(135deg, #fff 0%, #93C5FD 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: block;
+}
+
+.hero-desc-modern {
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.7;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Mouse Scroll Animation */
+.scroll-mouse {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.wheel {
+    width: 30px;
+    height: 50px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    position: relative;
+}
+
+.wheel::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 8px;
+    background: #fff;
+    border-radius: 2px;
+    animation: scrollWheel 1.5s infinite;
+}
+
+@keyframes scrollWheel {
+    0% { top: 10px; opacity: 1; }
+    100% { top: 30px; opacity: 0; }
+}
+
+/* --- Story Section (Collage) --- */
+.story-section {
+    padding: var(--spacing-2xl) 0;
+}
+
+.story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.section-label {
+    color: var(--primary-blue);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.section-heading {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.highlight-underline {
+    position: relative;
+    z-index: 1;
+}
+
+.highlight-underline::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: rgba(245, 158, 11, 0.2); /* Accent Amber */
+    z-index: -1;
+    transform: rotate(-1deg);
+}
+
+.story-text {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.story-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--bg-tertiary);
+}
+
+.story-stat-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-num {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-blue);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Collage Styles */
+.story-visuals {
+    position: relative;
+}
+
+.collage-wrapper {
+    position: relative;
+    padding-bottom: 40px; 
+    /* Space for floating elements */
+}
+
+.collage-img-lg {
+    width: 85%;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+    aspect-ratio: 4/5;
+    position: relative;
+    z-index: 1;
+}
+
+.collage-img-sm {
+    position: absolute;
+    bottom: 0;
+    left: 0; /* RTL: left side */
+    width: 50%;
+    aspect-ratio: 1;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    z-index: 2;
+    border: 8px solid var(--bg-primary); /* Creates cut-out effect */
+    box-shadow: var(--shadow-2xl);
+}
+
+.collage-badge {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--primary-blue);
+    box-shadow: var(--shadow-sm);
+}
+
+.circle-decor {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 150px;
+    height: 150px;
+    border: 2px solid var(--accent-amber);
+    border-radius: 50%;
+    opacity: 0.2;
+    z-index: 0;
+}
+
+.dots-decor {
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+    width: 100px;
+    height: 100px;
+    background-image: radial-gradient(var(--primary-blue) 1px, transparent 1px);
+    background-size: 10px 10px;
+    opacity: 0.1;
+    z-index: 0;
+}
+
+/* ========================================
+   MODERN BENTO GRID (REDESIGNED)
+   ======================================== */
+
+.values-section-modern {
+    padding: 6rem 0;
+    background-color: var(--bg-secondary);
+}
+
+.section-header-center {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 3rem;
+}
+
+.section-tag {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    background: rgba(8, 145, 178, 0.1);
+    color: var(--primary-cyan);
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.bento-grid-modern {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, minmax(260px, auto));
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Common Card Styles */
+.bento-item {
+    background: #fff;
+    border-radius: 24px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bento-item:hover {
+    box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.08);
+}
+
+.bento-item h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+    position: relative;
+    z-index: 2;
+}
+
+.bento-item p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 0;
+    position: relative;
+    z-index: 2;
+}
+
+.icon-wrapper {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    background: var(--bg-secondary);
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.bento-item:hover .icon-wrapper {
+    transform: scale(1.1) rotate(-5deg);
+}
+
+/* 1. Vision Card (Large, Dark Blue) */
+.vision-card {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #004B87 0%, #003661 100%);
+    color: white;
+    justify-content: center;
+}
+
+.vision-card h3, .vision-card p {
+    color: white;
+}
+
+.vision-card p {
+    opacity: 0.9;
+    max-width: 85%;
+}
+
+.vision-card .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(0,0,0,0.1), transparent);
+    z-index: 1;
+}
+
+.glass-icon {
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.bg-pattern {
+    position: absolute;
+    right: -50px;
+    bottom: -50px;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 0;
+}
+
+/* 2. Trust Card (Tall, Vertical) */
+.trust-card {
+    grid-column: span 1;
+    grid-row: span 2;
+    background: linear-gradient(to bottom, #fff 0%, #FFFBEB 100%);
+    border: 1px solid rgba(245, 158, 11, 0.1);
+}
+
+.trust-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(245, 158, 11, 0.1);
+    color: #d97706;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    align-self: flex-start;
+    margin-bottom: 2rem;
+}
+
+/* 3. Team Card */
+.team-card {
+    grid-column: span 1;
+}
+
+.tiny-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #2563EB;
+    background: #EFF6FF;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+/* 4. Map Card */
+.map-card {
+    grid-column: span 1;
+}
+
+.map-dots-decoration {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 60px;
+    height: 60px;
+    background-image: radial-gradient(#CBD5E1 1.5px, transparent 1.5px);
+    background-size: 8px 8px;
+    opacity: 0.5;
+}
+
+/* 5. Service Card */
+.service-card {
+    grid-column: span 1;
+}
+
+/* Tailwind Utilities (if not using Tailwind directly) */
+.relative { position: relative; }
+.z-10 { z-index: 10; }
+.mb-3 { margin-bottom: 0.75rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-5 { margin-bottom: 2rem; }
+.mt-auto { margin-top: auto; }
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.text-amber-500 { color: #f59e0b; }
+.text-blue-600 { color: #2563eb; }
+.text-teal-600 { color: #0d9488; }
+.text-rose-500 { color: #f43f5e; }
+
+/* --- CTA Section --- */
+.cta-modern-section {
+    padding: var(--spacing-2xl) 0;
+}
+
+.cta-modern-card {
+    background: var(--primary-dark);
+    border-radius: 30px;
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    box-shadow: var(--shadow-xl);
+}
+
+.cta-modern-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.cta-modern-content h2 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.cta-modern-content p {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 2.5rem;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cta-pattern-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255,255,255,0.05) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(255,255,255,0.05) 0%, transparent 20%);
+    z-index: 1;
+}
+
+.text-white { color: white !important; }
+.border-white { border-color: rgba(255,255,255,0.3) !important; }
+.hover-white:hover { background: white !important; color: var(--primary-blue) !important; }
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 992px) {
+    .bento-grid-modern {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+    }
+    
+    .vision-card { grid-column: span 2; }
+    .trust-card { grid-column: span 1; grid-row: span 1; min-height: 280px; }
+    .team-card { grid-column: span 1; }
+    .map-card { grid-column: span 1; }
+    .service-card { grid-column: span 2; } /* Stretch service on tablet */
+}
+
+@media (max-width: 768px) {
+    .story-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .collage-wrapper {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .bento-grid-modern {
+        grid-template-columns: 1fr;
+    }
+    
+    .vision-card, .trust-card, .team-card, .map-card, .service-card {
+        grid-column: span 1;
+        grid-row: auto;
+    }
+
+    .hero-title-modern {
+        font-size: 2.5rem;
+    }
+}
+```
+
+## File: src/pages/Services.css
+
+- Extension: .css
+- Language: unknown
+- Size: 8593 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-27 16:39:04
+
+### Code
+
+```unknown
+/* ========================================
+   PREMIUM SERVICES PAGE STYLES
+   ======================================== */
+
+.services-page-premium {
+    background-color: var(--bg-secondary);
+    overflow-x: hidden;
+    padding-bottom: var(--spacing-2xl);
+}
+
+/* --- Modern Hero Section --- */
+.services-hero-modern {
+    position: relative;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #004B87 0%, #002b4d 100%);
+    overflow: hidden;
+    padding-top: 80px; /* Space for navbar */
+    margin-bottom: -60px; /* Overlap with filter bar */
+}
+
+.hero-bg-layer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+}
+
+.blob-1 {
+    width: 400px;
+    height: 400px;
+    background: var(--primary-light);
+    top: -100px;
+    right: -100px;
+    animation: floatBlob 10s infinite ease-in-out;
+}
+
+.blob-2 {
+    width: 300px;
+    height: 300px;
+    background: var(--accent-amber);
+    bottom: 0;
+    left: -50px;
+    opacity: 0.2;
+    animation: floatBlob 15s infinite ease-in-out reverse;
+}
+
+@keyframes floatBlob {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(30px, -30px); }
+}
+
+.hero-content-center {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-badge-pill {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    color: var(--accent-amber);
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(5px);
+}
+
+.hero-title-lg {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.text-gradient-gold {
+    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-desc-lg {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.hero-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.hero-wave svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 80px;
+}
+
+.hero-wave .shape-fill {
+    fill: var(--bg-secondary);
+}
+
+/* --- Sticky Filter Bar --- */
+.filter-sticky-wrapper {
+    position: sticky;
+    top: 90px; /* Adjust based on navbar height */
+    z-index: 50;
+    margin-bottom: var(--spacing-xl);
+    padding: 0 var(--spacing-md);
+}
+
+.filter-glass-bar {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: var(--radius-full);
+    padding: 0.75rem;
+    box-shadow: 0 10px 30px -10px rgba(0, 75, 135, 0.15);
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.filter-scroll-container {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    justify-content: center;
+    scrollbar-width: none; /* Firefox */
+}
+
+.filter-scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.filter-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-full);
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-body);
+}
+
+.filter-pill:hover {
+    background: rgba(8, 145, 178, 0.05);
+    color: var(--primary-cyan);
+}
+
+.filter-pill.active {
+    background: var(--primary-blue);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 75, 135, 0.2);
+}
+
+.filter-icon {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+}
+
+/* --- Services Grid --- */
+.services-grid-section {
+    min-height: 400px;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+}
+
+.results-header h3 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.clear-filter {
+    background: none;
+    border: none;
+    color: var(--primary-cyan);
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.services-grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+}
+
+.empty-state-modern {
+    text-align: center;
+    padding: 4rem;
+    color: var(--text-muted);
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    grid-column: 1 / -1;
+}
+
+/* --- Process Section --- */
+.process-section {
+    padding: 4rem 0;
+    background: white;
+    position: relative;
+}
+
+.process-steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 4rem;
+    position: relative;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.process-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    padding: 0 1rem;
+}
+
+.step-number {
+    font-size: 4rem;
+    font-weight: 800;
+    color: rgba(8, 145, 178, 0.05);
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
+}
+
+.step-icon {
+    width: 70px;
+    height: 70px;
+    background: white;
+    border: 2px solid var(--bg-tertiary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: var(--primary-cyan);
+    margin: 0 auto 1.5rem;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
+}
+
+.process-step:hover .step-icon {
+    border-color: var(--primary-cyan);
+    transform: scale(1.1);
+}
+
+.process-line {
+    flex: 1;
+    height: 2px;
+    background: var(--bg-tertiary);
+    margin-top: 35px; /* Aligns with center of icons */
+    position: relative;
+}
+
+.process-step h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.process-step p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* --- Premium CTA --- */
+.premium-cta-wrapper {
+    padding: 4rem 0;
+}
+
+.premium-cta-card {
+    background: var(--primary-dark);
+    border-radius: 30px;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    text-align: center;
+    padding: 5rem 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.cta-bg-image {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.cta-bg-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cta-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(0, 75, 135, 0.85), rgba(15, 23, 42, 0.95));
+}
+
+.cta-content-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.cta-content-inner h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: white;
+}
+
+.cta-content-inner p {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2.5rem;
+}
+
+.cta-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* --- Responsive --- */
+@media (max-width: 992px) {
+    .services-grid-layout {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .process-steps {
+        flex-direction: column;
+        gap: 3rem;
+    }
+    
+    .process-line {
+        display: none;
+    }
+    
+    .hero-title-lg {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .filter-scroll-container {
+        justify-content: flex-start;
+        padding-bottom: 10px;
+    }
+    
+    .services-grid-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .results-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .hero-title-lg {
+        font-size: 2.5rem;
+    }
+    
+    .cta-content-inner h2 {
+        font-size: 2rem;
+    }
+}
+```
+
+## File: src/pages/Destinations.css
+
+- Extension: .css
+- Language: unknown
+- Size: 12314 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-20 16:45:05
+
+### Code
+
+```unknown
+.destinations-page {
+    /* Removed padding-top to allow hero to start at top of screen behind navbar */
+    overflow-x: hidden;
+}
+
+/* ========================================
+   ENHANCED DESTINATIONS HERO SECTION
+   ======================================== */
+
+.destinations-hero {
+    position: relative;
+    min-height: 85vh;
+    /* Increased height for better impact */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* Updated background to image as requested */
+    background-image: url('/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* Removed solid gradient background */
+    overflow: hidden;
+    padding: max(8rem, env(safe-area-inset-top)) var(--spacing-md) max(3rem, env(safe-area-inset-bottom));
+    /* Performance optimization */
+    contain: layout style paint;
+}
+
+.destinations-hero-overlay {
+    position: absolute;
+    inset: 0;
+    /* Darker overlay for better text readability over image */
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.4) 0%,
+            rgba(0, 0, 0, 0.5) 50%,
+            rgba(0, 54, 97, 0.8) 100%);
+    z-index: 1;
+}
+
+.destinations-hero-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.4;
+    z-index: 1;
+}
+
+.destinations-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 900px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+/* Hero Badge */
+.destinations-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    font-weight: 600;
+    font-family: var(--font-heading);
+    min-height: 44px;
+    /* Touch target optimization */
+}
+
+.destinations-hero-badge svg {
+    font-size: 1.1em;
+}
+
+/* Hero Title with Animated Underline */
+.destinations-title-wrapper {
+    position: relative;
+    margin: var(--spacing-sm) 0;
+}
+
+.destinations-hero-title {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-weight: 800;
+    color: white;
+    line-height: 1.2;
+    margin: 0;
+    font-family: var(--font-heading);
+    position: relative;
+    display: inline-block;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+}
+
+.destinations-title-underline {
+    position: absolute;
+    bottom: -0.5rem;
+    right: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--accent-amber), transparent);
+    transform-origin: right;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+/* Sliding Text Animation (RTL) */
+.destinations-sliding-text-wrapper {
+    width: 100%;
+    overflow: hidden;
+    margin: var(--spacing-md) 0;
+    position: relative;
+    mask-image: linear-gradient(to right,
+            transparent 0%,
+            black 8%,
+            black 92%,
+            transparent 100%);
+    -webkit-mask-image: linear-gradient(to right,
+            transparent 0%,
+            black 8%,
+            black 92%,
+            transparent 100%);
+}
+
+.destinations-sliding-text {
+    display: flex;
+    gap: 1.5rem;
+    width: max-content;
+    animation: slide-text-rtl 40s linear infinite;
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+@keyframes slide-text-rtl {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.sliding-word {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-full);
+    color: white;
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-family: var(--font-heading);
+    transition: all 0.3s ease;
+}
+
+.sliding-word:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/* Hero Subtitle */
+.destinations-hero-subtitle {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0;
+    font-family: var(--font-body);
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* CTA Button */
+.destinations-hero-cta {
+    margin-top: var(--spacing-md);
+}
+
+.destinations-cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-full);
+    color: white;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-weight: 700;
+    font-family: var(--font-heading);
+    text-decoration: none;
+    transition: all var(--transition-base);
+    min-height: 52px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.destinations-cta-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.destinations-cta-button:hover::before {
+    opacity: 1;
+}
+
+.destinations-cta-button:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.destinations-cta-button:active {
+    transform: translateY(0);
+}
+
+.destinations-cta-button svg {
+    transition: transform var(--transition-base);
+}
+
+.destinations-cta-button:hover svg {
+    transform: translateX(-4px);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .destinations-sliding-text {
+        animation: none;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .destinations-title-underline {
+        animation: none;
+        transform: scaleX(1);
+    }
+
+    .destinations-cta-button:hover {
+        transform: none;
+    }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 767px) {
+    .destinations-hero {
+        min-height: 60vh;
+        padding: max(2rem, env(safe-area-inset-top)) var(--spacing-sm) max(2rem, env(safe-area-inset-bottom));
+    }
+
+    .destinations-hero-content {
+        gap: var(--spacing-sm);
+    }
+
+    .destinations-sliding-text {
+        gap: 1rem;
+    }
+
+    .sliding-word {
+        padding: 0.4rem 1rem;
+    }
+
+    .destinations-hero-decoration {
+        width: 80px;
+        height: 80px;
+        bottom: -1rem;
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .destinations-hero-badge {
+        min-height: 44px;
+    }
+
+    .sliding-word {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+}
+
+.destinations-grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.destination-card-full {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.destination-card-full:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    border-color: rgba(8, 145, 178, 0.2);
+}
+
+.dest-img-wrapper {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+}
+
+.dest-full-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.destination-card-full:hover .dest-full-img {
+    transform: scale(1.15);
+}
+
+.dest-overlay-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.destination-card-full:hover .dest-overlay-gradient {
+    opacity: 1;
+}
+
+.dest-duration-badge {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--text-primary);
+    padding: 8px 14px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: var(--font-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.destination-card-full:hover .dest-duration-badge {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.05);
+}
+
+.dest-badge-icon {
+    font-size: 14px;
+    color: var(--primary-cyan);
+}
+
+.dest-content {
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.dest-header {
+    margin-bottom: var(--spacing-md);
+}
+
+.dest-title {
+    font-size: var(--font-xl);
+    color: var(--text-primary);
+    margin: 0 0 6px 0;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.dest-country {
+    font-size: var(--font-sm);
+    color: var(--primary-cyan);
+    font-weight: 600;
+    display: block;
+    margin-top: 4px;
+}
+
+.dest-desc {
+    font-size: var(--font-base);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+}
+
+.dest-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.dest-feature-tag {
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.1) 0%, rgba(14, 116, 144, 0.1) 100%);
+    color: var(--primary-cyan);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-xs);
+    font-weight: 600;
+    border: 1px solid rgba(8, 145, 178, 0.15);
+    transition: all 0.2s ease;
+}
+
+.dest-feature-tag:hover {
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.15) 0%, rgba(14, 116, 144, 0.15) 100%);
+    border-color: rgba(8, 145, 178, 0.25);
+    transform: translateY(-1px);
+}
+
+.dest-cta-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: auto;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.dest-cta-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.dest-cta-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.dest-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(8, 145, 178, 0.3);
+}
+
+.dest-btn-icon {
+    transition: transform 0.3s ease;
+}
+
+.dest-cta-btn:hover .dest-btn-icon {
+    transform: translateX(-4px);
+}
+
+.mt-md {
+    margin-top: var(--spacing-md);
+}
+
+/* Enhanced card animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.destination-card-full {
+    animation: fadeInUp 0.6s ease-out backwards;
+}
+
+/* Special styling for Makkah and Madina cards */
+.destination-card-full[data-special="true"] {
+    border: 2px solid rgba(245, 158, 11, 0.3);
+    background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(245, 158, 11, 0.02) 100%);
+}
+
+.destination-card-full[data-special="true"]:hover {
+    border-color: rgba(245, 158, 11, 0.5);
+    box-shadow: 0 12px 40px rgba(245, 158, 11, 0.2);
+}
+```
+
+## File: src/data/destinations.js
+
+- Extension: .js
+- Language: javascript
+- Size: 11216 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-20 22:17:02
+
+### Code
+
+```javascript
+// Destinations data
+export const popularDestinations = [
+    {
+        name: "دبي",
+        image: "/dubai.jpg",
+        price: "تبدأ من 1500 ر.س",
+        category: "تسوق وترفيه",
+
+    },
+    {
+        name: "لندن",
+        image: "/london.jpeg",
+        price: "تبدأ من 3500 ر.س",
+        category: "تاريخ وثقافة",
+
+    },
+    {
+        name: "المالديف",
+        image: "/beach.jpg",
+        price: "تبدأ من 4500 ر.س",
+        category: "استجمام",
+
+    },
+    {
+        name: "إسطنبول",
+        image: "/istanbul.jpeg",
+        price: "تبدأ من 2000 ر.س",
+        category: "تاريخ وطبيعة",
+
+    },
+    {
+        name: "القاهرة",
+        image: "/cairo.jpg",
+        price: "تبدأ من 1800 ر.س",
+        category: "تاريخ وحضارة",
+
+    }
+];
+
+export const allDestinations = [
+    {
+        id: 1,
+        name: "دبي",
+        country: "الإمارات العربية المتحدة",
+        image: "/dubai.jpg",
+        description: "دبي هي وجهة عالمية تجمع بين الحداثة المذهلة والتقاليد العربية الأصيلة. من ناطحات السحاب الشاهقة إلى الأسواق التقليدية، تقدم دبي تجربة لا تُنسى لكل زائر.",
+        features: ["برج خليفة", "نخلة جميرا", "دبي مول"],
+        offeredServices: ["حجوزات فنادق فاخرة", "جولات سياحية خاصة"],
+        placesToVisit: ["برج خليفة", "نافورة دبي", "حي الفهيدي التاريخي", "برواز دبي"],
+        startingPrice: "1500 ر.س",
+        price: "1500 ر.س",
+
+    },
+    {
+        id: 2,
+        name: "إسطنبول",
+        country: "تركيا",
+        image: "/istanbul.jpeg",
+        description: "إسطنبول، المدينة التي تمتد عبر قارتين، هي مزيج ساحر من التاريخ والثقافة. استمتع بجمال البسفور، وروعة المساجد العثمانية، وحيوية البازارات.",
+        features: ["آيا صوفيا", "البسفور", "البازار الكبير"],
+        offeredServices: ["رحلات بحرية في البسفور", "جولات ثقافية وتاريخية"],
+        placesToVisit: ["مسجد السلطان أحمد", "قصر توبكابي", "برج غلطة", "ميدان تقسيم"],
+        startingPrice: "2000 ر.س",
+        price: "2000 ر.س",
+
+    },
+    {
+        id: 3,
+        name: "المالديف",
+        country: "جزر المالديف",
+        image: "/beach.jpg",
+        description: "المالديف هي الجنة الاستوائية المثالية للباحثين عن الاسترخاء والهدوء. شواطئ رملية بيضاء، مياه فيروزية صافية، ومنتجعات فاخرة فوق الماء.",
+        features: ["منتجعات فاخرة", "الغوص", "رحلات بحرية"],
+        offeredServices: ["باقات شهر العسل", "أنشطة الغوص والرياضات المائية"],
+        placesToVisit: ["جزيرة ماليه", "جزيرة مافوشي", "منتجع أداران", "الشاطئ المضيء"],
+        startingPrice: "4500 ر.س",
+        price: "4500 ر.س",
+
+    },
+    {
+        id: 4,
+        name: "لندن",
+        country: "المملكة المتحدة",
+        image: "/london.jpeg",
+        description: "لندن هي عاصمة الثقافة والتاريخ، حيث يلتقي الماضي بالحاضر. استكشف القصور الملكية، والمتاحف العالمية، والحدائق الخلابة في واحدة من أعظم مدن العالم.",
+        features: ["بيج بن", "قصر باكنغهام", "المتحف البريطاني"],
+        offeredServices: ["تذاكر المعالم السياحية", "خدمات النقل والمواصلات"],
+        placesToVisit: ["عين لندن", "برج لندن", "هايد بارك", "جسر البرج"],
+        startingPrice: "3500 ر.س",
+        price: "3500 ر.س",
+
+    },
+    {
+        id: 5,
+        name: "باريس",
+        country: "فرنسا",
+        image: "/paris.jpg",
+        description: "باريس، مدينة الحب والأضواء، تأسر القلوب بجمالها المعماري وفنونها الراقية. استمتع بجولة في الشانزليزيه، وزيارة برج إيفل، وتذوق أشهى المأكولات الفرنسية.",
+        features: ["برج إيفل", "متحف اللوفر", "الشانزليزيه"],
+        offeredServices: ["جولات رومانسية", "حجوزات مطاعم فاخرة"],
+        placesToVisit: ["قوس النصر", "كاتدرائية نوتردام", "حي مونمارتر", "قصر فرساي"],
+        startingPrice: "4000 ر.س",
+        price: "4000 ر.س",
+
+    },
+    {
+        id: 6,
+        name: "مكة المكرمة",
+        country: "المملكة العربية السعودية",
+        image: "/hero_makkah_background_1764893075599.jpg",
+        description: "مكة المكرمة، أقدس مدن الإسلام وقلب العالم الإسلامي. حيث يتجه ملايين المسلمين من كل أنحاء العالم لأداء فريضة الحج والعمرة. تجربة روحانية لا تُنسى في أطهر بقاع الأرض.",
+        features: ["الكعبة المشرفة", "المسجد الحرام", "جبل عرفة"],
+        offeredServices: ["برامج الحج والعمرة", "حجوزات فنادق قريبة من الحرم", "خدمات الإرشاد"],
+        placesToVisit: ["الكعبة المشرفة", "المسجد الحرام", "جبل النور", "غار حراء", "جبل عرفة"],
+        startingPrice: "1000 ر.س",
+        price: "1000 ر.س",
+
+    },
+    {
+        id: 7,
+        name: "المدينة المنورة",
+        country: "المملكة العربية السعودية",
+        image: "/almadina.jpg",
+        description: "المدينة المنورة، مدينة النبي صلى الله عليه وسلم، ثاني أقدس مدن الإسلام. حيث يزور المسلمون المسجد النبوي الشريف وروضة الشريف. تجربة روحانية عميقة في أرض الهجرة النبوية.",
+        features: ["المسجد النبوي", "قبر النبي", "جبل أحد"],
+        offeredServices: ["برامج العمرة", "زيارة المسجد النبوي", "جولات تاريخية"],
+        placesToVisit: ["المسجد النبوي الشريف", "روضة الشريف", "جبل أحد", "مسجد قباء", "مقبرة البقيع"],
+        startingPrice: "1000 ر.س",
+        price: "1000 ر.س",
+
+    },
+    {
+        id: 8,
+        name: "القاهرة",
+        country: "مصر",
+        image: "/cairo.jpg",
+        description: "القاهرة، مدينة الألف مئذنة، هي قلب العالم العربي النابض. اكتشف عظمة الأهرامات، وسحر النيل، وعبق التاريخ في خان الخليلي.",
+        features: ["الأهرامات", "المتحف المصري", "خان الخليلي"],
+        offeredServices: ["رحلات نيلية", "جولات أثرية متخصصة"],
+        placesToVisit: ["أهرامات الجيزة", "قلعة صلاح الدين", "شارع المعز", "برج القاهرة"],
+        startingPrice: "1800 ر.س",
+        price: "1800 ر.س",
+
+    },
+    {
+        id: 9,
+        name: "الرياض",
+        country: "المملكة العربية السعودية",
+        image: "/Riyadh.jpg",
+        description: "الرياض، عاصمة المملكة المتطورة، تجمع بين الأصالة التراثية والحداثة المعمارية. استمتع بفعاليات موسم الرياض، وزيارة الدرعية التاريخية، والتسوق في أرقى المولات.",
+        features: ["الدرعية", "بوليفارد الرياض", "المتحف الوطني"],
+        offeredServices: ["جولات تراثية", "حجوزات فعاليات ترفيهية"],
+        placesToVisit: ["حي الطريف", "برج المملكة", "وادي حنيفة", "منتزه الملك عبدالله"],
+        startingPrice: "1200 ر.س",
+        price: "1200 ر.س",
+
+    },
+    {
+        id: 10,
+        name: "أديس أبابا",
+        country: "إثيوبيا",
+        image: "/adisababa.jpg",
+        description: "أديس أبابا، الزهرة الجديدة، هي عاصمة إفريقيا الدبلوماسية. تتميز بطبيعتها الخلابة، وثقافتها العريقة، وتاريخها الغني كأرض القهوة الأصلية.",
+        features: ["المتحف الوطني", "جبل إنتوتو", "سوق ميركاتو"],
+        offeredServices: ["رحلات استكشاف الطبيعة", "تجربة القهوة الإثيوبية"],
+        placesToVisit: ["كاتدرائية الثالوث القدوس", "ميدان مسكل", "حديقة الوحدة", "متحف الإثنوجرافيا"],
+        startingPrice: "2500 ر.س",
+        price: "2500 ر.س",
+
+    },
+    {
+        id: 11,
+        name: "نيودلهي",
+        country: "الهند",
+        image: "/delhi.jpg",
+        description: "نيودلهي هي مدينة التناقضات المدهشة، حيث تتعايش المعالم التاريخية القديمة مع ناطحات السحاب الحديثة. استمتع بألوان الهند، ونكهاتها، وتراثها الغني.",
+        features: ["تاج محل", "بوابة الهند", "القلعة الحمراء"],
+        offeredServices: ["جولات في المثلث الذهبي", "تجارب طعام محلية"],
+        placesToVisit: ["قطب منار", "معبد اللوتس", "جامع مسجد", "حدائق لودهي"],
+        startingPrice: "2800 ر.س",
+        price: "2800 ر.س",
+
+    },
+    {
+        id: 12,
+        name: "كوالالمبور",
+        country: "ماليزيا",
+        image: "/hero-bg.jpg",
+        description: "كوالالمبور هي جوهرة جنوب شرق آسيا، مدينة نابضة بالحياة تجمع بين الثقافات المتعددة. من أبراج بتروناس الشهيرة إلى الكهوف الطبيعية، تقدم ماليزيا تجربة سياحية متكاملة.",
+        features: ["أبراج بتروناس", "كهوف باتو", "مرتفعات جنتنج"],
+        offeredServices: ["باقات عائلية", "رحلات للجزر الاستوائية"],
+        placesToVisit: ["حديقة الطيور", "ميدان ميرديكا", "شارع العرب (بوكيت بينتانج)", "اكواريوم KLCC"],
+        startingPrice: "3200 ر.س",
+        price: "3200 ر.س",
+
+    }
+];
+
+```
+
+## File: src/data/faq.js
+
+- Extension: .js
+- Language: javascript
+- Size: 1449 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+// FAQ data
+export const faqs = [
+    {
+        question: "كيف يمكنني حجز رحلة؟",
+        answer: "يمكنك حجز رحلتك بسهولة عن طريق التواصل معنا عبر الواتساب أو زيارة مكتبنا. قريباً سنوفر خدمة الحجز المباشر عبر الموقع."
+    },
+    {
+        question: "هل توفرون عروضاً خاصة للعائلات؟",
+        answer: "نعم، لدينا باقات مخصصة للعائلات تشمل تذاكر الطيران، الإقامة، والجولات السياحية بأسعار مميزة."
+    },
+    {
+        question: "ما هي طرق الدفع المتاحة؟",
+        answer: "نقبل الدفع نقداً، التحويل البنكي، والبطاقات الائتمانية (فيزا/ماستركارد)."
+    },
+    {
+        question: "هل يمكنني تعديل أو إلغاء الحجز؟",
+        answer: "نعم، يخضع التعديل والإلغاء لسياسة الشروط والأحكام الخاصة بكل رحلة. يرجى التواصل مع خدمة العملاء للمساعدة."
+    },
+    {
+        question: "هل تشمل الباقات التأمين الطبي؟",
+        answer: "بعض الباقات تشمل التأمين الطبي الدولي. يرجى التحقق من تفاصيل الباقة أو سؤال موظف الحجز."
+    }
+];
+
+```
+
+## File: src/data/testimonials.js
+
+- Extension: .js
+- Language: javascript
+- Size: 1517 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+// Testimonials data
+export const testimonials = [
+    {
+        name: "أحمد السعيد",
+        rating: 5,
+        text: "تجربة رائعة من البداية للنهاية. الفريق محترف جداً والخدمة ممتازة. أنصح الجميع بالتعامل معهم.",
+        location: "الرياض، السعودية"
+    },
+    {
+        name: "فاطمة محمد",
+        rating: 5,
+        text: "حجزت معهم رحلة شهر العسل للمالديف وكانت تجربة لا تُنسى. كل التفاصيل كانت مرتبة بشكل مثالي.",
+        location: "جدة، السعودية"
+    },
+    {
+        name: "خالد العتيبي",
+        rating: 4.5,
+        text: "خدمة سريعة وأسعار منافسة. استخدمت خدماتهم عدة مرات وكانت تجربتي دائماً إيجابية.",
+        location: "الدمام، السعودية"
+    },
+    {
+        name: "نورة المطيري",
+        rating: 5,
+        text: "أفضل وكالة سفر تعاملت معها. الموظفون متعاونون جداً ويقدمون استشارات قيمة.",
+        location: "الكويت"
+    },
+    {
+        name: "محمد الشمري",
+        rating: 5,
+        text: "حجزت رحلة عمرة لعائلتي وكانت التجربة رائعة. كل شيء كان منظم بشكل ممتاز.",
+        location: "مكة المكرمة، السعودية"
+    }
+];
+
+```
+
+## File: src/data/index.js
+
+- Extension: .js
+- Language: javascript
+- Size: 118 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+// Re-export all data
+export * from './services';
+export * from './destinations';
+export * from './testimonials';
+
+```
+
+## File: src/data/services.js
+
+- Extension: .js
+- Language: javascript
+- Size: 20760 bytes
+- Created: 2025-12-28 00:39:35
+- Modified: 2025-12-28 00:39:35
+
+### Code
+
+```javascript
+// Services data - Highlights (Updated to include new services)
+export const services = [
+    {
+        title: "تفاويض العمالة (مساند)",
+        description: "توثيق واعتماد تفاويض التأشيرات عبر منصة مساند بكل سهولة وسرعة.",
+        icon: "📋",
+        features: ["توثيق فوري", "ربط آلي بمساند", "دعم فني"],
+        link: "/services"
+    },
+    {
+        title: "تأشيرات الزيارة العائلية",
+        description: "تسهيل استخراج تأشيرات الزيارة للأقارب من الدرجة الأولى لجمع شمل العائلة.",
+        icon: "🤝",
+        features: ["مراجعة المستندات", "إنجاز سريع", "نسبة قبول عالية"],
+        link: "/services"
+    },
+    {
+        title: "استقدام الأيدي العاملة",
+        description: "توفير وتخليص معاملات الكوادر المهنية لمختلف التخصصات بترخيص رسمي رقم 19.",
+        icon: "👷",
+        features: ["كوادر مؤهلة", "إجراءات نظامية", "خبرة واسعة"],
+        link: "/services"
+    }
+];
+
+export const allServices = [
+    /** --- NEW SERVICES ADDED --- **/
+    {
+        title: "تفاويض العمالة عبر مساند",
+        tagline: "توثيق واعتماد التفاويض الرسمية للعمالة المنزلية",
+        description: "نقدم خدمة توثيق تفاويض تأشيرات العمالة المنزلية عبر منصة مساند بدقة وعناية.",
+        detailedDescription: "بصفتنا مكتباً معتمداً، نضمن لك إنهاء جميع إجراءات تفاويض العمالة عبر منصة مساند وتسهيل عملية الربط مع مكاتب الاستقدام الخارجية لضمان وصول عمالتك في أسرع وقت ممكن وبكل احترافية.",
+        icon: "FiFileText",
+        features: [
+            "إصدار التفاويض الإلكترونية",
+            "الربط مع منصة مساند",
+            "متابعة حالة الطلب",
+            "إنهاء الإجراءات القانونية",
+            "دعم فني للمستفيدين"
+        ],
+        category: "musaned"
+    },
+    {
+        title: "تأشيرات الزيارة العائلية",
+        tagline: "تخليص تأشيرات الزيارة للأقارب من الدرجة الأولى",
+        description: "تسهيل إجراءات استخراج تأشيرات الزيارة لجمع شمل العائلة داخل المملكة.",
+        detailedDescription: "نتولى كافة إجراءات استخراج تأشيرات الزيارة العائلية للأقارب من الدرجة الأولى (الزوجة، الأبناء، والوالدين)، مع مراجعة دقيقة لكافة المستندات المطلوبة لضمان قبول الطلب وسرعة التنفيذ لدى الجهات المختصة.",
+        icon: "FiUsers",
+        features: [
+            "تجهيز ملف الطلب",
+            "مراجعة شروط القرابة",
+            "تقديم الطلب إلكترونياً",
+            "متابعة صدور التأشيرة",
+            "استشارات نظامية مجانية"
+        ],
+        category: "visa"
+    },
+    {
+        title: "خدمات الأيدي العاملة",
+        tagline: "توفير واستقدام الكوادر المهنية المتخصصة",
+        description: "تخليص معاملات الأيدي العاملة لمختلف المهن بموجب ترخيص رقم 19.",
+        detailedDescription: "نعمل بموجب الترخيص الرسمي رقم (19) لنقدم لأصحاب العمل حلولاً موثوقة في استقطاب الكفاءات المهنية وتسهيل إجراءات استقدامهم، مع ضمان مطابقة كافة الإجراءات للقوانين واللوائح التنظيمية المعمول بها.",
+        icon: "FiBriefcase",
+        features: [
+            "استقدام المهن الفنية",
+            "استقدام المهن الإدارية",
+            "تسهيل إجراءات الإقامة",
+            "فحص مهني معتمد",
+            "حلول شاملة للشركات"
+        ],
+        category: "manpower"
+    },
+    {
+        title: "تأشيرات الإقامة العائلية",
+        tagline: "استقدام الزوجة والأبناء للإقامة الدائمة",
+        description: "نساعدك في إجراءات استقدام عائلتك للإقامة الدائمة في المملكة العربية السعودية.",
+        detailedDescription: "نوفر الدعم الكامل في تقديم طلبات الإقامة للزوجة والأبناء، ومتابعة كافة الخطوات النظامية لربطها بإقامة رب الأسرة، لضمان استقرار عائلتك بجانبك بيسر وسهولة وتجاوز أي عقبات إدارية.",
+        icon: "FiUserCheck",
+        features: [
+            "تقديم طلبات الاستقدام",
+            "ربط الملفات العائلية",
+            "متابعة الفحص الطبي",
+            "إصدار الإقامات الدائمة",
+            "تحديث بيانات المرافقين"
+        ],
+        category: "residency"
+    },
+
+    /** --- PREVIOUS SERVICES MAINTAINED --- **/
+    {
+        title: "حجوزات الطيران",
+        tagline: "حجز وإصدار التذاكر الداخلية والدولية",
+        description: "تشمل هذه الخدمة حجز وإصدار التذاكر الداخلية والدولية والتأكيد على المقاعد لجميع شركات الطيران",
+        detailedDescription: "تشمل هذه الخدمة حجز وإصدار التذاكر الداخلية والدولية والتأكيد على المقاعد لجميع شركات الطيران وتعديل التذاكر عند الحاجة كما اننا نحرص على تقديم أفضل جودة بأقل سعر ممكن ولدينا أنظمة خصومات خاصة للمجموعات واستئجار الطائرات الخاصة.",
+        icon: "TbPlane",
+        features: [
+            "حجز وإصدار التذاكر الداخلية والدولية",
+            "التأكيد على المقاعد لجميع شركات الطيران",
+            "تعديل التذاكر عند الحاجة",
+            "أفضل جودة بأقل سعر ممكن",
+            "أنظمة خصومات خاصة للمجموعات",
+            "استئجار الطائرات الخاصة"
+        ],
+        category: "flights"
+    },
+    {
+        title: "حجوزات الفنادق",
+        tagline: "فنادق ومنتجعات وشقق فندقية وفلل خاصة",
+        description: "تتوفر لدينا حجوزات الفنادق وحجوزات المنتجعات وحجوزات الشقق الفندقية وحجوزات الفلل الخاصة",
+        detailedDescription: "تتوفر لدينا حجوزات الفنادق وحجوزات المنتجعات وحجوزات الشقق الفندقية وحجوزات الفلل الخاصة وتنفيذ ترقية مجانية إلى جناح لكبار الضيوف وأيضا تتوفر لدينا خدمة الغرف لكبار الضيوف وتتوفر خدمة الغسيل لكبار الضيوف وتتوفر ايضاً خدمة السبا للكبار الضيوف.",
+        icon: "TbBuilding",
+        features: [
+            "حجوزات الفنادق والمنتجعات",
+            "حجوزات الشقق الفندقية",
+            "حجوزات الفلل الخاصة",
+            "ترقية مجانية إلى جناح لكبار الضيوف",
+            "خدمة الغرف والغسيل والسبا لكبار الضيوف"
+        ],
+        category: "hotels"
+    },
+    {
+        title: "حجوزات السيارات",
+        tagline: "تأجير السيارات والحافلات والاستقبال من المطار",
+        description: "تشمل هذه الخدمة تأجير السيارات بكافة أنواعها والاستقبال والتوديع من المطار",
+        detailedDescription: "تشمل هذه الخدمة تأجير السيارات بكافة أنواعها والاستقبال والتوديع من المطار وتأجير السيارة بسائق خاص وتأجير الحافلات وتشمل أيضا تذاكر القطار الدولية كما أنه يتوفر سعر خاص للمجموعات.",
+        icon: "TbBus",
+        features: [
+            "تأجير السيارات بكافة أنواعها",
+            "الاستقبال والتوديع من المطار",
+            "تأجير السيارة بسائق خاص",
+            "تأجير الحافلات",
+            "تذاكر القطار الدولية",
+            "سعر خاص للمجموعات"
+        ],
+        category: "transport"
+    },
+    {
+        title: "إصدار التأشيرات والفيز والرخص الدولية",
+        tagline: "خدمات استخراج التأشيرات والرخص الدولية",
+        description: "تشمل هذه الخدمة تعبئة نماذج الإصدار وإصدار التأشيرات السياحية والتعليمية والعمل",
+        detailedDescription: "تشمل هذه الخدمة تعبئة نماذج الإصدار وإصدار التأشيرات السياحية والتعليمية و العمل وزيارة التجارية لأي دولة خارجية واستقبال مقدم الطلب أمام السفارة وحجز موعد البصمة واستلام الجواز بعد الإصدار وتوصيل الجواز.",
+        icon: "FiGlobe",
+        features: [
+            "تعبئة نماذج الإصدار",
+            "إصدار التأشيرات السياحية والتعليمية والعمل",
+            "تأشيرات زيارة تجارية لأي دولة",
+            "استقبال مقدم الطلب أمام السفارة",
+            "حجز موعد البصمة",
+            "استلام الجواز بعد الإصدار وتوصيله"
+        ],
+        category: "visa"
+    },
+    {
+        title: "الترجمات المعتمدة",
+        tagline: "ترجمة معتمدة لجميع المستندات الرسمية",
+        description: "تشمل ترجمة من العربية الي الإنجليزية ومن الإنجليزية الي الصينة",
+        detailedDescription: "تشمل ترجمة من العربية الي الإنجليزية ومن الإنجليزية الي الصينة ترجمات عقود الزواج -سجلات العائله -الوثائق والمستندات بشتي أنواعها",
+        icon: "TbLanguage",
+        features: [
+            "ترجمة من العربية إلى الإنجليزية",
+            "ترجمة من الإنجليزية إلى الصينية",
+            "ترجمة عقود الزواج",
+            "ترجمة سجلات العائلة",
+            "ترجمة الوثائق والمستندات بشتى أنواعها"
+        ],
+        category: "translation"
+    },
+    {
+        title: "الحج والعمرة",
+        tagline: "برامج متكاملة للحج والعمرة مع أفضل الخدمات",
+        description: "تشمل هذه الخدمة النقل الأرضي والسكن والإعاشة في مكة المكرمة والمدينة المنورة",
+        detailedDescription: "تشمل هذه الخدمة النقل الأرضي والسكن والإعاشة في مكة المكرمة والمدينة المنورة كما تشمل السكن والإعاشة في مشعل عرفات ومزدلفة ومنى وتشمل أيضا حجوزات الطيران وتشغيل مركز إعلامي وتقنية المعلومات والخدمات الطبية والمترجمين.",
+        icon: "TbBuildingMosque",
+        features: [
+            "النقل الأرضي والسكن والإعاشة في مكة والمدينة",
+            "السكن والإعاشة في مشعل عرفات ومزدلفة ومنى",
+            "حجوزات الطيران",
+            "تشغيل مركز إعلامي وتقنية المعلومات",
+            "الخدمات الطبية والمترجمين"
+        ],
+        category: "hajj"
+    },
+    {
+        title: "خدمات الدراسة بالخارج",
+        tagline: "تنسيق دراسة البكالوريوس والدراسات العليا ودراسة اللغات",
+        description: "تشمل هذه الخدمة تنسيق دراسة البكالوريوس والدراسات العليا ودراسة اللغات المختلفة",
+        detailedDescription: "تشمل هذه الخدمة تنسيق دراسة البكالوريوس والدراسات العليا ودراسة اللغات المختلفة حول العالم سواء اللغة الإنجليزية أو الصينية أو الفرنسية وغيرها من اللغات العالمية.",
+        icon: "FiFileText",
+        features: [
+            "تنسيق دراسة البكالوريوس",
+            "تنسيق الدراسات العليا",
+            "دراسة اللغة الإنجليزية",
+            "دراسة اللغة الصينية",
+            "دراسة اللغة الفرنسية",
+            "دراسة اللغات العالمية الأخرى"
+        ],
+        category: "education"
+    },
+    {
+        title: "الرحلات العلاجية",
+        tagline: "خدمات الرحلات العلاجية للرعاية الطبية عالية الجودة",
+        description: "نحن نقدم خدمات الرحلات العلاجية للعملاء الذين يسعون للحصول على الرعاية الطبية",
+        detailedDescription: "نحن نقدم خدمات الرحلات العلاجية للعملاء الذين يسعون للحصول على الرعاية الطبية عالية الجودة في وجهات سياحية.",
+        icon: "FiMap",
+        features: [
+            "تنسيق الرحلات العلاجية",
+            "الرعاية الطبية عالية الجودة",
+            "وجهات سياحية علاجية",
+            "تنسيق كامل للرحلة العلاجية"
+        ],
+        category: "medical"
+    },
+    {
+        title: "المعارض و المؤتمرات",
+        tagline: "فريق خاص لتنظيم المعارض والمؤتمرات",
+        description: "تشمل هذه الخدمة تقديم فريق خاص لتنظيم المعارض والمؤتمرات",
+        detailedDescription: "تشمل هذه الخدمة تقديم فريق خاص لتنظيم المعارض والمؤتمرات ولحجز القاعات واستقبال منسوبي المعرض أو المؤتمر واستقبال الضيوف من المطار وتوزيع الدعوات ومرافقة كبار الشخصيات وتنسيق الطاولات وأيضا تتوفر لدينا خدمة تنظيم الوجبات الساخنة والخفيفة وطاقم للمرافقة خارج الجمهورية وترتيب السكن والنقل والدعم اللوجيستي وتسهيل كافة إجراءات السفر وتقديم الدعم والتوثيق الإعلامي.",
+        icon: "FiAward",
+        features: [
+            "فريق خاص لتنظيم المعارض والمؤتمرات",
+            "حجز القاعات",
+            "استقبال منسوبي المعرض أو المؤتمر",
+            "استقبال الضيوف من المطار",
+            "توزيع الدعوات ومرافقة كبار الشخصيات",
+            "تنظيم الوجبات الساخنة والخفيفة",
+            "طاقم للمرافقة خارج الجمهورية",
+            "ترتيب السكن والنقل والدعم اللوجيستي",
+            "الدعم والتوثيق الإعلامي"
+        ],
+        category: "events"
+    },
+    {
+        title: "برامج سياحية متنوعة",
+        tagline: "تنسيق برامج سياحية داخلية ودولية",
+        description: "لدينا تنسيق برامج سياحية داخلية ودولية مع الجولات السياحية",
+        detailedDescription: "لدينا تنسيق برامج سياحية داخلية ودولية مع الجولات السياحية والاستقبال والتوديع في جميع مطارات العالم و شرائح الجوال الدولية وأيضا تتوفر لدينا خدمة إصدار الرخصة الدولية والبرامج العلاجية.",
+        icon: "TbMap",
+        features: [
+            "برامج سياحية داخلية ودولية",
+            "الجولات السياحية",
+            "الاستقبال والتوديع في جميع مطارات العالم",
+            "شرائح الجوال الدولية",
+            "إصدار الرخصة الدولية",
+            "البرامج العلاجية"
+        ],
+        category: "tours"
+    },
+    {
+        title: "السياحة الداخلية",
+        tagline: "حجوزات الفنادق والمواصلات ورحلات المزارات السياحية",
+        description: "تشمل هذه الخدمة حجوزات الفنادق والمواصلات ورحلات المزارات السياحية",
+        detailedDescription: "تشمل هذه الخدمة حجوزات الفنادق والمواصلات ورحلات المزارات السياحية ورحلات المغامرات وخدمة المرشد السياحي.",
+        icon: "TbMap",
+        features: [
+            "حجوزات الفنادق",
+            "المواصلات",
+            "رحلات المزارات السياحية",
+            "رحلات المغامرات",
+            "خدمة المرشد السياحي"
+        ],
+        category: "domestic"
+    },
+    {
+        title: "خدمات التاشيرات",
+        tagline: "فيز عمل وتأشيرات حج وعمرة وسياحية",
+        description: "فيز عمل السعوديه وتأشيرات حج وعمره وسياحيه",
+        detailedDescription: "فيز عمل السعوديه -تاشيرات حج وعمره وسياحيه -دعوات تجارية وحكوميه الصين – موافقات امنيه كلا من القاهره والأردن – فيز علاجية الي الهند …..",
+        icon: "FiGlobe",
+        features: [
+            "فيز عمل السعودية",
+            "تأشيرات حج وعمرة وسياحية",
+            "دعوات تجارية وحكومية للصين",
+            "موافقات أمنية من القاهرة والأردن",
+            "فيز علاجية إلى الهند"
+        ],
+        category: "visa"
+    },
+    {
+        title: "رحلات بحرية",
+        tagline: "رحلات كروز فاخرة لأجمل الوجهات البحرية",
+        description: "رحلات كروز فاخرة لأجمل الوجهات البحرية",
+        detailedDescription: "استمتع برحلات كروز فاخرة إلى أجمل الوجهات البحرية في العالم. نقدم لك مجموعة متنوعة من الرحلات البحرية على سفن فاخرة مجهزة بجميع وسائل الراحة والترفيه. من رحلات قصيرة إلى رحلات طويلة، اكتشف وجهات متعددة في رحلة واحدة مع ترفيه متكامل وخدمات راقية.",
+        icon: "TbShip",
+        features: [
+            "سفن فاخرة مجهزة بأحدث المرافق",
+            "وجهات متعددة في رحلة واحدة",
+            "ترفيه متكامل وخدمات راقية",
+            "باقات شاملة تشمل الطعام والأنشطة",
+            "رحلات مناسبة لجميع الأعمار"
+        ],
+        category: "cruises"
+    }
+];
+```
+
+## File: src/constants/routes.js
+
+- Extension: .js
+- Language: javascript
+- Size: 509 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+// Application routes
+export const ROUTES = {
+    HOME: '/',
+    ABOUT: '/about',
+    SERVICES: '/services',
+    DESTINATIONS: '/destinations',
+    CONTACT: '/contact'
+};
+
+// Navigation links
+export const NAV_LINKS = [
+    { name: 'الرئيسية', path: ROUTES.HOME },
+    { name: 'من نحن', path: ROUTES.ABOUT },
+    { name: 'خدماتنا', path: ROUTES.SERVICES },
+    { name: 'الوجهات', path: ROUTES.DESTINATIONS },
+    { name: 'اتصل بنا', path: ROUTES.CONTACT }
+];
+
+```
+
+## File: src/constants/company.js
+
+- Extension: .js
+- Language: javascript
+- Size: 1223 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-27 00:03:57
+
+### Code
+
+```javascript
+// Contact information
+export const CONTACT_INFO = {
+   // Add \u202D at the start and \u202C at the end
+    phone: "\u202D+967 779 717 177\u202C",
+    email: "alnajmpluo@gmail.com",
+    whatsapp: "+967 779 717 177",
+    address: " صنعاء شارع القدس مقابل السفارة السعودية",
+    workingHours: "السبت - الخميس: 9:00 ص - 6:00 م"
+};
+
+// Social media links
+// TODO: Update these with your actual social media profile URLs
+export const SOCIAL_LINKS = {
+    facebook: "https://www.facebook.com/profile.php?id=61571202487332#", // Replace with your Facebook page URL
+    twitter: "https://twitter.com/your-handle", // Replace with your Twitter/X handle URL
+    instagram: "https://www.instagram.com/your-handle", // Replace with your Instagram profile URL
+    whatsapp: "https://www.whatsapp.com/your-number" // Replace with your WhatsApp number
+};
+
+// Company info
+export const COMPANY_INFO = {
+    name: "النجم الأزرق للسفريات والسياحة",
+    nameEn: "Alnajm Alazrak Travel & Tourism",
+    slogan: "سافر إلى حيث تأخذك أحلامك",
+    foundedYear: 2010,
+    yearsOfExperience: new Date().getFullYear() - 2010
+};
+
+```
+
+## File: src/constants/index.js
+
+- Extension: .js
+- Language: javascript
+- Size: 83 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+// Re-export all constants
+export * from './routes';
+export * from './company';
+
+```
+
+## File: src/components/layout/index.js
+
+- Extension: .js
+- Language: javascript
+- Size: 130 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+// Layout components barrel export
+export { default as Navbar } from './Navbar';
+export { default as Footer } from './Footer';
+
+```
+
+## File: src/components/common/Analytics.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 3332 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
+/**
+ * Analytics component for tracking page views
+ * Supports Google Analytics, Facebook Pixel, and custom analytics
+ * 
+ * Usage:
+ * - Add your Google Analytics ID to environment variables: VITE_GA_ID
+ * - Add your Facebook Pixel ID to environment variables: VITE_FB_PIXEL_ID
+ * - The component will automatically track page views on route changes
+ */
+
+const Analytics = () => {
+    const location = useLocation();
+
+    useEffect(() => {
+        // Track page view on route change
+        const path = location.pathname + location.search;
+        
+        // Google Analytics 4 (gtag)
+        if (window.gtag && import.meta.env.VITE_GA_ID) {
+            window.gtag('config', import.meta.env.VITE_GA_ID, {
+                page_path: path,
+            });
+        }
+
+        // Google Analytics Universal (ga)
+        if (window.ga) {
+            window.ga('send', 'pageview', path);
+        }
+
+        // Facebook Pixel
+        if (window.fbq && import.meta.env.VITE_FB_PIXEL_ID) {
+            window.fbq('track', 'PageView');
+        }
+
+        // Custom analytics event
+        if (window.analytics && typeof window.analytics.track === 'function') {
+            window.analytics.track('Page Viewed', {
+                path: path,
+                title: document.title,
+            });
+        }
+
+        // Console log in development
+        if (import.meta.env.DEV) {
+            console.log('Page view tracked:', path);
+        }
+    }, [location]);
+
+    // Initialize Google Analytics script
+    useEffect(() => {
+        const gaId = import.meta.env.VITE_GA_ID;
+        
+        if (gaId && !window.gtag) {
+            // Google Analytics 4
+            const script1 = document.createElement('script');
+            script1.async = true;
+            script1.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+            document.head.appendChild(script1);
+
+            window.dataLayer = window.dataLayer || [];
+            function gtag(...args) {
+                window.dataLayer.push(args);
+            }
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', gaId, {
+                page_path: window.location.pathname,
+            });
+        }
+    }, []);
+
+    // Initialize Facebook Pixel
+    useEffect(() => {
+        const fbPixelId = import.meta.env.VITE_FB_PIXEL_ID;
+        
+        if (fbPixelId && !window.fbq) {
+            !function(f,b,e,v,n,t,s) {
+                if(f.fbq)return;
+                n=f.fbq=function(){
+                    n.callMethod ? n.callMethod.apply(n,arguments):n.queue.push(arguments)
+                };
+                if(!f._fbq)f._fbq=n;
+                n.push=n;
+                n.loaded=!0;
+                n.version='2.0';
+                n.queue=[];
+                t=b.createElement(e);
+                t.async=!0;
+                t.src=v;
+                s=b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t,s)
+            }(window, document,'script', 'https://connect.facebook.net/en_US/fbevents.js');
+            
+            window.fbq('init', fbPixelId);
+            window.fbq('track', 'PageView');
+        }
+    }, []);
+
+    return null; // This component doesn't render anything
+};
+
+export default Analytics;
+
+
+```
+
+## File: src/components/common/ErrorBoundary.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 7138 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+import React from 'react';
+import { FiAlertCircle, FiRefreshCw, FiHome } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+
+class ErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { 
+            hasError: false, 
+            error: null,
+            errorInfo: null 
+        };
+    }
+
+    static getDerivedStateFromError(error) {
+        // Update state so the next render will show the fallback UI
+        return { hasError: true };
+    }
+
+    componentDidCatch(error, errorInfo) {
+        // Log error to console in development only
+        if (import.meta.env.DEV) {
+            console.error('Error caught by boundary:', error, errorInfo);
+        }
+        
+        // You can also log the error to an error reporting service here
+        // Example: logErrorToService(error, errorInfo);
+        
+        this.setState({
+            error,
+            errorInfo
+        });
+    }
+
+    handleReset = () => {
+        this.setState({ 
+            hasError: false, 
+            error: null, 
+            errorInfo: null 
+        });
+    };
+
+    render() {
+        if (this.state.hasError) {
+            return (
+                <div className="error-boundary">
+                    <div className="error-boundary-content">
+                        <div className="error-boundary-icon">
+                            <FiAlertCircle />
+                        </div>
+                        <h1 className="error-boundary-title">عذراً، حدث خطأ</h1>
+                        <p className="error-boundary-message">
+                            نعتذر عن الإزعاج. يبدو أن شيئاً ما لم يعمل بشكل صحيح.
+                        </p>
+                        <div className="error-boundary-actions">
+                            <button 
+                                onClick={this.handleReset}
+                                className="btn btn-primary"
+                            >
+                                <FiRefreshCw />
+                                <span>إعادة المحاولة</span>
+                            </button>
+                            <Link 
+                                to="/" 
+                                className="btn btn-outline"
+                            >
+                                <FiHome />
+                                <span>العودة للصفحة الرئيسية</span>
+                            </Link>
+                        </div>
+                        {process.env.NODE_ENV === 'development' && this.state.error && (
+                            <details className="error-boundary-details">
+                                <summary>تفاصيل الخطأ (للمطورين)</summary>
+                                <pre className="error-boundary-stack">
+                                    {this.state.error.toString()}
+                                    {this.state.errorInfo?.componentStack}
+                                </pre>
+                            </details>
+                        )}
+                    </div>
+                    <style>{`
+                        .error-boundary {
+                            min-height: 100vh;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            padding: 2rem;
+                            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                        }
+                        .error-boundary-content {
+                            max-width: 600px;
+                            width: 100%;
+                            text-align: center;
+                            background: white;
+                            padding: 3rem;
+                            border-radius: 1rem;
+                            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+                        }
+                        .error-boundary-icon {
+                            font-size: 4rem;
+                            color: #ef4444;
+                            margin-bottom: 1.5rem;
+                        }
+                        .error-boundary-title {
+                            font-size: 2rem;
+                            font-weight: 700;
+                            color: #1f2937;
+                            margin: 0 0 1rem 0;
+                        }
+                        .error-boundary-message {
+                            font-size: 1.1rem;
+                            color: #6b7280;
+                            margin-bottom: 2rem;
+                            line-height: 1.6;
+                        }
+                        .error-boundary-actions {
+                            display: flex;
+                            gap: 1rem;
+                            justify-content: center;
+                            flex-wrap: wrap;
+                        }
+                        .error-boundary-actions .btn {
+                            display: flex;
+                            align-items: center;
+                            gap: 0.5rem;
+                            padding: 0.75rem 1.5rem;
+                        }
+                        .error-boundary-details {
+                            margin-top: 2rem;
+                            text-align: right;
+                            background: #f9fafb;
+                            padding: 1rem;
+                            border-radius: 0.5rem;
+                            border: 1px solid #e5e7eb;
+                        }
+                        .error-boundary-details summary {
+                            cursor: pointer;
+                            font-weight: 600;
+                            color: #374151;
+                            margin-bottom: 0.5rem;
+                        }
+                        .error-boundary-stack {
+                            text-align: left;
+                            font-size: 0.875rem;
+                            color: #dc2626;
+                            background: #fee2e2;
+                            padding: 1rem;
+                            border-radius: 0.25rem;
+                            overflow-x: auto;
+                            white-space: pre-wrap;
+                            word-break: break-word;
+                        }
+                        @media (max-width: 640px) {
+                            .error-boundary-content {
+                                padding: 2rem 1.5rem;
+                            }
+                            .error-boundary-title {
+                                font-size: 1.5rem;
+                            }
+                            .error-boundary-actions {
+                                flex-direction: column;
+                            }
+                            .error-boundary-actions .btn {
+                                width: 100%;
+                            }
+                        }
+                    `}</style>
+                </div>
+            );
+        }
+
+        return this.props.children;
+    }
+}
+
+export default ErrorBoundary;
+
+
+```
+
+## File: src/components/common/index.js
+
+- Extension: .js
+- Language: javascript
+- Size: 79 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+// Common components barrel export
+export { default as Card } from './Card';
+
+```
+
+## File: src/components/common/LazyImage.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 4407 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+import React, { useState, useRef, useEffect } from 'react';
+
+/**
+ * Enhanced LazyImage component with Intersection Observer for better performance
+ * Supports placeholder, error handling, smooth loading transitions, and modern image formats
+ */
+const LazyImage = ({ src, alt, className = '', webpSrc, avifSrc, ...props }) => {
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [isInView, setIsInView] = useState(false);
+    const [hasError, setHasError] = useState(false);
+    const imgRef = useRef(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsInView(true);
+                    observer.disconnect();
+                }
+            },
+            { 
+                threshold: 0.1,
+                rootMargin: '50px' // Start loading 50px before image enters viewport
+            }
+        );
+
+        if (imgRef.current) {
+            observer.observe(imgRef.current);
+        }
+
+        return () => {
+            if (imgRef.current) {
+                observer.unobserve(imgRef.current);
+            }
+            observer.disconnect();
+        };
+    }, []);
+
+    const handleLoad = () => {
+        setIsLoaded(true);
+    };
+
+    const handleError = () => {
+        setHasError(true);
+        setIsLoaded(true); // Show placeholder even on error
+    };
+
+    return (
+        <div 
+            ref={imgRef} 
+            className={`lazy-image-wrapper ${className}`}
+            style={{ position: 'relative', overflow: 'hidden' }}
+        >
+            {!isLoaded && (
+                <div 
+                    className="lazy-image-placeholder"
+                    style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
+                        backgroundSize: '200% 100%',
+                        animation: 'shimmer 1.5s infinite',
+                    }}
+                    aria-hidden="true"
+                />
+            )}
+            {hasError ? (
+                <div 
+                    className="lazy-image-error"
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: '#f0f0f0',
+                        color: '#999',
+                        fontSize: '14px'
+                    }}
+                >
+                    {alt || 'Image'}
+                </div>
+            ) : (
+                <picture>
+                    {/* AVIF format (best compression) */}
+                    {avifSrc && isInView && (
+                        <source srcSet={avifSrc} type="image/avif" />
+                    )}
+                    {/* WebP format (good compression) */}
+                    {webpSrc && isInView && (
+                        <source srcSet={webpSrc} type="image/webp" />
+                    )}
+                    {/* Fallback to original image */}
+                    <img
+                        src={isInView ? src : undefined}
+                        alt={alt}
+                        loading="lazy"
+                        onLoad={handleLoad}
+                        onError={handleError}
+                        className={`lazy-image ${isLoaded ? 'loaded' : ''} ${className}`}
+                        style={{
+                            opacity: isLoaded ? 1 : 0,
+                            transition: 'opacity 0.3s ease-in-out',
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover'
+                        }}
+                        {...props}
+                    />
+                </picture>
+            )}
+            <style>{`
+                @keyframes shimmer {
+                    0% { background-position: -200% 0; }
+                    100% { background-position: 200% 0; }
+                }
+                .lazy-image.loaded {
+                    opacity: 1;
+                }
+            `}</style>
+        </div>
+    );
+};
+
+export default LazyImage;
+
+```
+
+## File: src/components/admin/Admin.css
+
+- Extension: .css
+- Language: unknown
+- Size: 132 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-10 17:23:43
+
+### Code
+
+```unknown
+/* Shared admin component styles */
+/* Most styles are in Admin.css, but this file can be used for component-specific overrides */
+
+
+```
+
+## File: src/components/admin/AddEntryForm.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 4737 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-27 17:21:47
+
+### Code
+
+```javascript
+import { useState } from 'react';
+import './Admin.css';
+
+const AddEntryForm = ({ onSuccess }) => {
+  const [formData, setFormData] = useState({
+    passport_number: '',
+    first_name: '',
+    last_name: '',
+    status: 'pending',
+    admin_notes: '',
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!formData.passport_number.trim()) {
+      setError('رقم الجواز مطلوب');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('/api/admin/create-entry', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          passport_number: formData.passport_number.trim().toUpperCase(),
+          first_name: formData.first_name.trim(),
+          last_name: formData.last_name.trim(),
+          status: formData.status,
+          admin_notes: formData.admin_notes.trim() || null,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || 'فشل في إضافة المدخل');
+        return;
+      }
+
+      // Reset form
+      setFormData({
+        passport_number: '',
+        first_name: '',
+        last_name: '',
+        status: 'pending',
+        admin_notes: '',
+      });
+
+      alert('تم إضافة المدخل بنجاح!');
+      onSuccess();
+    } catch (err) {
+      console.error('خطأ في إضافة المدخل:', err);
+      setError('حدث خطأ. يرجى المحاولة مرة أخرى.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="add-entry-form">
+      <h3>إضافة مدخل جديد لجواز السفر</h3>
+      <form onSubmit={handleSubmit}>
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="passport-number">رقم الجواز *</label>
+            <input
+              type="text"
+              id="passport-number"
+              value={formData.passport_number}
+              onChange={(e) =>
+                setFormData({ ...formData, passport_number: e.target.value })
+              }
+              placeholder="أدخل رقم الجواز"
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="first-name">الاسم الأول</label>
+            <input
+              type="text"
+              id="first-name"
+              value={formData.first_name}
+              onChange={(e) =>
+                setFormData({ ...formData, first_name: e.target.value })
+              }
+              placeholder="الاسم الأول"
+              disabled={loading}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="last-name">اسم العائلة</label>
+            <input
+              type="text"
+              id="last-name"
+              value={formData.last_name}
+              onChange={(e) =>
+                setFormData({ ...formData, last_name: e.target.value })
+              }
+              placeholder="اسم العائلة"
+              disabled={loading}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="status">الحالة *</label>
+            <select
+              id="status"
+              value={formData.status}
+              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+              required
+              disabled={loading}
+            >
+              <option value="pending">قيد الانتظار</option>
+              <option value="in_embassy">في السفارة</option>
+              <option value="ready">جاهز</option>
+              <option value="rejected">مرفوض</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="admin-notes">ملاحظات المدير (اختياري)</label>
+          <textarea
+            id="admin-notes"
+            value={formData.admin_notes}
+            onChange={(e) => setFormData({ ...formData, admin_notes: e.target.value })}
+            placeholder="أضف أي ملاحظات حول هذا المدخل..."
+            rows="3"
+            disabled={loading}
+          />
+        </div>
+
+        {error && <div className="error-message">{error}</div>}
+
+        <button type="submit" className="btn-primary" disabled={loading}>
+          {loading ? 'جارٍ الإضافة...' : 'إضافة المدخل'}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default AddEntryForm;
+```
+
+## File: src/components/admin/EditEntryModal.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 5192 bytes
+- Created: 2025-12-27 17:55:51
+- Modified: 2025-12-27 17:55:51
+
+### Code
+
+```javascript
+import { useState, useEffect } from 'react';
+import './Admin.css';
+
+const EditEntryModal = ({ entry, onClose, onSuccess }) => {
+  const [formData, setFormData] = useState({
+    first_name: entry.first_name || '',
+    last_name: entry.last_name || '',
+    status: entry.status,
+    admin_notes: entry.admin_notes || '',
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('/api/admin/update-status', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: entry.id,
+          first_name: formData.first_name.trim(),
+          last_name: formData.last_name.trim(),
+          status: formData.status,
+          admin_notes: formData.admin_notes.trim() || null,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || 'Failed to update entry');
+        return;
+      }
+
+      alert('تم تحديث البيانات بنجاح!');
+      onSuccess();
+    } catch (err) {
+      console.error('Error updating entry:', err);
+      setError('حدث خطأ. يرجى المحاولة مرة أخرى.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  return (
+    <div className="modal-backdrop" onClick={handleBackdropClick}>
+      <div className="modal-content">
+        <div className="modal-header">
+          <h3>تعديل البيانات</h3>
+          <button className="modal-close" onClick={onClose}>
+            ×
+          </button>
+        </div>
+
+        <div className="modal-body">
+          <div className="entry-info">
+            <p>
+              <strong>رقم الجواز:</strong> {entry.passport_number}
+            </p>
+            <p>
+              <strong>تاريخ الإنشاء:</strong> {new Date(entry.created_at).toLocaleString('ar-SA')}
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            <div className="form-group-row">
+              <div className="form-group">
+                <label htmlFor="edit-first-name">الاسم الأول</label>
+                <input
+                  type="text"
+                  id="edit-first-name"
+                  value={formData.first_name}
+                  onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+                  placeholder="الاسم الأول"
+                  disabled={loading}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="edit-last-name">اسم العائلة</label>
+                <input
+                  type="text"
+                  id="edit-last-name"
+                  value={formData.last_name}
+                  onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                  placeholder="اسم العائلة"
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="edit-status">الحالة *</label>
+              <select
+                id="edit-status"
+                value={formData.status}
+                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                required
+                disabled={loading}
+              >
+                <option value="pending">قيد الانتظار</option>
+                <option value="in_embassy">في السفارة</option>
+                <option value="ready">جاهز</option>
+                <option value="rejected">مرفوض</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="edit-notes">ملاحظات المدير (اختياري)</label>
+              <textarea
+                id="edit-notes"
+                value={formData.admin_notes}
+                onChange={(e) => setFormData({ ...formData, admin_notes: e.target.value })}
+                placeholder="أضف أي ملاحظات حول هذا المدخل..."
+                rows="4"
+                disabled={loading}
+              />
+            </div>
+
+            {error && <div className="error-message">{error}</div>}
+
+            <div className="modal-actions">
+              <button type="button" className="btn-secondary" onClick={onClose} disabled={loading}>
+                إلغاء
+              </button>
+              <button type="submit" className="btn-primary" disabled={loading}>
+                {loading ? 'جاري التحديث...' : 'تحديث البيانات'}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EditEntryModal;
+```
+
+## File: src/components/admin/PassportTable.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 4452 bytes
+- Created: 2025-12-27 17:55:56
+- Modified: 2025-12-27 17:55:56
+
+### Code
+
+```javascript
+import { useState } from 'react';
+import EditEntryModal from './EditEntryModal';
+import './Admin.css';
+
+const PassportTable = ({ entries, onRefresh, onDelete }) => {
+  const [editingEntry, setEditingEntry] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
+
+  const handleEdit = (entry) => {
+    setEditingEntry(entry);
+  };
+
+  const handleDelete = async (id, passportNumber) => {
+    if (!window.confirm(`هل أنت متأكد من حذف رقم الجواز ${passportNumber}؟`)) {
+      return;
+    }
+
+    setDeletingId(id);
+
+    try {
+      const response = await fetch(`/api/admin/delete-entry?id=${id}`, {
+        method: 'DELETE',
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.error || 'فشل في حذف المدخل');
+        return;
+      }
+
+      alert('تم حذف المدخل بنجاح');
+      onRefresh();
+    } catch (error) {
+      console.error('Error deleting entry:', error);
+      alert('حدث خطأ أثناء حذف المدخل');
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const getStatusBadge = (status) => {
+    const badges = {
+      ready: { label: 'جاهز', className: 'badge-success' },
+      in_embassy: { label: 'في السفارة', className: 'badge-warning' },
+      pending: { label: 'قيد الانتظار', className: 'badge-info' },
+      rejected: { label: 'مرفوض', className: 'badge-error' },
+    };
+
+    const badge = badges[status] || badges.pending;
+    return <span className={`status-badge ${badge.className}`}>{badge.label}</span>;
+  };
+
+  if (entries.length === 0) {
+    return (
+      <div className="empty-state">
+        <p>لم يتم العثور على إدخالات جواز السفر. أضف أول إدخال لك باستخدام النموذج أعلاه</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="table-container">
+        <table className="passport-table">
+          <thead>
+            <tr>
+              <th>رقم الجواز</th>
+              <th>الاسم الكامل</th>
+              <th>الحالة</th>
+              <th>تاريخ الإنشاء</th>
+              <th>آخر تحديث</th>
+              <th>ملاحظات</th>
+              <th>الإجراءات</th>
+            </tr>
+          </thead>
+          <tbody>
+            {entries.map((entry) => (
+              <tr key={entry.id}>
+                <td>
+                  <strong>{entry.passport_number}</strong>
+                </td>
+                <td>
+                  {[entry.first_name, entry.last_name].filter(Boolean).join(' ') || '—'}
+                </td>
+                <td>{getStatusBadge(entry.status)}</td>
+                <td>{new Date(entry.created_at).toLocaleDateString()}</td>
+                <td>{new Date(entry.updated_at).toLocaleDateString()}</td>
+                <td className="notes-cell">
+                  {entry.admin_notes ? (
+                    <span title={entry.admin_notes}>
+                      {entry.admin_notes.length > 30
+                        ? `${entry.admin_notes.substring(0, 30)}...`
+                        : entry.admin_notes}
+                    </span>
+                  ) : (
+                    <span className="text-muted">—</span>
+                  )}
+                </td>
+                <td>
+                  <div className="action-buttons">
+                    <button
+                      className="btn-edit"
+                      onClick={() => handleEdit(entry)}
+                      title="تعديل"
+                    >
+                      ✏️ تعديل
+                    </button>
+                    <button
+                      className="btn-delete"
+                      onClick={() => handleDelete(entry.id, entry.passport_number)}
+                      disabled={deletingId === entry.id}
+                      title="حذف"
+                    >
+                      {deletingId === entry.id ? '⏳' : '🗑️ حذف'}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {editingEntry && (
+        <EditEntryModal
+          entry={editingEntry}
+          onClose={() => setEditingEntry(null)}
+          onSuccess={() => {
+            setEditingEntry(null);
+            onRefresh();
+          }}
+        />
+      )}
+    </>
+  );
+};
+
+export default PassportTable;
+```
+
+## File: src/components/sections/index.js
+
+- Extension: .js
+- Language: javascript
+- Size: 341 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-10 17:23:43
+
+### Code
+
+```javascript
+export { default as Hero } from './Hero';
+export { default as HomeServices } from './HomeServices';
+export { default as DestinationsCarousel } from './DestinationsCarousel';
+export { default as AboutUs } from './AboutUs';
+export { default as Testimonials } from './Testimonials';
+export { default as PassportCheck } from './PassportCheck';
+
+
+```
+
+## File: src/components/widgets/index.js
+
+- Extension: .js
+- Language: javascript
+- Size: 99 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+// Widget components barrel export
+export { default as WhatsAppWidget } from './WhatsAppWidget';
+
+```
+
+## File: src/components/layout/Footer/Footer.css
+
+- Extension: .css
+- Language: unknown
+- Size: 12900 bytes
+- Created: 2025-12-28 01:00:30
+- Modified: 2025-12-28 01:00:30
+
+### Code
+
+```unknown
+.footer {
+    background-color: var(--bg-secondary);
+    padding-top: var(--spacing-2xl);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    /* Enhanced visual separation */
+    position: relative;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(8, 145, 178, 0.2), transparent);
+}
+
+[data-theme="dark"] .footer {
+    background-color: #0B1120;
+    /* Darker than bg-secondary for footer */
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-xl);
+    padding-bottom: var(--spacing-2xl);
+    /* Better alignment and spacing */
+    align-items: start;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    transition: opacity var(--transition-base);
+    text-decoration: none;
+    color: inherit;
+    /* Add padding for breathing room around logo */
+    padding: var(--spacing-xs) 0;
+}
+
+.footer-logo:hover {
+    opacity: 0.85;
+}
+
+.footer-logo:focus-visible {
+    outline: 2px solid var(--primary-cyan);
+    outline-offset: 4px;
+    border-radius: var(--radius-sm);
+}
+
+@media (min-width: 992px) {
+    .footer-logo {
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-md);
+        padding: var(--spacing-sm) 0;
+    }
+}
+
+.footer-logo-img {
+    height: 100px;
+    width: auto;
+    max-width: 320px;
+    min-width: 200px;
+    object-fit: contain;
+    object-position: center center;
+    transition: opacity var(--transition-base);
+    flex-shrink: 0;
+    /* Subtle shadow for transparent SVG - single, minimal */
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+    /* SVG-specific optimizations for perfect sharpness */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: auto; /* Best for SVG - smooth scaling */
+    /* Prevent blur on transform */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    /* Display full logo with proper spacing */
+    display: block;
+    /* SVG quality enhancements */
+    shape-rendering: geometricPrecision;
+    text-rendering: optimizeLegibility;
+}
+
+/* Company Name Text */
+.footer-logo-text {
+    display: none;
+    font-family: var(--font-heading);
+    font-size: var(--font-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+    transition: color var(--transition-base);
+}
+
+.footer-logo-img:hover {
+    /* Subtle hover effect - professional and clean */
+    opacity: 1;
+    transform: translateY(-2px);
+    filter: drop-shadow(0 6px 15px rgba(0, 0, 0, 0.2));
+}
+
+/* Desktop Logo Enhancement - Much More Visible */
+@media (min-width: 992px) {
+    .footer-logo-img {
+        height: 140px;
+        max-width: 400px;
+        min-width: 280px;
+        filter: drop-shadow(0 3px 15px rgba(0, 0, 0, 0.15));
+    }
+    
+    .footer-logo-text {
+        display: block;
+        font-size: var(--font-xl);
+    }
+    
+    .footer-logo:hover .footer-logo-img {
+        opacity: 0.9;
+        filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.18));
+    }
+    
+    .footer-logo:hover .footer-logo-text {
+        color: var(--primary-cyan);
+    }
+}
+
+@media (min-width: 1200px) {
+    .footer-logo-img {
+        height: 160px;
+        max-width: 450px;
+        min-width: 320px;
+        filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.18));
+    }
+    
+    .footer-logo-text {
+        font-size: var(--font-2xl);
+    }
+    
+    .footer-logo:hover .footer-logo-img {
+        opacity: 0.9;
+        filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.2));
+    }
+}
+
+.footer-desc {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: var(--font-sm);
+}
+
+.footer-title {
+    font-size: var(--font-lg);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+    font-weight: 700;
+    /* Better visual hierarchy */
+    position: relative;
+    padding-bottom: var(--spacing-xs);
+}
+
+.footer-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--gradient-ocean);
+    border-radius: var(--radius-full);
+}
+
+.footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-links a {
+    color: var(--text-secondary);
+    font-size: var(--font-sm);
+    transition: all var(--transition-base);
+    font-weight: 400;
+    display: inline-block;
+    padding: 4px 0;
+    /* Better touch targets */
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+}
+
+.footer-links a:hover {
+    color: var(--primary-cyan);
+    padding-right: 8px;
+    /* RTL slide */
+    transform: translateX(-2px);
+}
+
+.footer-links a:focus-visible {
+    outline: 2px solid var(--primary-cyan);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+.footer-contact {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.footer-contact li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    color: var(--text-secondary);
+    font-size: var(--font-sm);
+    line-height: 1.6;
+    transition: all var(--transition-base);
+    padding: 4px 0;
+    /* Better touch targets */
+    min-height: 44px;
+}
+
+.footer-contact li:hover {
+    transform: translateX(-2px);
+    /* RTL direction */
+}
+
+.footer-contact .icon {
+    font-size: 1.25rem;
+    color: var(--primary-cyan);
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: all var(--transition-base);
+}
+
+.footer-contact a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    word-break: break-word;
+}
+
+.footer-contact a:hover {
+    color: var(--primary-cyan);
+    padding-right: 4px;
+}
+
+.footer-contact a:focus-visible {
+    outline: 2px solid var(--primary-cyan);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+.footer-contact li:hover .icon {
+    color: var(--accent-amber);
+    transform: scale(1.1);
+}
+
+.social-links {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.social-link {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    transition: transform var(--transition-base), box-shadow var(--transition-base), color var(--transition-base), background-color var(--transition-base), opacity var(--transition-base);
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(0, 75, 135, 0.06);
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.social-link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--social-color, var(--primary-blue));
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    border-radius: 50%;
+}
+
+.social-link svg {
+    position: relative;
+    z-index: 1;
+    transition: color var(--transition-base), transform var(--transition-base), opacity var(--transition-base);
+}
+
+[data-theme="dark"] .social-link {
+    background: rgba(15, 23, 42, 0.6);
+    color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.social-link:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 
+        0 6px 14px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(0, 75, 135, 0.08);
+}
+
+.social-link:hover::before {
+    opacity: 0.1;
+}
+
+.social-link:hover svg {
+    color: var(--social-color, var(--primary-blue));
+    transform: scale(1.04);
+}
+
+.social-link:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding: var(--spacing-lg) 0;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: var(--font-sm);
+    margin-top: var(--spacing-xl);
+    /* Better separation */
+}
+
+[data-theme="dark"] .footer-bottom {
+    border-top-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ========================================
+   MOBILE OPTIMIZATIONS
+   ======================================== */
+
+/* Tablet and below */
+@media (max-width: 992px) {
+    .footer {
+        padding-top: var(--spacing-xl);
+    }
+    
+    .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-lg);
+        padding-bottom: var(--spacing-xl);
+    }
+    
+    .footer-col {
+        gap: var(--spacing-sm);
+    }
+    
+    .footer-logo-img {
+        /* UPSCALE: Footer logo on tablet */
+        height: 100px;
+        max-width: 280px;
+        min-width: 200px;
+    }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+    .footer {
+        padding-top: var(--spacing-lg);
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+        padding-bottom: var(--spacing-lg);
+    }
+    
+    /* Center company info on mobile */
+    .footer-col-main {
+        text-align: center;
+        align-items: center;
+    }
+    
+    .footer-logo {
+        justify-content: center;
+        margin-bottom: var(--spacing-md);
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    .footer-logo-img {
+        /* UPSCALE: Footer logo on mobile */
+        height: 100px; /* Same as navbar */
+        max-width: 260px;
+        min-width: 180px;
+    }
+    
+    .footer-desc {
+        text-align: center;
+        max-width: 100%;
+        font-size: var(--font-sm);
+        line-height: 1.7;
+        margin-bottom: var(--spacing-md);
+    }
+    
+    /* Social links - larger and centered */
+    .social-links {
+        justify-content: center;
+        gap: var(--spacing-md);
+        margin-top: var(--spacing-md);
+    }
+    
+    .social-link {
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
+        min-width: 48px;
+        min-height: 48px;
+    }
+    
+    /* Footer titles - better spacing */
+    .footer-title {
+        font-size: var(--font-base);
+        margin-bottom: var(--spacing-sm);
+        font-weight: 700;
+    }
+    
+    /* Footer links - better touch targets */
+    .footer-links {
+        gap: 10px;
+    }
+    
+    .footer-links a {
+        font-size: var(--font-base);
+        padding: 0.5rem 0;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+    
+    /* Contact info - better layout */
+    .footer-contact {
+        gap: 12px;
+    }
+    
+    .footer-contact li {
+        font-size: var(--font-base);
+        padding: 0.5rem 0;
+        min-height: 44px;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+    
+    .footer-contact .icon {
+        font-size: 1.1rem;
+        margin-top: 4px;
+    }
+    
+    .footer-contact a,
+    .footer-contact span:not(.icon) {
+        flex: 1;
+        word-break: break-word;
+        line-height: 1.5;
+    }
+    
+    /* Footer bottom - better readability */
+    .footer-bottom {
+        padding: var(--spacing-md) var(--spacing-sm);
+        font-size: var(--font-sm);
+        line-height: 1.6;
+    }
+    
+    .footer-bottom p {
+        margin: 0;
+        padding: 0 var(--spacing-sm);
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+    .footer {
+        padding-top: var(--spacing-md);
+    }
+    
+    .footer-grid {
+        gap: var(--spacing-lg);
+        padding-bottom: var(--spacing-md);
+    }
+    
+    .footer-logo-img {
+        /* UPSCALE: Footer logo on small mobile */
+        height: 90px;
+        max-width: 240px;
+        min-width: 160px;
+    }
+    
+    .footer-desc {
+        font-size: 0.9rem;
+    }
+    
+    .social-link {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+        min-width: 44px;
+        min-height: 44px;
+    }
+    
+    .footer-title {
+        font-size: 1rem;
+    }
+    
+    .footer-links a,
+    .footer-contact li {
+        font-size: 0.9rem;
+    }
+    
+    .footer-bottom {
+        font-size: 0.85rem;
+        padding: var(--spacing-sm);
+    }
+    
+    .footer-contact li {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+/* X (formerly Twitter) brand adjustment */
+.social-link.x {
+    --social-color: #000000;
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .footer-links a,
+    .footer-contact li,
+    .social-link {
+        min-height: 44px;
+    }
+    
+    .footer-links a:active {
+        color: var(--primary-cyan);
+        transform: translateX(-4px);
+    }
+    
+    .social-link:active {
+        transform: translateY(-2px) scale(1.05);
+    }
+}
+```
+
+## File: src/components/layout/Footer/index.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 5738 bytes
+- Created: 2025-12-27 23:48:04
+- Modified: 2025-12-27 23:48:04
+
+### Code
+
+```javascript
+import { Link } from 'react-router-dom';
+import { FiInstagram, FiFacebook, FiLinkedin, FiPhone, FiMail, FiMapPin } from 'react-icons/fi';
+import { SOCIAL_LINKS, COMPANY_INFO, CONTACT_INFO } from '../../../constants/company';
+import { SiX } from 'react-icons/si';
+import './Footer.css';
+
+const Footer = () => {
+    const socialMedia = [
+        { icon: <SiX />, href: SOCIAL_LINKS.twitter, label: 'X', color: '#000000', className: 'x' },
+        { icon: <FiInstagram />, href: SOCIAL_LINKS.instagram, label: 'إنستغرام', color: '#E4405F' },
+        { icon: <FiFacebook />, href: SOCIAL_LINKS.facebook, label: 'فيسبوك', color: '#1877F2' },
+        { icon: <FiLinkedin />, href: SOCIAL_LINKS.linkedin, label: 'لينكد إن', color: '#0077B5' }
+    ];
+
+    return (    
+        <footer className="footer">
+            <div className="container">
+                <div className="footer-grid">
+                    {/* Company Info */}
+                    <div className="footer-col footer-col-main">
+                        <Link to="/" className="footer-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="الرجوع إلى الصفحة الرئيسية">
+                            <img 
+                                src="/logo_svg.svg" 
+                                alt="النجم الأزرق للسياحة والسفر" 
+                                className="footer-logo-img"
+                                /* Updated attributes to match new CSS max-sizes */
+                                width="350"  
+                                height="120"
+                                loading="lazy" /* Changed to lazy for footer performance */
+                            />
+                        </Link>
+                        <p className="footer-desc">
+                            شريكك الموثوق في عالم السفر والسياحة. نقدم لك تجارب سفر استثنائية وخدمات راقية تليق بك.
+                        </p>
+                        <div className="social-links" role="list" aria-label="روابط التواصل الاجتماعي">
+                            {socialMedia.map((social, index) => (
+                                <a
+                                    key={index}
+                                    href={social.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`social-link ${social.className || ''}`}
+                                    aria-label={social.label}
+                                    style={{ '--social-color': social.color }}
+                                >
+                                    {social.icon}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Quick Links */}
+                    <div className="footer-col">
+                        <h3 className="footer-title">روابط سريعة</h3>
+                        <ul className="footer-links">
+                            <li><Link to="/">الرئيسية</Link></li>
+                             <li><Link to="/services">خدماتنا</Link></li>   
+                            <li><Link to="/about">من نحن</Link></li>
+                            <li><Link to="/destinations">الوجهات</Link></li>
+                            <li><Link to="/contact">اتصل بنا</Link></li>
+                        </ul>
+                    </div>
+
+                    {/* Services */}
+                    <div className="footer-col">
+                        <h3 className="footer-title">خدماتنا</h3>
+                        <ul className="footer-links">
+                            <li><Link to="/services">حجوزات الطيران</Link></li>
+                            <li><Link to="/services">حجوزات الفنادق</Link></li>
+                            <li><Link to="/services">البرامج السياحية</Link></li>
+                            <li><Link to="/services">التأشيرات</Link></li>
+                            <li><Link to="/services">السياحة العلاجية</Link></li>
+                        </ul>
+                    </div>
+
+                    {/* Contact */}
+                    <div className="footer-col">
+                        <h3 className="footer-title">تواصل معنا</h3>
+                        <ul className="footer-contact" role="list">
+                            <li>
+                                <FiPhone className="icon" aria-hidden="true" />
+                                <a href={`tel:${CONTACT_INFO.phone.replace(/\s/g, '')}`} aria-label="اتصل بنا">{CONTACT_INFO.phone}</a>
+                            </li>
+                            <li>
+                                <FiMail className="icon" aria-hidden="true" />
+                                <a href={`mailto:${CONTACT_INFO.email}`} aria-label="أرسل بريد إلكتروني">{CONTACT_INFO.email}</a>
+                            </li>
+                            <li>
+                                <FiMapPin className="icon" aria-hidden="true" />
+                                <span>{CONTACT_INFO.address}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div className="footer-bottom">
+                    <p>&copy; {new Date().getFullYear()} النجم الأزرق للسفريات والسياحة. جميع الحقوق محفوظة.</p>
+                </div>
+            </div>
+        </footer>
+    );
+};
+
+export default Footer;
+```
+
+## File: src/components/layout/Navbar/index.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 4569 bytes
+- Created: 2025-12-28 00:33:17
+- Modified: 2025-12-28 00:33:17
+
+### Code
+
+```javascript
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import './Navbar.css';
+
+
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
+
+  const navLinks = [
+    { name: 'الرئيسية', path: '/' },
+    { name: 'من نحن', path: '/about' },
+    { name: 'خدماتنا', path: '/services' },
+    { name: 'الوجهات', path: '/destinations' },
+    { name: 'اتصل بنا', path: '/contact' },
+  ];
+
+  return (
+    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+      <div className="container navbar-container">
+        {/* Logo */}
+        <Link to="/" className="navbar-logo" aria-label="النجم الأزرق للسياحة والسفر - العودة إلى الصفحة الرئيسية">
+          <img
+            src="/logo_svg.svg"
+            alt="النجم الأزرق للسياحة والسفر"
+            className="logo-img"
+            width="480"
+            height="140"
+            loading="eager"
+            fetchPriority="high"
+          />
+        </Link>
+
+        {/* Desktop Menu */}
+        <div className="navbar-links">
+          {navLinks.map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
+            >
+              {link.name}
+              {location.pathname === link.path && (
+                <motion.div
+                  layoutId="underline"
+                  className="nav-underline"
+                />
+              )}
+            </Link>
+          ))}
+        </div>
+
+        {/* Desktop CTA */}
+        <div className="navbar-cta">
+          <Link
+            to="/contact"
+            className="btn btn-primary"
+            // Inline styles to override the class colors directly
+            style={{
+              backgroundColor: '#004B87',
+              borderColor: '#1428A0',
+              color: 'white'
+            }}
+          >
+            احجز الآن
+          </Link>
+        </div>
+
+        {/* Mobile Toggle */}
+        <button
+          className={`navbar-toggle ${isOpen ? 'open' : ''}`}
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle menu"
+        >
+          <span className="bar"></span>
+          <span className="bar"></span>
+          <span className="bar"></span>
+        </button>
+
+        {/* Mobile Menu Overlay */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="mobile-menu"
+            >
+              <div className="mobile-menu-content">
+                {navLinks.map((link, index) => (
+                  <motion.div
+                    key={link.path}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Link
+                      to={link.path}
+                      className={`mobile-nav-link ${location.pathname === link.path ? 'active' : ''}`}
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.div>
+                ))}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="mobile-cta-container"
+                >
+                  <Link to="/contact" className="btn btn-primary w-full">
+                    احجز رحلتك الآن
+                  </Link>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
+
+```
+
+## File: src/components/layout/Navbar/Navbar.css
+
+- Extension: .css
+- Language: unknown
+- Size: 8556 bytes
+- Created: 2025-12-28 01:38:40
+- Modified: 2025-12-28 01:38:40
+
+### Code
+
+```unknown
+/* Navbar Styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: var(--z-sticky);
+    transition: all var(--transition-base);
+    background: transparent;
+    padding: var(--spacing-sm) 0;
+    min-height: 120px;
+    /* Smooth scroll behavior */
+}
+
+.navbar.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding: var(--spacing-xs) 0;
+    min-height: 100px;
+}
+
+[data-theme="dark"] .navbar.scrolled {
+    background: rgba(15, 23, 42, 0.9);
+}
+
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    /* Better spacing between elements */
+}
+
+/* Logo */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    z-index: var(--z-fixed);
+    transition: opacity var(--transition-base);
+    height: 100%;
+    /* Add padding to create breathing room around logo */
+    padding: var(--spacing-xs) 0;
+}
+
+.navbar-logo:hover {
+    opacity: 0.85;
+}
+
+.navbar-logo:focus-visible {
+    outline: 2px solid var(--primary-cyan);
+    outline-offset: 4px;
+    border-radius: var(--radius-sm);
+}
+
+.logo-img {
+    height: 110px;
+    width: auto;
+    max-width: 400px;
+    min-width: 260px;
+    object-fit: contain;
+    object-position: center center;
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), filter 0.4s ease, opacity 0.4s ease;
+    /* Richer shadow for depth and clarity */
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
+    /* SVG-specific optimizations for perfect sharpness */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: auto;
+    /* Best for SVG - smooth scaling */
+    /* Prevent blur on transform */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    will-change: filter, transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    /* Display full logo with proper spacing */
+    display: block;
+    /* SVG quality enhancements */
+    shape-rendering: geometricPrecision;
+    text-rendering: optimizeLegibility;
+}
+
+.navbar.scrolled .logo-img {
+    height: 90px;
+    max-width: 340px;
+    min-width: 240px;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+.logo-img:hover {
+    /* Subtle hover effect - professional and clean */
+    opacity: 0.9;
+    filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.15));
+}
+
+/* Mobile optimizations for logo */
+@media (max-width: 768px) {
+    .navbar-logo {
+        padding: var(--spacing-xs) 0;
+        /* Ensure vertical center */
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-img {
+        /* UPSCALE: Larger mobile logo (was ~80px) */
+        height: 100px;
+        max-width: 320px;
+        min-width: 220px;
+    }
+
+    .navbar.scrolled .logo-img {
+        /* Slightly smaller but still clearly visible */
+        height: 90px;
+        max-width: 280px;
+        min-width: 200px;
+    }
+
+    .navbar {
+        min-height: 80px;
+        padding: var(--spacing-sm) 0;
+    }
+
+    .navbar.scrolled {
+        min-height: 75px;
+        padding: var(--spacing-xs) 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-logo {
+        padding: 4px 0;
+    }
+
+    .logo-img {
+        /* UPSCALE: Larger small-mobile logo */
+        height: 90px;
+        max-width: 280px;
+        min-width: 200px;
+    }
+
+    .navbar.scrolled .logo-img {
+        height: 80px;
+        max-width: 260px;
+        min-width: 180px;
+    }
+
+    .navbar {
+        min-height: 70px;
+    }
+
+    .navbar.scrolled {
+        min-height: 68px;
+    }
+}
+
+/* Desktop - larger logo for better visibility */
+@media (min-width: 992px) {
+    .navbar-logo {
+        padding: var(--spacing-sm) 0;
+    }
+
+    .logo-img {
+        height: 120px;
+        max-width: 420px;
+        min-width: 300px;
+    }
+
+    .navbar.scrolled .logo-img {
+        height: 100px;
+        max-width: 360px;
+        min-width: 260px;
+    }
+
+    .navbar {
+        min-height: 140px;
+    }
+
+    .navbar.scrolled {
+        min-height: 120px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .navbar-logo {
+        padding: var(--spacing-sm) 0;
+    }
+
+    .logo-img {
+        height: 140px;
+        max-width: 480px;
+        min-width: 340px;
+    }
+
+    .navbar.scrolled .logo-img {
+        height: 115px;
+        max-width: 420px;
+        min-width: 300px;
+    }
+}
+
+/* Desktop Links */
+.navbar-links {
+    display: none;
+}
+
+@media (min-width: 992px) {
+    .navbar-links {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xl);
+        /* Better spacing between nav links */
+        flex: 1;
+        justify-content: center;
+        /* Center navigation links for better balance */
+    }
+}
+
+.nav-link {
+    position: relative;
+    font-weight: 500;
+    color: var(--text-secondary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-base);
+    transition: color var(--transition-base);
+    /* Better touch target */
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    border-radius: var(--radius-sm);
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary-cyan);
+}
+
+.nav-link:hover {
+    background-color: rgba(8, 145, 178, 0.05);
+    /* Subtle background on hover */
+}
+
+.nav-link:focus-visible {
+    outline: 2px solid var(--primary-cyan);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+.nav-underline {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-ocean);
+    border-radius: var(--radius-full);
+}
+
+/* Desktop CTA */
+.navbar-cta {
+    display: none;
+}
+
+@media (min-width: 992px) {
+    .navbar-cta {
+        display: block;
+    }
+
+    .btn-sm {
+        padding: 10px 24px;
+        min-height: 44px;
+        font-size: var(--font-sm);
+    }
+}
+
+/* Mobile Toggle */
+.navbar-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: var(--z-fixed);
+    padding: 0;
+}
+
+@media (min-width: 992px) {
+    .navbar-toggle {
+        display: none;
+    }
+}
+
+.bar {
+    width: 100%;
+    height: 2px;
+    background-color: var(--text-primary);
+    border-radius: var(--radius-full);
+    transition: all var(--transition-fast);
+}
+
+.navbar-toggle.open .bar:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.navbar-toggle.open .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.navbar-toggle.open .bar:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Mobile Menu */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    z-index: var(--z-sticky);
+    /* Behind toggle */
+    padding-top: 110px;
+    /* Space for navbar */
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu {
+        padding-top: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-menu {
+        padding-top: 75px;
+    }
+}
+
+.mobile-menu-content {
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.mobile-nav-link {
+    font-family: var(--font-heading);
+    font-size: var(--font-xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    display: block;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    /* Better touch targets */
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+    background-color: var(--bg-secondary);
+    color: var(--primary-cyan);
+    transform: translateX(-4px);
+    /* RTL direction */
+    padding-right: calc(var(--spacing-lg) + 4px);
+}
+
+.mobile-cta-container {
+    margin-top: var(--spacing-lg);
+}
+
+.w-full {
+    width: 100%;
+}
+```
+
+## File: src/components/common/ExpandableServiceCard/ExpandableServiceCard.css
+
+- Extension: .css
+- Language: unknown
+- Size: 7199 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```unknown
+/* Expandable Service Card Styles */
+
+.expandable-service-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+[data-theme="dark"] .expandable-service-card {
+    background: var(--bg-secondary);
+}
+
+.expandable-service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+    border-color: rgba(8, 145, 178, 0.2);
+}
+
+.expandable-service-card.expanded {
+    box-shadow: var(--shadow-xl);
+    border-color: rgba(8, 145, 178, 0.3);
+}
+
+.expandable-service-card.expanded:hover {
+    transform: translateY(-8px);
+}
+
+/* Gradient border accent */
+.expandable-card-accent {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--gradient-tropical);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.expandable-service-card:hover .expandable-card-accent,
+.expandable-service-card.expanded .expandable-card-accent {
+    opacity: 1;
+}
+
+/* Card Header */
+.expandable-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: padding-bottom var(--transition-base);
+}
+
+.expandable-service-card.expanded .expandable-card-header {
+    padding-bottom: var(--spacing-lg);
+    border-bottom-color: rgba(8, 145, 178, 0.2);
+}
+
+.expandable-card-header-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex: 1;
+}
+
+/* Icon Wrapper */
+.expandable-icon-wrapper {
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    box-shadow: 0 4px 15px rgba(8, 145, 178, 0.1);
+}
+
+[data-theme="dark"] .expandable-icon-wrapper {
+    background: var(--bg-tertiary);
+}
+
+.expandable-service-card:hover .expandable-icon-wrapper,
+.expandable-service-card.expanded .expandable-icon-wrapper {
+    background: var(--gradient-ocean);
+    transform: rotate(-10deg) scale(1.1);
+    box-shadow: 0 8px 25px rgba(8, 145, 178, 0.4);
+}
+
+.expandable-icon {
+    font-size: 36px;
+    color: var(--primary-cyan);
+    transition: all 0.5s;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.expandable-service-card:hover .expandable-icon,
+.expandable-service-card.expanded .expandable-icon {
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Title Section */
+.expandable-card-title-section {
+    flex: 1;
+}
+
+.expandable-card-title {
+    font-size: var(--font-xl);
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    transition: color 0.3s;
+    font-weight: 700;
+}
+
+.expandable-service-card:hover .expandable-card-title,
+.expandable-service-card.expanded .expandable-card-title {
+    background: var(--gradient-ocean);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.expandable-card-tagline {
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Chevron Icon */
+.expandable-chevron {
+    color: var(--primary-cyan);
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.expandable-service-card:hover .expandable-chevron {
+    color: var(--accent-amber);
+    transform: scale(1.1);
+}
+
+/* Expanded Content */
+.expandable-card-content {
+    overflow: hidden;
+}
+
+.expandable-card-body {
+    padding-top: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.expandable-card-description {
+    font-size: var(--font-base);
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin: 0;
+}
+
+/* Features List */
+.expandable-card-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.expandable-feature-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    transition: all 0.3s;
+}
+
+.expandable-feature-item:hover {
+    color: var(--text-primary);
+    transform: translateX(-3px);
+}
+
+.expandable-check-icon {
+    color: var(--secondary-teal);
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    transition: transform 0.3s;
+}
+
+.expandable-feature-item:hover .expandable-check-icon {
+    transform: scale(1.2);
+}
+
+/* CTA Button */
+.expandable-card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--primary-cyan);
+    font-weight: 600;
+    font-size: var(--font-base);
+    margin-top: var(--spacing-sm);
+    transition: all 0.3s;
+    width: fit-content;
+    padding: 0.5rem 0;
+}
+
+.expandable-card-cta:hover {
+    gap: var(--spacing-sm);
+    color: var(--accent-amber);
+}
+
+.expandable-arrow-icon {
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.expandable-card-cta:hover .expandable-arrow-icon {
+    transform: translateX(-6px);
+    animation: arrowPulse 0.6s ease infinite;
+}
+
+@keyframes arrowPulse {
+    0%,
+    100% {
+        transform: translateX(-6px);
+    }
+
+    50% {
+        transform: translateX(-10px);
+    }
+}
+
+/* Focus States for Accessibility */
+.expandable-card-header:focus {
+    outline: 2px solid var(--primary-cyan);
+    outline-offset: 2px;
+    border-radius: var(--radius-md);
+}
+
+.expandable-card-cta:focus {
+    outline: 2px solid var(--primary-cyan);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .expandable-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    .expandable-card-header-content {
+        width: 100%;
+    }
+
+    .expandable-chevron {
+        align-self: flex-end;
+    }
+
+    .expandable-icon-wrapper {
+        width: 60px;
+        height: 60px;
+        min-width: 60px;
+    }
+
+    .expandable-icon {
+        font-size: 28px;
+    }
+
+    .expandable-card-title {
+        font-size: var(--font-lg);
+    }
+
+    .expandable-card-tagline {
+        font-size: var(--font-xs);
+    }
+}
+
+/* Disable animations for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .expandable-service-card,
+    .expandable-icon-wrapper,
+    .expandable-chevron,
+    .expandable-card-cta,
+    .expandable-arrow-icon {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .expandable-chevron {
+        transform: none !important;
+    }
+}
+
+
+```
+
+## File: src/components/common/ExpandableServiceCard/index.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 5196 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-20 18:10:53
+
+### Code
+
+```javascript
+import { memo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { 
+    FiGlobe, 
+    FiHome, 
+    FiMap, 
+    FiFileText, 
+    FiTruck, 
+    FiAnchor,
+    FiChevronDown,
+    FiCheckCircle,
+    FiAward
+} from 'react-icons/fi';
+import { 
+    TbPlane, 
+    TbBuilding, 
+    TbMap, 
+    TbBus, 
+    TbShip, 
+    TbLanguage, 
+    TbBuildingMosque 
+} from 'react-icons/tb';
+import './ExpandableServiceCard.css';
+
+// Icon mapping - supporting both react-icons/fi and react-icons/tb
+const iconMap = {
+    // Tabler icons
+    TbPlane: TbPlane,
+    TbBuilding: TbBuilding,
+    TbMap: TbMap,
+    TbBus: TbBus,
+    TbShip: TbShip,
+    TbLanguage: TbLanguage,
+    TbBuildingMosque: TbBuildingMosque,
+    // Feather icons (legacy support)
+    FiPlane: TbPlane,
+    FiHome: FiHome,
+    FiMap: FiMap,
+    FiFileText: FiFileText,
+    FiTruck: FiTruck,       
+    FiAnchor: FiAnchor,
+    FiGlobe: FiGlobe,
+    FiAward: FiAward,
+};
+
+const ExpandableServiceCard = ({ 
+    title, 
+    tagline,
+    icon, 
+    detailedDescription,
+    features = [], 
+    isExpanded, 
+    onToggle, 
+    delay = 0 
+}) => {
+    // Safely get icon component with fallback
+    const IconComponent = (icon && iconMap[icon]) ? iconMap[icon] : FiGlobe;
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onToggle();
+        }
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay }}
+            layout
+            className={`expandable-service-card ${isExpanded ? 'expanded' : ''}`}
+        >
+            <div className="expandable-card-accent"></div>
+
+            {/* Card Header - Always Visible */}
+            <div 
+                className="expandable-card-header"
+                onClick={onToggle}
+                onKeyDown={handleKeyDown}
+                role="button"
+                tabIndex={0}
+                aria-expanded={isExpanded}
+                aria-label={`${title} - ${isExpanded ? 'إغلاق' : 'فتح'} التفاصيل`}
+            >
+                <div className="expandable-card-header-content">
+                    <div className="expandable-icon-wrapper">
+                        <IconComponent className="expandable-icon" />
+                    </div>
+                    <div className="expandable-card-title-section">
+                        <h3 className="expandable-card-title">{title}</h3>
+                        <p className="expandable-card-tagline">{tagline}</p>
+                    </div>
+                </div>
+                <motion.div
+                    animate={{ rotate: isExpanded ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="expandable-chevron"
+                >
+                    <FiChevronDown />
+                </motion.div>
+            </div>
+
+            {/* Expanded Content */}
+            <AnimatePresence>
+                {isExpanded && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        className="expandable-card-content"
+                    >
+                        <div className="expandable-card-body">
+                            <p className="expandable-card-description">
+                                {detailedDescription}
+                            </p>
+
+                            <ul className="expandable-card-features">
+                                {features.map((feature, index) => (
+                                    <motion.li
+                                        key={index}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: index * 0.05 }}
+                                        className="expandable-feature-item"
+                                    >
+                                        <FiCheckCircle className="expandable-check-icon" />
+                                        <span>{feature}</span>
+                                    </motion.li>
+                                ))}
+                            </ul>
+
+                            <Link 
+                                to="/contact" 
+                                className="expandable-card-cta"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <span>تعرف على المزيد</span>
+                                <span className="expandable-arrow-icon">←</span>
+                            </Link>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
+    );
+};
+
+export default memo(ExpandableServiceCard);
+
+
+```
+
+## File: src/components/common/Card/Card.css
+
+- Extension: .css
+- Language: unknown
+- Size: 5809 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```unknown
+.service-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /* Floating animation */
+    animation: cardFloat 6s ease-in-out infinite;
+    /* 3D perspective */
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+@keyframes cardFloat {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+[data-theme="dark"] .service-card {
+    background: var(--bg-secondary);
+}
+
+.service-card:hover {
+    transform: translateY(-15px) rotateX(5deg);
+    box-shadow:
+        var(--shadow-xl),
+        0 0 30px rgba(8, 145, 178, 0.2);
+    border-color: transparent;
+    background: linear-gradient(white, white) padding-box,
+        linear-gradient(135deg, #0891B2, #06B6D4, #F59E0B) border-box;
+    animation: none;
+    /* Stop floating on hover */
+}
+
+/* Gradient border glow */
+.service-card::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: var(--radius-lg);
+    padding: 2px;
+    background: linear-gradient(135deg, #0891B2 0%, #06B6D4 30%, #F59E0B 70%, #EA580C 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.service-card:hover::before {
+    opacity: 1;
+    animation: gradientSpin 3s linear infinite;
+}
+
+@keyframes gradientSpin {
+    0% {
+        filter: hue-rotate(0deg);
+    }
+
+    100% {
+        filter: hue-rotate(360deg);
+    }
+}
+
+.service-card-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--gradient-tropical);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.service-card:hover .service-card-accent {
+    opacity: 1;
+}
+
+.service-icon-wrapper {
+    width: 70px;
+    height: 70px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-md);
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    box-shadow: 0 4px 15px rgba(8, 145, 178, 0.1);
+}
+
+[data-theme="dark"] .service-icon-wrapper {
+    background: var(--bg-tertiary);
+}
+
+/* Icon pulse animation */
+.service-icon-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-md);
+    background: inherit;
+    animation: iconPulse 2s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+}
+
+.service-card:hover .service-icon-wrapper {
+    background: var(--gradient-ocean);
+    transform: rotate(-10deg) scale(1.15);
+    box-shadow: 0 8px 25px rgba(8, 145, 178, 0.4);
+}
+
+.service-icon {
+    font-size: 36px;
+    transition: all 0.5s;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.service-card:hover .service-icon {
+    color: white;
+    transform: scale(1.1);
+    animation: iconBounce 0.6s ease;
+}
+
+@keyframes iconBounce {
+
+    0%,
+    100% {
+        transform: scale(1.1);
+    }
+
+    50% {
+        transform: scale(1.25);
+    }
+}
+
+.service-title {
+    font-size: var(--font-xl);
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    transition: color 0.3s;
+}
+
+.service-card:hover .service-title {
+    background: var(--gradient-ocean);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.service-description {
+    font-size: var(--font-base);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.7;
+    flex-grow: 1;
+}
+
+.service-features {
+    list-style: none;
+    margin-bottom: var(--spacing-lg);
+    padding: 0;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    opacity: 0.8;
+    transition: all 0.3s;
+}
+
+.service-card:hover .feature-item {
+    opacity: 1;
+    transform: translateX(-3px);
+    /* RTL */
+}
+
+.check-icon {
+    color: var(--secondary-teal);
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.service-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--primary-cyan);
+    font-weight: 600;
+    font-size: var(--font-base);
+    margin-top: auto;
+    transition: all 0.3s;
+}
+
+.service-link:hover {
+    gap: var(--spacing-sm);
+    color: var(--accent-amber);
+}
+
+.arrow-icon {
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.service-link:hover .arrow-icon {
+    transform: translateX(-6px);
+    animation: arrowPulse 0.6s ease infinite;
+}
+
+@keyframes arrowPulse {
+
+    0%,
+    100% {
+        transform: translateX(-6px);
+    }
+
+    50% {
+        transform: translateX(-10px);
+    }
+}
+
+/* Disable animations for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .service-card,
+    .service-icon-wrapper,
+    .service-link,
+    .arrow-icon {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+```
+
+## File: src/components/common/Card/index.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 1405 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import './Card.css';
+
+const ServiceCard = ({ title, description, icon, features = [], link, delay = 0 }) => {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay }}
+            className="service-card"
+        >
+            <div className="service-card-accent"></div>
+
+            <div className="service-icon-wrapper">
+                <span className="service-icon">{icon}</span>
+            </div>
+
+            <h3 className="service-title">{title}</h3>
+            <p className="service-description">{description}</p>
+
+            <ul className="service-features">
+                {features.slice(0, 3).map((feature, index) => (
+                    <li key={index} className="feature-item">
+                        <span className="check-icon">✓</span>
+                        {feature}
+                    </li>
+                ))}
+            </ul>
+
+            <Link to={link || '/services'} className="service-link">
+                <span>المزيد من التفاصيل</span>
+                <span className="arrow-icon">←</span>
+            </Link>
+        </motion.div>
+    );
+};
+
+export default ServiceCard;
+
+```
+
+## File: src/components/sections/AboutUs/AboutUs.css
+
+- Extension: .css
+- Language: unknown
+- Size: 3034 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```unknown
+.about-us-section {
+    padding: var(--spacing-2xl) 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-2xl);
+    align-items: center;
+}
+
+/* Visual Side */
+.about-visual {
+    position: relative;
+}
+
+.image-stack {
+    position: relative;
+    padding: var(--spacing-lg);
+}
+
+.main-image-wrapper {
+    border-radius: var(--radius-2xl) var(--radius-lg) var(--radius-2xl) var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-2xl);
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.main-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.main-image-wrapper:hover .main-image {
+    transform: scale(1.05);
+}
+
+.experience-badge {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    background: #fff;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-2xl);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 160px;
+    border: 4px solid var(--bg-secondary);
+}
+
+.experience-badge .years {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--primary-cyan);
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.experience-badge .text {
+    font-size: 1rem;
+    color: var(--text-primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Content Side */
+.about-content {
+    text-align: right;
+    /* RTL */
+}
+
+.about-description {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: var(--spacing-xl);
+}
+
+.features-list {
+    display: grid;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+}
+
+.feature-item .icon {
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    margin-top: 5px;
+    flex-shrink: 0;
+}
+
+.feature-item h4 {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin: 0 0 5px 0;
+}
+
+.feature-item p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+    }
+
+    .about-visual {
+        order: 2;
+        /* Image below text on tablet/mobile if preferred, or remove to keep top */
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .experience-badge {
+        transform: translate(10%, 10%);
+    }
+}
+
+@media (max-width: 768px) {
+    .about-us-section {
+        padding: var(--spacing-xl) 0;
+    }
+
+    .experience-badge {
+        padding: var(--spacing-md);
+        min-width: 100px;
+    }
+
+    .experience-badge .years {
+        font-size: 2rem;
+    }
+}
+```
+
+## File: src/components/sections/AboutUs/index.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 3664 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { FiCheckCircle, FiArrowLeft } from 'react-icons/fi';
+import LazyImage from '../../common/LazyImage';
+import './AboutUs.css';
+
+const AboutUs = () => {
+    return (
+        <section className="section about-us-section">
+            <div className="container">
+                <div className="about-grid">
+                    {/* Visual Side */}
+                    <motion.div
+                        className="about-visual"
+                        initial={{ opacity: 0, x: 50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        <div className="image-stack">
+                            <div className="main-image-wrapper">
+                                <LazyImage src="/hero-bg.jpg" alt="About Alnajm Alazrak" className="main-image" />
+                            </div>
+                            <div className="experience-badge glass">
+                                <span className="years">15+</span>
+                                <span className="text">عاماً من<br />التميز</span>
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    {/* Content Side */}
+                    <motion.div
+                        className="about-content"
+                        initial={{ opacity: 0, x: -50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                    >
+                        <span className="section-tag">من نحن</span>
+                        <h2 className="section-title">
+                            نصنع ذكريات <span className="text-gradient">لا تُنسى</span>
+                        </h2>
+                        <p className="about-description">
+                            في النجم الأزرق، لا نقدم مجرد رحلات، بل نصمم تجارب حياة. نحن نؤمن بأن السفر هو أكثر من مجرد انتقال من مكان لآخر؛ إنه اكتشاف للذات وللعالم من حولنا.
+                        </p>
+
+                        <div className="features-list">
+                            <div className="feature-item">
+                                <FiCheckCircle className="icon" />
+                                <div>
+                                    <h4>خدمة شخصية</h4>
+                                    <p>نهتم بأدق التفاصيل لتناسب رغباتك.</p>
+                                </div>
+                            </div>
+                            <div className="feature-item">
+                                <FiCheckCircle className="icon" />
+                                <div>
+                                    <h4>وجهات حصرية</h4>
+                                    <p>نأخذك إلى أماكن لا يعرفها الجميع.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <Link to="/contact" className="btn btn-primary btn-lg">
+                            تواصل معنا <FiArrowLeft />
+                        </Link>
+                    </motion.div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+export default AboutUs;
+
+```
+
+## File: src/components/sections/Testimonials/index.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 3318 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { testimonials } from '../../../data';
+import './Testimonials.css';
+
+const Testimonials = () => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const nextTestimonial = () => {
+        setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    };
+
+    const prevTestimonial = () => {
+        setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    };
+
+    return (
+        <section className="testimonials-section section">
+            <div className="container">
+                <div className="section-header">
+                    <h2 className="section-title">ماذا يقول عملاؤنا</h2>
+                    <p className="section-subtitle">نفخر بثقة عملائنا ونسعى دائماً لتقديم الأفضل</p>
+                </div>
+
+                <div className="testimonials-carousel">
+                    <button className="carousel-btn prev" onClick={prevTestimonial}>→</button>
+
+                    <div className="testimonial-card-wrapper">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={currentIndex}
+                                initial={{ opacity: 0, x: 50 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -50 }}
+                                transition={{ duration: 0.5 }}
+                                className="testimonial-card"
+                            >
+                                <div className="testimonial-content">
+                                    <div className="stars">
+                                        {[...Array(5)].map((_, i) => (
+                                            <span key={i} className={i < testimonials[currentIndex].rating ? "star filled" : "star"}>★</span>
+                                        ))}
+                                    </div>
+                                    <p className="review-text">{testimonials[currentIndex].text}</p>
+                                    <div className="reviewer-info">
+                                        <h4 className="reviewer-name">{testimonials[currentIndex].name}</h4>
+                                        <span className="reviewer-role">{testimonials[currentIndex].location}</span>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
+
+                    <button className="carousel-btn next" onClick={nextTestimonial}>←</button>
+                </div>
+
+                <div className="carousel-dots">
+                    {testimonials.map((_, index) => (
+                        <span
+                            key={index}
+                            className={`dot ${index === currentIndex ? 'active' : ''}`}
+                            onClick={() => setCurrentIndex(index)}
+                        ></span>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+};
+
+export default Testimonials;
+
+```
+
+## File: src/components/sections/Testimonials/Testimonials.css
+
+- Extension: .css
+- Language: unknown
+- Size: 3456 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```unknown
+.testimonials-section {
+    background-color: var(--bg-secondary);
+    text-align: center;
+}
+
+.section-header {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.section-title {
+    font-size: var(--font-3xl);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: var(--font-lg);
+}
+
+.testimonials-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.testimonial-card-wrapper {
+    width: 100%;
+    min-height: 300px;
+}
+
+.testimonial-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-lg);
+    position: relative;
+}
+
+@media (min-width: 768px) {
+    .testimonial-card {
+        flex-direction: row;
+        text-align: right;
+        padding: var(--spacing-2xl);
+    }
+}
+
+.testimonial-image {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.testimonial-image img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: var(--shadow-md);
+}
+
+.quote-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    background: var(--gradient-sunset);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: var(--shadow-sm);
+}
+
+.testimonial-content {
+    flex: 1;
+}
+
+.stars {
+    color: var(--accent-amber);
+    font-size: 20px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.review-text {
+    font-size: var(--font-lg);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+    font-style: italic;
+    line-height: 1.8;
+}
+
+.reviewer-name {
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.reviewer-role {
+    font-size: var(--font-sm);
+    color: var(--primary-cyan);
+    font-weight: 600;
+}
+
+.carousel-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: white;
+    color: var(--text-primary);
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.carousel-btn:hover {
+    background: var(--primary-cyan);
+    color: white;
+    transform: scale(1.1);
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: var(--spacing-lg);
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--bg-tertiary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.dot.active {
+    width: 24px;
+    border-radius: 10px;
+    background: var(--primary-cyan);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .carousel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .prev {
+        left: -10px;
+    }
+
+    .next {
+        right: -10px;
+    }
+
+    .testimonial-card {
+        padding: var(--spacing-lg);
+    }
+}
+```
+
+## File: src/components/sections/DestinationsCarousel/DestinationsCarousel.css
+
+- Extension: .css
+- Language: unknown
+- Size: 6863 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-17 14:38:32
+
+### Code
+
+```unknown
+.destinations-grid-section {
+    padding: var(--spacing-xl) 0;
+    position: relative;
+}
+
+/* Static Grid Container */
+.destinations-static-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    width: 100%;
+    min-height: 600px;
+}
+
+/* Grid Item */
+.destination-grid-item {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    cursor: pointer;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    transition: flex 0.5s ease;
+}
+
+.destination-grid-item:last-child {
+    border-right: none;
+}
+
+.grid-image-wrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.grid-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s ease;
+}
+
+.destination-grid-item:hover .grid-image {
+    transform: scale(1.1);
+}
+
+.grid-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.2) 100%);
+    z-index: 2;
+    transition: background 0.3s ease;
+}
+
+.destination-grid-item:hover .grid-overlay {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.grid-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--spacing-lg);
+    z-index: 3;
+    color: #fff;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.destination-grid-item:hover .grid-content {
+    transform: translateY(0);
+}
+
+.grid-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 5px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.grid-location {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.grid-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    padding-top: var(--spacing-sm);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.destination-grid-item:hover .grid-footer {
+    opacity: 1;
+}
+
+.grid-duration {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.grid-cta {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Modal Styles (Text Focused Redesign) --- */
+.destination-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+}
+
+.destination-modal-content {
+    background: #ffffff;
+    width: 100%;
+    max-width: 700px;
+    /* Reduced width for text focus */
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--shadow-2xl);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* .modal-close-btn {
+    position: absolute;
+    top: var(--spacing-md);
+    left: var(--spacing-md);
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.05);
+    color: #0F172A;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-close-btn:hover {
+    background: var(--primary-color);
+    color: #fff;
+    transform: rotate(90deg);
+} */
+/* ============ Updated Modal Close Button ============ */
+.modal-close-btn {
+    /* Reset absolute positioning to sit in the layout flow */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Layout & Spacing */
+    width: 100%;
+    height: 52px;
+    margin-bottom: var(--spacing-sm);
+    /* Gap between this and Book Now button */
+
+    /* Visuals */
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: none;
+    border-radius: var(--radius-md);
+
+    /* Typography */
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--font-base);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.modal-close-btn:hover {
+    /* Uses your brand blue on hover */
+    background: var(--primary-blue);
+    color: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.modal-close-btn:active {
+    transform: translateY(0);
+}
+
+.modal-text-layout {
+    padding: var(--spacing-xl);
+    text-align: right;
+}
+
+.modal-text-header {
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: var(--spacing-md);
+}
+
+.modal-country-tag {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.modal-text-header h2 {
+    font-size: 2.2rem;
+    margin: 0;
+    color: #0F172A;
+}
+
+.modal-section {
+    margin-bottom: var(--spacing-xl);
+}
+
+.modal-section h3 {
+    font-size: 1.2rem;
+    color: #0F172A;
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.section-icon {
+    color: var(--secondary-color);
+}
+
+.modal-description {
+    color: #475569;
+    line-height: 1.8;
+    font-size: 1.05rem;
+}
+
+.modal-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.info-list {
+    list-style: none;
+    padding: 0;
+}
+
+.info-list li {
+    position: relative;
+    padding-right: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: #334155;
+    font-weight: 500;
+}
+
+.info-list li::before {
+    content: "•";
+    color: var(--primary-color);
+    font-weight: bold;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.modal-text-footer {
+    margin-top: var(--spacing-lg);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .destinations-static-grid {
+        grid-template-columns: repeat(2, 1fr);
+        min-height: auto;
+    }
+
+    .destination-grid-item {
+        height: 400px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+}
+
+@media (max-width: 768px) {
+    .destinations-static-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .destination-grid-item {
+        height: 350px;
+    }
+
+    .modal-columns {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .modal-text-header h2 {
+        font-size: 1.8rem;
+    }
+}
+```
+
+## File: src/components/sections/DestinationsCarousel/index.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 7437 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-20 22:21:41
+
+### Code
+
+```javascript
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { FiMapPin, FiClock, FiX, FiCheckCircle, FiStar, FiArrowLeft } from 'react-icons/fi';
+import { allDestinations } from '../../../data';
+import LazyImage from '../../common/LazyImage';
+import './DestinationsCarousel.css';
+
+const DestinationsCarousel = () => {
+    const [selectedDestination, setSelectedDestination] = useState(null);
+
+    // Select first 5 destinations
+    const displayDestinations = allDestinations.slice(0, 5);
+
+    const handleCardClick = (dest) => {
+        setSelectedDestination(dest);
+    };
+
+    const closeModal = () => {
+        setSelectedDestination(null);
+    };
+
+    return (
+        <section className="section destinations-grid-section">
+            <div className="container">
+                <div className="section-header text-center mb-xl">
+                    <motion.span
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        className="section-tag"
+                    >
+                        وجهاتنا
+                    </motion.span>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="section-title"
+                    >
+                        وجهات سياحية <span className="text-gradient">مختارة</span>
+                    </motion.h2>
+                </div>
+            </div>
+
+            <div className="container-fluid p-0">
+                <div className="destinations-static-grid">
+                    {displayDestinations.map((dest, index) => (
+                        <motion.div
+                            key={index}
+                            className="destination-grid-item"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.1 }}
+                            onClick={() => handleCardClick(dest)}
+                        >
+                            <div className="grid-image-wrapper">
+                                <LazyImage src={dest.image} alt={dest.name} className="grid-image" />
+                                <div className="grid-overlay"></div>
+                            </div>
+
+                            <div className="grid-content">
+                                <div className="grid-header">
+                                    <h3>{dest.name}</h3>
+                                    <div className="grid-location">
+                                        <FiMapPin />
+                                        <span>{dest.country}</span>
+                                    </div>
+                                </div>
+
+                                <div className="grid-footer">
+                                    <span className="grid-cta">
+                                        استكشف
+                                    </span>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Quick View Modal - Text Focused Redesign */}
+            <AnimatePresence>
+                {selectedDestination && (
+                    <div className="destination-modal-overlay" onClick={closeModal}>
+                        <motion.div
+                            className="destination-modal-content text-focused glass"
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            transition={{ type: "spring", duration: 0.5 }}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button className="modal-close-btn" onClick={closeModal}>
+                                <FiX />
+                            </button>
+
+                            <div className="modal-text-layout">
+                                {/* Header */}
+                                <div className="modal-text-header">
+                                    <span className="modal-country-tag">{selectedDestination.country}</span>
+                                    <h2>{selectedDestination.name}</h2>
+                                </div>
+
+                                {/* Review Section */}
+                                <div className="modal-section review-section">
+                                    <h3><FiStar className="section-icon" /> نبذة عن الوجهة</h3>
+                                    <p className="modal-description">
+                                        {selectedDestination.description}
+                                    </p>
+                                </div>
+
+                                <div className="modal-columns">
+                                    {/* Services Section */}
+                                    <div className="modal-section services-section">
+                                        <h3><FiCheckCircle className="section-icon" /> خدماتنا المتاحة</h3>
+                                        <ul className="info-list">
+                                            {selectedDestination.offeredServices && selectedDestination.offeredServices.map((service, idx) => (
+                                                <li key={idx}>{service}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+
+                                    {/* Places Section */}
+                                    <div className="modal-section places-section">
+                                        <h3><FiMapPin className="section-icon" /> أماكن ننصح بزيارتها</h3>
+                                        <ul className="info-list">
+                                            {selectedDestination.placesToVisit && selectedDestination.placesToVisit.map((place, idx) => (
+                                                <li key={idx}>{place}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                {/* Footer CTA */}
+                                <div className="modal-text-footer">
+                                    <Link to="/contact" className="btn btn-primary btn-lg w-full">
+                                        احجز رحلتك إلى {selectedDestination.name} الآن <FiArrowLeft />
+                                    </Link>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+        </section>
+    );
+};
+
+export default DestinationsCarousel;
+
+```
+
+## File: src/components/sections/PassportCheck/index.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 4745 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-20 22:22:14
+
+### Code
+
+```javascript
+import { useState } from 'react';
+import StatusResult from './StatusResult';
+import './PassportCheck.css';
+
+const PassportCheck = () => {
+  const [passportNumber, setPassportNumber] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
+
+  // Input validation function
+  const validatePassportNumber = (number) => {
+    const trimmed = number.trim().toUpperCase();
+
+    // Check if empty
+    if (!trimmed) {
+      return { valid: false, error: 'الرجاء إدخال رقم الجواز' };
+    }
+
+    // Check length (typical passport numbers are 6-12 characters)
+    if (trimmed.length < 3 || trimmed.length > 20) {
+      return { valid: false, error: 'يجب أن يكون رقم الجواز بين 3 و 20 حرفاً' };
+    }
+
+    // Allow alphanumeric characters, hyphens, and spaces
+    const validPattern = /^[A-Z0-9\s\-]+$/;
+    if (!validPattern.test(trimmed)) {
+      return { valid: false, error: 'رقم الجواز يحتوي على أحرف غير صالحة' };
+    }
+
+    return { valid: true, sanitized: trimmed };
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Reset states
+    setError(null);
+    setResult(null);
+
+    // Validate input
+    const validation = validatePassportNumber(passportNumber);
+    if (!validation.valid) {
+      setError(validation.error);
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Call Vercel API route with sanitized input
+      const response = await fetch(
+        `/api/check-visa-status?passport_number=${encodeURIComponent(validation.sanitized)}`
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          setResult({
+            found: false,
+            message: data.message || 'رقم الجواز غير موجود في نظامنا',
+          });
+        } else {
+          setError(data.error || 'حدث خطأ. الرجاء المحاولة مرة أخرى.');
+        }
+      } else {
+        setResult({
+          found: true,
+          passport_number: data.passport_number,
+          status: data.status,
+          updated_at: data.updated_at,
+          admin_notes: data.admin_notes,
+          first_name: data.first_name,
+          last_name: data.last_name,
+        });
+      }
+    } catch (err) {
+      console.error('Error checking visa status:', err);
+      setError('تعذر الاتصال بالخادم. الرجاء المحاولة لاحقاً.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleReset = () => {
+    setPassportNumber('');
+    setResult(null);
+    setError(null);
+  };
+
+  return (
+    <section className="passport-check-section">
+      <div className="container">
+        <div className="passport-check-wrapper">
+          <div className="passport-check-header">
+            <h2 className="section-title">التحقق من حالة التأشيرة</h2>
+            <p className="section-subtitle">
+              أدخل رقم جواز سفرك للتحقق من حالة التأشيرة
+            </p>
+          </div>
+
+          <div className="passport-check-card">
+            <form onSubmit={handleSubmit} className="passport-check-form">
+              <div className="form-group">
+                <label htmlFor="passport-number" className="form-label">
+                  رقم الجواز
+                </label>
+                <input
+                  type="text"
+                  id="passport-number"
+                  className="form-input"
+                  placeholder="أدخل رقم جواز سفرك"
+                  value={passportNumber}
+                  onChange={(e) => setPassportNumber(e.target.value)}
+                  disabled={loading}
+                  required
+                />
+              </div>
+
+              {error && (
+                <div className="error-message" role="alert">
+                  {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="btn-check"
+                disabled={loading || !passportNumber.trim()}
+              >
+                {loading ? (
+                  <>
+                    <span className="spinner"></span>
+                    جاري التحقق...
+                  </>
+                ) : (
+                  'استعلام'
+                )}
+              </button>
+            </form>
+
+            {result && (
+              <StatusResult
+                result={result}
+                onReset={handleReset}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default PassportCheck;
+
+
+```
+
+## File: src/components/sections/PassportCheck/PassportCheck.css
+
+- Extension: .css
+- Language: unknown
+- Size: 5163 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-10 18:12:10
+
+### Code
+
+```unknown
+.passport-check-section {
+  padding: var(--spacing-2xl) 0;
+  background: var(--bg-secondary);
+  direction: rtl;
+  text-align: right;
+}
+
+.passport-check-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.passport-check-header {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  direction: rtl;
+}
+
+.passport-check-header .section-title {
+  font-size: var(--font-3xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.passport-check-header .section-subtitle {
+  font-size: var(--font-lg);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.passport-check-card {
+  background: var(--bg-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.passport-check-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.form-label {
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: var(--font-base);
+  border: 2px solid var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-cyan);
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+}
+
+.form-input:disabled {
+  background: var(--bg-tertiary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.error-message {
+  padding: var(--spacing-md);
+  background: rgba(236, 72, 153, 0.1);
+  border: 1px solid var(--accent-coral);
+  border-radius: var(--radius-md);
+  color: var(--accent-coral);
+  font-size: var(--font-sm);
+  font-weight: 500;
+}
+
+.btn-check {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: white;
+  background: var(--gradient-ocean);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-check:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-check:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-check:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.status-result {
+  margin-top: var(--spacing-2xl);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.status-card {
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  border: 2px solid;
+  text-align: center;
+}
+
+.status-card.found {
+  background: var(--bg-primary);
+}
+
+.status-card.not-found {
+  background: var(--bg-secondary);
+  border-color: var(--text-muted);
+}
+
+.status-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.status-icon {
+  font-size: 48px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.status-icon-large {
+  font-size: 64px;
+  margin-bottom: var(--spacing-md);
+}
+
+.status-info {
+  text-align: center;
+}
+
+.status-title {
+  font-size: var(--font-2xl);
+  font-weight: 800;
+  margin-bottom: var(--spacing-sm);
+}
+
+.status-passport {
+  font-size: var(--font-base);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.status-passport strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.status-date {
+  font-size: var(--font-sm);
+  color: var(--text-muted);
+}
+
+.status-body {
+  margin-bottom: var(--spacing-lg);
+}
+
+.status-message {
+  font-size: var(--font-base);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+}
+
+.admin-notes {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--primary-cyan);
+  text-align: left;
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+}
+
+.admin-notes strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.btn-reset {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--primary-cyan);
+  background: transparent;
+  border: 2px solid var(--primary-cyan);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-reset:hover {
+  background: var(--primary-cyan);
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .passport-check-card {
+    padding: var(--spacing-lg);
+  }
+
+  .passport-check-header .section-title {
+    font-size: var(--font-2xl);
+  }
+
+  .status-icon-large {
+    font-size: 48px;
+  }
+
+  .status-title {
+    font-size: var(--font-xl);
+  }
+}
+
+
+```
+
+## File: src/components/sections/PassportCheck/StatusResult.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 3907 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-27 17:23:59
+
+### Code
+
+```javascript
+import './PassportCheck.css';
+
+const StatusResult = ({ result, onReset }) => {
+  if (!result) return null;
+
+  const getStatusConfig = (status) => {
+    const configs = {
+      ready: {
+        label: 'جاهزة',
+        icon: '✓',
+        color: 'var(--secondary-teal)',
+        bgColor: 'rgba(20, 184, 166, 0.1)',
+        message: 'تأشيرتك جاهزة! يمكنك المتابعة مع خطط سفرك.',
+      },
+      in_embassy: {
+        label: 'في السفارة',
+        icon: '🏛️',
+        color: 'var(--accent-amber)',
+        bgColor: 'rgba(245, 158, 11, 0.1)',
+        message: 'جواز السفر الخاص بك حالياً في السفارة لإتمام الإجراءات.',
+      },
+      pending: {
+        label: 'معلقة',
+        icon: '📋',
+        color: 'var(--text-secondary)',
+        bgColor: 'rgba(71, 85, 105, 0.1)',
+        message: 'طلب التأشيرة الخاص بك معلق. سنقوم بتحديثك بمجرد بدء المعالجة.',
+      },
+      rejected: {
+        label: 'مرفوضة',
+        icon: '✗',
+        color: 'var(--accent-coral)',
+        bgColor: 'rgba(236, 72, 153, 0.1)',
+        message: 'للأسف، تم رفض طلب التأشيرة الخاص بك. يرجى الاتصال بنا لمزيد من المعلومات.',
+      },
+    };
+
+    return configs[status] || configs.pending;
+  };
+
+  if (!result.found) {
+    return (
+      <div className="status-result">
+        <div className="status-card not-found">
+          <div className="status-icon">🔍</div>
+          <h3 className="status-title">غير موجود</h3>
+          <p className="status-message">{result.message}</p>
+          <p className="status-help">
+            يرجى التحقق من رقم الجواز أو الاتصال بفريق الدعم للحصول على المساعدة.
+          </p>
+          <button onClick={onReset} className="btn-reset">
+            التحقق من جواز آخر
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const statusConfig = getStatusConfig(result.status);
+  const fullName = [result.first_name, result.last_name].filter(Boolean).join(' ');
+  const updatedDate = result.updated_at
+    ? new Date(result.updated_at).toLocaleDateString('ar-SA', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+    : null;
+
+  return (
+    <div className="status-result">
+      <div
+        className="status-card found"
+        style={{
+          borderColor: statusConfig.color,
+          backgroundColor: statusConfig.bgColor,
+        }}
+      >
+        <div className="status-header">
+          <div
+            className="status-icon-large"
+            style={{ color: statusConfig.color }}
+          >
+            {statusConfig.icon}
+          </div>
+          <div className="status-info">
+            {fullName && (
+              <p className="status-name">
+                مرحباً، <strong>{fullName}</strong>
+              </p>
+            )}
+            <h3 className="status-title" style={{ color: statusConfig.color }}>
+              {statusConfig.label}
+            </h3>
+            <p className="status-passport">
+              رقم الجواز: <strong>{result.passport_number}</strong>
+            </p>
+            {updatedDate && (
+              <p className="status-date">آخر تحديث: {updatedDate}</p>
+            )}
+          </div>
+        </div>
+
+        <div className="status-body">
+          <p className="status-message">{statusConfig.message}</p>
+
+          {result.admin_notes && (
+            <div className="admin-notes">
+              <strong>ملاحظة:</strong> {result.admin_notes}
+            </div>
+          )}
+        </div>
+
+        <button onClick={onReset} className="btn-reset">
+          التحقق من جواز آخر
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default StatusResult;
+```
+
+## File: src/components/sections/HomeServices/index.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 7991 bytes
+- Created: 2025-12-27 19:53:37
+- Modified: 2025-12-27 19:53:37
+
+### Code
+
+```javascript
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { FiArrowLeft, FiBriefcase, FiMap, FiCheckCircle, FiGlobe } from 'react-icons/fi';
+import './HomeServices.css';
+import LazyImage from '../../common/LazyImage';
+
+const servicesList = [
+    {
+        id: 'musaned',
+        icon: <FiGlobe />,
+        title: 'تفاويض العمالة عبر مساند',
+        description: 'نقدم حلولاً متكاملة لإصدار وتوثيق تفاويض تأشيرات العمالة المنزلية عبر منصة مساند بدقة وعناية.',
+        image: '/flight.jpg',
+        features: ['توثيق فوري ومعتمد', 'ربط آلي مع منصة مساند', 'دعم فني متكامل']
+    },
+    {
+        id: 'visit-visa',
+        icon: <FiBriefcase />,
+        title: 'تأشيرات الزيارة العائلية',
+        description: 'نسهل لك إجراءات جمع شمل العائلة من خلال استخراج تأشيرات الزيارة للأقارب من الدرجة الأولى.',
+        image: '/hotel.jpg',
+        features: ['مراجعة دقيقة للمستندات', 'سرعة عالية في الإنجاز', 'نسبة قبول مرتفعة']
+    },
+    {
+        id: 'manpower',
+        icon: <FiMap />,
+        title: 'استقدام الأيدي العاملة',
+        description: 'توفير وتخليص معاملات الكوادر المهنية لمختلف التخصصات بموجب الترخيص الرسمي رقم 19.',
+        image: '/hero-bg.jpg',
+        features: ['كوادر مهنية مؤهلة', 'إجراءات نظامية وقانونية', 'خبرة واسعة في الاستقدام']
+    },
+    {
+        id: 'residency',
+        icon: <FiCheckCircle />,
+        title: 'خدمات الإقامة العائلية',
+        description: 'متخصصون في إنهاء معاملات استقدام الزوجة والأبناء للإقامة الدائمة وربطها بملف رب الأسرة.',
+        image: '/cairo.jpg',
+        features: ['استقرار عائلي متكامل', 'متابعة حثيثة للطلبات', 'حلول للمعاملات المتعثرة']
+    }
+];
+
+const HomeServices = () => {
+    const [activeService, setActiveService] = useState(servicesList[0]);
+
+    return (
+        <section className="section home-services-section">
+            <div className="container">
+                <div className="section-header text-center mb-xl">
+                    <motion.span
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        className="section-tag"
+                    >
+                        خدماتنا
+                    </motion.span>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="section-title"
+                    >
+                        حلول وخدمات <span className="text-gradient">متكاملة</span>
+                    </motion.h2>
+                    <p className="section-subtitle">نضع خبرتنا بين يديك لتسهيل كافة إجراءاتك وتأشيراتك في مكان واحد</p>
+                </div>
+
+                <div className="services-showcase">
+                    {/* Left Column: Interactive List */}
+                    <div className="services-list">
+                        {servicesList.map((service, index) => (
+                            <motion.div
+                                key={service.id}
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                className={`service-list-item ${activeService.id === service.id ? 'active' : ''}`}
+                                onMouseEnter={() => setActiveService(service)}
+                                onClick={() => setActiveService(service)} // For mobile tap
+                            >
+                                <div className="service-item-icon">
+                                    {service.icon}
+                                </div>
+                                <div className="service-item-content">
+                                    <h3>{service.title}</h3>
+                                    <p>{service.description}</p>
+                                </div>
+                                <div className="service-item-arrow">
+                                    <FiArrowLeft />
+                                </div>
+                            </motion.div>
+                        ))}
+
+                        <div className="services-cta-mobile">
+                            <Link to="/services" className="btn btn-primary w-full">
+                                عرض جميع الخدمات
+                            </Link>
+                        </div>
+                    </div>
+
+                    {/* Right Column: Visual Preview */}
+                    <div className="services-preview">
+                        <div className="preview-card-wrapper">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={activeService.id}
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 1.05 }}
+                                    transition={{ duration: 0.4 }}
+                                    className="preview-image-container"
+                                >
+                                    <LazyImage
+                                        src={activeService.image}
+                                        alt={activeService.title}
+                                        className="preview-image"
+                                    />
+                                    <div className="preview-overlay"></div>
+                                </motion.div>
+                            </AnimatePresence>
+
+                            <div className="preview-content glass">
+                                <motion.div
+                                    key={activeService.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.2 }}
+                                >
+                                    <h3>{activeService.title}</h3>
+                                    <ul className="preview-features">
+                                        {activeService.features.map((feature, idx) => (
+                                            <li key={idx}>
+                                                <span className="dot"></span>
+                                                {feature}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <Link to="/contact" className="btn btn-sm btn-primary">
+                                        احجز الآن
+                                    </Link>
+                                </motion.div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+export default HomeServices;
+```
+
+## File: src/components/sections/HomeServices/HomeServices.css
+
+- Extension: .css
+- Language: unknown
+- Size: 5594 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-17 14:02:47
+
+### Code
+
+```unknown
+/* Home Services Showcase Styles */
+
+.home-services-section {
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 0;
+    background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+.section-tag {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: rgba(8, 145, 178, 0.1);
+    color: var(--primary-cyan);
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.services-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+/* Left Column: List */
+.services-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.service-list-item {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.service-list-item:hover,
+.service-list-item.active {
+    background: white;
+    box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+    transform: translateX(-10px);
+    /* RTL pull */
+    border-color: rgba(8, 145, 178, 0.2);
+}
+
+.service-list-item.active::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--primary-cyan);
+}
+
+.service-item-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: all 0.3s;
+}
+
+.service-list-item.active .service-item-icon {
+    background: var(--primary-cyan);
+    color: #004B87;
+}
+
+.service-item-content {
+    flex: 1;
+}
+
+.service-item-content h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.service-item-content p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.service-item-arrow {
+    opacity: 0;
+    transform: translateX(10px);
+    transition: all 0.3s;
+    color: var(--primary-cyan);
+}
+
+.service-list-item.active .service-item-arrow {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Right Column: Preview */
+.services-preview {
+    position: relative;
+    height: 500px;
+}
+
+.preview-card-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+}
+
+.preview-image-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+}
+
+.preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.preview-overlay {
+    position: absolute;
+    inset: 0;
+    /* slightly lighter overlay so image remains visible under content */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, transparent 60%);
+}
+
+.preview-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem;
+    /* glass-style but lighter so it doesn't fully hide the image */
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: white;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+    /* limit how much of the image the content can cover */
+    max-height: 45vh;
+    overflow-y: auto;
+}
+
+.preview-card-wrapper:hover .preview-content {
+    transform: translateY(-5px);
+}
+
+.preview-content h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    /* strong readable heading on the glass background */
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.preview-features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.preview-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.preview-features .dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent-amber);
+    border-radius: 50%;
+}
+
+.services-cta-mobile {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .services-showcase {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .services-preview {
+        height: 400px;
+        order: -1;
+        /* Show image first on mobile */
+    }
+
+    .services-cta-mobile {
+        display: block;
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .services-preview {
+        height: 300px;
+    }
+
+    /* Make the preview content compact on small screens so it doesn't cover the whole image */
+    .preview-content {
+        padding: 1.5rem;
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+        border-radius: 12px;
+        max-height: 35vh;
+    }
+
+    /* Hide the long features list on mobile to reduce vertical space usage */
+    .preview-features {
+        display: none;
+    }
+
+    .preview-content h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .service-list-item {
+        padding: 1rem;
+    }
+}
+```
+
+## File: src/components/sections/Hero/Hero.css
+
+- Extension: .css
+- Language: unknown
+- Size: 11267 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```unknown
+/* ========================================
+   PREMIUM HERO SLIDER
+   ======================================== */
+
+.hero-slider-premium {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 700px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ========================================
+   BACKGROUND SLIDER
+   ======================================== */
+
+.hero-slider-backgrounds {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.hero-slider-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    will-change: opacity;
+    transform: translateZ(0);
+}
+
+/* ========================================
+   GLASSMORPHISM EFFECT
+   ======================================== */
+
+.glass {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px rgba(10, 15, 30, 0.15);
+}
+
+/* ========================================
+   CONTENT
+   ======================================== */
+
+.hero-slider-content-wrapper {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 2rem;
+}
+
+.hero-slider-content {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    color: #fff;
+}
+
+/* ========================================
+   DESTINATION TAG
+   ======================================== */
+
+.hero-destination-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.75rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    animation: tagFade 0.8s ease-out;
+}
+
+.tag-icon {
+    font-size: 1.3rem;
+}
+
+@keyframes tagFade {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ========================================
+   HEADLINE & SUBTITLE
+   ======================================== */
+
+.hero-slider-headline {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    animation: contentFadeIn 0.8s ease-out 0.1s backwards;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #fff 0%, #f0f9ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    /* Remove shadow for gradient text */
+}
+
+.hero-slider-subtitle {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.95);
+    max-width: 650px;
+    margin: 0 auto 3rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    animation: contentFadeIn 0.8s ease-out 0.2s backwards;
+}
+
+@keyframes contentFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   CTA BUTTONS
+   ======================================== */
+
+.hero-slider-cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: contentFadeIn 0.8s ease-out 0.3s backwards;
+}
+
+.hero-btn-hero,
+.hero-btn-hero-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.1rem 2.5rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Primary Button (Gold Gradient) */
+.hero-btn-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    color: #fff;
+    box-shadow:
+        0 4px 20px rgba(8, 145, 178, 0.4),
+        0 8px 30px rgba(245, 158, 11, 0.2);
+}
+
+.hero-btn-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.6s;
+}
+
+.hero-btn-hero:hover::before {
+    left: 100%;
+}
+
+.hero-btn-hero:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 25px rgba(8, 145, 178, 0.5),
+        0 12px 40px rgba(245, 158, 11, 0.3);
+}
+
+/* Outline Button (Glassmorphism) */
+.hero-btn-hero-outline {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.hero-btn-hero-outline:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-arrow {
+    font-size: 1.3rem;
+    transition: transform 0.3s;
+}
+
+.hero-btn-hero:hover .btn-arrow {
+    transform: translateX(-5px);
+}
+
+/* ========================================
+   NAVIGATION ARROWS
+   ======================================== */
+
+.hero-nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.8;
+}
+
+.hero-nav-arrow:hover {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.hero-nav-prev {
+    right: 3rem;
+    /* RTL: previous is on right */
+}
+
+.hero-nav-next {
+    left: 3rem;
+    /* RTL: next is on left */
+}
+
+/* ========================================
+   CONTROLS CONTAINER
+   ======================================== */
+
+.hero-slider-controls {
+    position: absolute;
+    bottom: 3rem;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3rem;
+    gap: 2rem;
+}
+
+/* ========================================
+   SLIDE COUNTER
+   ======================================== */
+
+.slide-counter {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Courier New', monospace;
+}
+
+.slide-counter .current {
+    font-size: 1.3rem;
+    color: var(--accent-color);
+}
+
+.slide-counter .separator {
+    opacity: 0.5;
+    margin: 0 0.25rem;
+}
+
+.slide-counter .total {
+    opacity: 0.8;
+}
+
+/* ========================================
+   DOT INDICATORS
+   ======================================== */
+
+.slide-indicators-premium {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.slide-dot-premium {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    position: relative;
+}
+
+.slide-dot-premium:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(1.2);
+}
+
+.slide-dot-premium.active {
+    width: 35px;
+    border-radius: 50px;
+    background: #fff;
+    animation: indicatorPulse 2s ease-in-out infinite;
+}
+
+@keyframes indicatorPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+
+    50% {
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+}
+
+/* ========================================
+   PROGRESS BAR
+   ======================================== */
+
+.slide-progress {
+    width: 200px;
+    height: 4px;
+    border-radius: 50px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.progress-fill-premium {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    box-shadow: 0 0 10px rgba(8, 145, 178, 0.6);
+    transition: width 100ms linear;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+/* Tablets */
+@media (max-width: 768px) {
+    .hero-slider-premium {
+        min-height: 600px;
+    }
+
+    .hero-slider-headline {
+        font-size: clamp(2rem, 6vw, 3.5rem);
+    }
+
+    .hero-slider-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .hero-slider-cta {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .hero-btn-hero,
+    .hero-btn-hero-outline {
+        width: 100%;
+        justify-content: center;
+        padding: 1rem 2rem;
+        font-size: 1rem;
+    }
+
+    .hero-slider-controls {
+        padding: 0 2rem;
+        bottom: 2rem;
+    }
+
+    .slide-counter {
+        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
+    }
+
+    .slide-progress {
+        width: 150px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .hero-slider-premium {
+        min-height: 550px;
+    }
+
+    .hero-slider-content-wrapper {
+        padding: 1rem;
+    }
+
+    .hero-destination-tag {
+        padding: 0.65rem 1.3rem;
+        font-size: 0.9rem;
+        gap: 0.5rem;
+    }
+
+    .tag-icon {
+        font-size: 1.1rem;
+    }
+
+    .hero-slider-headline {
+        font-size: clamp(1.8rem, 7vw, 2.5rem);
+        margin-bottom: 1rem;
+    }
+
+    .hero-slider-subtitle {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .hero-slider-controls {
+        flex-direction: column;
+        align-items: center;
+        padding: 0 1.5rem;
+        gap: 1rem;
+        bottom: 1.5rem;
+    }
+
+    .slide-counter {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .slide-counter .current {
+        font-size: 1.1rem;
+    }
+
+    .slide-indicators-premium {
+        gap: 0.6rem;
+    }
+
+    .slide-dot-premium {
+        width: 8px;
+        height: 8px;
+    }
+
+    .slide-dot-premium.active {
+        width: 28px;
+    }
+
+    .slide-progress {
+        width: 100%;
+        max-width: 250px;
+    }
+
+    .hero-nav-arrow {
+        width: 44px;
+        height: 44px;
+        opacity: 0.6;
+    }
+
+    .hero-nav-prev {
+        right: 1rem;
+    }
+
+    .hero-nav-next {
+        left: 1rem;
+    }
+}
+
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+.hero-slider-background,
+.hero-slider-content,
+.progress-fill-premium {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+    .hero-slider-background,
+    .hero-slider-content,
+    .slide-dot-premium,
+    .hero-btn-hero,
+    .hero-btn-hero-outline,
+    .hero-destination-tag,
+    .hero-slider-headline,
+    .hero-slider-subtitle,
+    .hero-slider-cta {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+```
+
+## File: src/components/sections/Hero/index.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 9621 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```javascript
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { FiMapPin, FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import './Hero.css';
+
+// Import backgrounds
+import makkahBg from '/hero_makkah_background_1764893075599.jpg';
+import mountainBg from '/hero_mountain_background_1764893090134.jpg';
+import beachBg from '/beach.jpg';
+import dubaiBg from '/dubai.jpg';
+const heroSlides = [
+    {
+        id: 1,
+        theme: 'makkah',
+        background: makkahBg,
+        tag: 'رحلة روحانية',
+        headline: 'اكتشف مكة المكرمة',
+        subtitle: 'رحلة الحج والعمرة بأفضل الخدمات والأسعار المميزة',
+        cta: 'احجز رحلتك الآن',
+        gradient: 'linear-gradient(180deg, rgba(8,145,178,0.2) 0%, rgba(8,145,178,0.75) 100%)'
+    },
+    {
+        id: 2,
+        theme: 'mountain',
+        background: mountainBg,
+        tag: 'مغامرة جبلية',
+        headline: 'قمم الألب الخلابة',
+        subtitle: 'تجربة فريدة في أجمل المناظر الطبيعية الجبلية',
+        cta: 'استكشف الجبال',
+        gradient: 'linear-gradient(180deg, rgba(99,102,241,0.2) 0%, rgba(99,102,241,0.75) 100%)'
+    },
+    {
+        id: 3,
+        theme: 'beach',
+        background: beachBg,
+        tag: 'جنة استوائية',
+        headline: 'شواطئ المالديف الساحرة',
+        subtitle: 'استرخ في أجمل الجزر الاستوائية بمياهها الفيروزية',
+        cta: 'اكتشف الشواطئ',
+        gradient: 'linear-gradient(180deg, rgba(6,182,212,0.2) 0%, rgba(6,182,212,0.75) 100%)'
+    },
+    {
+        id: 4,
+        theme: 'city',
+        background: dubaiBg, // Placeholder
+        tag: 'مدينة عصرية',
+        headline: 'دبي المدينة المستقبلية',
+        subtitle: 'استكشف عجائب العمارة الحديثة والحياة الفاخرة',
+        cta: 'اكتشف المدن',
+        gradient: 'linear-gradient(180deg, rgba(245,158,11,0.2) 0%, rgba(245,158,11,0.75) 100%)'
+    }
+];
+
+const Hero = () => {
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+    const [progress, setProgress] = useState(0);
+
+    const nextSlide = useCallback(() => {
+        setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+        setProgress(0);
+    }, []);
+
+    const prevSlide = useCallback(() => {
+        setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+        setProgress(0);
+    }, []);
+
+    const goToSlide = useCallback((index) => {
+        setCurrentSlide(index);
+        setProgress(0);
+    }, []);
+
+    // Auto-play with progress
+    useEffect(() => {
+        if (!isAutoPlaying) return;
+
+        const interval = setInterval(() => {
+            setProgress((prev) => {
+                if (prev >= 100) {
+                    nextSlide();
+                    return 0;
+                }
+                return prev + 2.86; // 2.86% every 100ms = 3.5 seconds
+            });
+        }, 100);
+
+        return () => clearInterval(interval);
+    }, [isAutoPlaying, nextSlide]);
+
+    const currentSlideData = heroSlides[currentSlide];
+
+    return (
+        <section
+            className="hero-slider-premium"
+            onMouseEnter={() => setIsAutoPlaying(false)}
+            onMouseLeave={() => setIsAutoPlaying(true)}
+        >
+            {/* Background Slider */}
+            <div className="hero-slider-backgrounds">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={currentSlide}
+                        className="hero-slider-background"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 1.5, ease: 'easeInOut' }}
+                        style={{
+                            backgroundImage: `${currentSlideData.gradient}, url(${currentSlideData.background})`
+                        }}
+                    />
+                </AnimatePresence>
+            </div>
+
+            {/* Content */}
+            <div className="hero-slider-content-wrapper">
+                <div className="container">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={currentSlide}
+                            className="hero-slider-content"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            {/* Destination Tag */}
+                            <motion.div
+                                className="hero-destination-tag glass"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.8, ease: 'easeOut' }}
+                            >
+                                <FiMapPin className="tag-icon" />
+                                <span>{currentSlideData.tag}</span>
+                            </motion.div>
+
+                            {/* Headline */}
+                            <motion.h1
+                                className="hero-slider-headline gradient-text"
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.1, ease: 'easeOut' }}
+                            >
+                                {currentSlideData.headline}
+                            </motion.h1>
+
+                            {/* Subtitle */}
+                            <motion.p
+                                className="hero-slider-subtitle"
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
+                            >
+                                {currentSlideData.subtitle}
+                            </motion.p>
+
+                            {/* CTA Buttons */}
+                            <motion.div
+                                className="hero-slider-cta"
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
+                            >
+                                <Link to="/destinations" className="hero-btn-hero">
+                                    <span>{currentSlideData.cta}</span>
+                                    <span className="btn-arrow">←</span>
+                                </Link>
+                                <Link to="/contact" className="hero-btn-hero-outline glass">
+                                    تواصل معنا
+                                </Link>
+                            </motion.div>
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
+            </div>
+
+            {/* Navigation Arrows */}
+            <button
+                className="hero-nav-arrow hero-nav-prev glass"
+                onClick={prevSlide}
+                aria-label="الشريحة السابقة"
+            >
+                <FiArrowRight size={24} />
+            </button>
+            <button
+                className="hero-nav-arrow hero-nav-next glass"
+                onClick={nextSlide}
+                aria-label="الشريحة التالية"
+            >
+                <FiArrowLeft size={24} />
+            </button>
+
+            {/* Controls Container */}  
+            <div className="hero-slider-controls">
+                {/* Slide Counter */}
+                <div className="slide-counter glass">
+                    <span className="current">{String(currentSlide + 1).padStart(2, '0')}</span>
+                    <span className="separator">/</span>
+                    <span className="total">{String(heroSlides.length).padStart(2, '0')}</span>
+                </div>
+
+                {/* Dot Indicators */}
+                <div className="slide-indicators-premium">
+                    {heroSlides.map((_, index) => (
+                        <button
+                            key={index}
+                            className={`slide-dot-premium ${index === currentSlide ? 'active' : ''}`}
+                            onClick={() => goToSlide(index)}
+                            aria-label={`الذهاب إلى الشريحة ${index + 1}`}
+                        />
+                    ))}
+                </div>
+
+                {/* Progress Bar */}
+                <div className="slide-progress glass">
+                    <div
+                        className="progress-fill-premium"
+                        style={{ width: `${progress}%` }}
+                    />
+                </div>
+            </div>
+        </section>
+    );
+};
+
+export default Hero;
+
+```
+
+## File: src/components/widgets/WhatsAppWidget/index.jsx
+
+- Extension: .jsx
+- Language: javascript
+- Size: 2210 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-20 22:22:12
+
+### Code
+
+```javascript
+import { motion } from 'framer-motion';
+import { CONTACT_INFO } from '../../constants/company';
+import './WhatsAppWidget.css';
+
+const WhatsAppWidget = () => {
+    const whatsappNumber = CONTACT_INFO.whatsapp.replace(/[^\d]/g, ''); // Remove all non-digits
+
+    return (
+        <motion.a
+            href={`https://wa.me/${whatsappNumber}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="whatsapp-widget"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 1, type: "spring", stiffness: 260, damping: 20 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+        >
+            <div className="whatsapp-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.654-.698c.93.509 1.842.771 2.803.771h.003c3.181 0 5.768-2.586 5.769-5.766.001-3.18-2.585-5.766-5.766-5.766zm0 10.16c-.863 0-1.705-.237-2.438-.669l-.174-.101-1.815.478.483-1.77-.11-.182c-.467-.775-.712-1.65-.712-2.551-.001-2.658 2.16-4.819 4.823-4.819 1.288.001 2.496.502 3.405 1.411.909.909 1.41 2.116 1.411 3.403.002 2.657-2.159 4.819-4.816 4.819zM14.65 12.53c-.146-.073-.861-.424-.994-.473-.134-.049-.231-.073-.328.073-.097.146-.379.473-.465.57-.087.097-.173.11-.318.037-.146-.073-.615-.227-1.173-.723-.433-.385-.726-.86-.811-1.006-.087-.146-.009-.225.064-.298.066-.066.146-.172.219-.258.073-.087.097-.146.146-.243.049-.097.024-.182-.012-.255-.036-.073-.328-.791-.449-1.084-.118-.285-.238-.246-.328-.251-.087-.005-.186-.005-.285-.005-.099 0-.26.037-.396.185-.136.149-.52.509-.52 1.241 0 .733.533 1.441.607 1.538.073.097 1.048 1.6 2.539 2.243.355.153.632.245.851.314.363.114.693.098.956.059.293-.044.861-.352.982-.692.121-.341.121-.633.085-.692-.036-.059-.134-.097-.28-.17z" />
+                </svg>
+            </div>
+            <div className="whatsapp-pulse"></div>
+            <span className="whatsapp-tooltip">تواصل معنا الآن</span>
+        </motion.a>
+    );
+};
+
+export default WhatsAppWidget;
+
+```
+
+## File: src/components/widgets/WhatsAppWidget/WhatsAppWidget.css
+
+- Extension: .css
+- Language: unknown
+- Size: 1832 bytes
+- Created: 2025-12-27 17:38:00
+- Modified: 2025-12-09 13:47:48
+
+### Code
+
+```unknown
+.whatsapp-widget {
+    position: fixed;
+    bottom: var(--spacing-lg);
+    right: var(--spacing-lg);
+    z-index: var(--z-fixed);
+    width: 60px;
+    height: 60px;
+    background-color: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.whatsapp-icon {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.whatsapp-pulse {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #25D366;
+    border-radius: 50%;
+    z-index: 1;
+    animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.whatsapp-tooltip {
+    position: absolute;
+    right: 70px;
+    top: 50%;
+    transform: translateY(-50%) translateX(10px);
+    background: white;
+    color: var(--text-primary);
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    font-size: var(--font-sm);
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+}
+
+.whatsapp-widget:hover .whatsapp-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .whatsapp-widget {
+        bottom: var(--spacing-md);
+        right: var(--spacing-md);
+        width: 50px;
+        height: 50px;
+    }
+
+    .whatsapp-tooltip {
+        display: none;
+    }
+}
+```
+
