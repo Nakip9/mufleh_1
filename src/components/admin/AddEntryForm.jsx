@@ -77,146 +77,154 @@ const AddEntryForm = ({ onSuccess }) => {
   };
 
   return (
-    <div className="add-entry-form">
-      <h3>إضافة مدخل جديد لجواز السفر</h3>
-      <form onSubmit={handleSubmit}>
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="passport-number">رقم الجواز *</label>
-            <input
-              type="text"
-              id="passport-number"
-              value={formData.passport_number}
-              onChange={(e) =>
-                setFormData({ ...formData, passport_number: e.target.value })
-              }
-              placeholder="أدخل رقم الجواز"
-              required
-              disabled={loading}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="first-name">الاسم الأول</label>
-            <input
-              type="text"
-              id="first-name"
-              value={formData.first_name}
-              onChange={(e) =>
-                setFormData({ ...formData, first_name: e.target.value })
-              }
-              placeholder="الاسم الأول"
-              disabled={loading}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="last-name">اسم العائلة</label>
-            <input
-              type="text"
-              id="last-name"
-              value={formData.last_name}
-              onChange={(e) =>
-                setFormData({ ...formData, last_name: e.target.value })
-              }
-              placeholder="اسم العائلة"
-              disabled={loading}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="status">الحالة *</label>
-            <select
-              id="status"
-              value={formData.status}
-              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-              required
-              disabled={loading}
-            >
-              <option value="pending"> تم الاستلام </option>
-              <option value="in_embassy">في السفارة</option>
-              <option value="ready">جاهز</option>
-              <option value="in_aden">في عدن</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="visa-type">نوع التأشيرة</label>
-            <select
-              id="visa-type"
-              value={formData.visa_type}
-              onChange={(e) =>
-                setFormData({ ...formData, visa_type: e.target.value })
-              }
-              disabled={loading}
-            >
-              <option value="">اختر النوع</option>
-              <option value="زيارة">زيارة</option>
-              <option value="عمل">عمل</option>
-              <option value="عمرة">عمرة</option>
-              <option value="أخرى">أخرى</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="passport-received-date">تاريخ استلام الجواز</label>
-            <input
-              type="date"
-              id="passport-received-date"
-              value={formData.passport_received_date}
-              onChange={(e) =>
-                setFormData({ ...formData, passport_received_date: e.target.value })
-              }
-              disabled={loading}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="embassy-submit-date">تاريخ التقديم للسفارة</label>
-            <input
-              type="date"
-              id="embassy-submit-date"
-              value={formData.embassy_submit_date}
-              onChange={(e) =>
-                setFormData({ ...formData, embassy_submit_date: e.target.value })
-              }
-              disabled={loading}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="expected-exit-date">تاريخ الخروج المتوقع</label>
-            <input
-              type="date"
-              id="expected-exit-date"
-              value={formData.expected_exit_date}
-              onChange={(e) =>
-                setFormData({ ...formData, expected_exit_date: e.target.value })
-              }
-              disabled={loading}
-            />
-          </div>
-        </div>
-
+    <form onSubmit={handleSubmit} className="add-entry-form-content">
+      <div className="form-grid">
         <div className="form-group">
-          <label htmlFor="admin-notes">ملاحظات المدير (اختياري)</label>
-          <textarea
-            id="admin-notes"
-            value={formData.admin_notes}
-            onChange={(e) => setFormData({ ...formData, admin_notes: e.target.value })}
-            placeholder="أضف أي ملاحظات حول هذا المدخل..."
-            rows="3"
+          <label htmlFor="passport-number" className="form-label">رقم الجواز *</label>
+          <input
+            type="text"
+            id="passport-number"
+            className="form-input"
+            value={formData.passport_number}
+            onChange={(e) =>
+              setFormData({ ...formData, passport_number: e.target.value })
+            }
+            placeholder="أدخل رقم الجواز"
+            required
             disabled={loading}
           />
         </div>
 
-        {error && <div className="error-message">{error}</div>}
+        <div className="form-group">
+          <label htmlFor="first-name" className="form-label">الاسم الأول</label>
+          <input
+            type="text"
+            id="first-name"
+            className="form-input"
+            value={formData.first_name}
+            onChange={(e) =>
+              setFormData({ ...formData, first_name: e.target.value })
+            }
+            placeholder="الاسم الأول"
+            disabled={loading}
+          />
+        </div>
 
-        <button type="submit" className="btn-primary" disabled={loading}>
-          {loading ? 'جارٍ الإضافة...' : 'إضافة المدخل'}
+        <div className="form-group">
+          <label htmlFor="last-name" className="form-label">اسم العائلة</label>
+          <input
+            type="text"
+            id="last-name"
+            className="form-input"
+            value={formData.last_name}
+            onChange={(e) =>
+              setFormData({ ...formData, last_name: e.target.value })
+            }
+            placeholder="اسم العائلة"
+            disabled={loading}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="status" className="form-label">الحالة *</label>
+          <select
+            id="status"
+            className="form-select"
+            value={formData.status}
+            onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+            required
+            disabled={loading}
+          >
+            <option value="pending">تم الاستلام</option>
+            <option value="in_embassy">في السفارة</option>
+            <option value="ready">جاهز للاستلام</option>
+            <option value="in_aden">في عدن</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="visa-type" className="form-label">نوع التأشيرة</label>
+          <select
+            id="visa-type"
+            className="form-select"
+            value={formData.visa_type}
+            onChange={(e) =>
+              setFormData({ ...formData, visa_type: e.target.value })
+            }
+            disabled={loading}
+          >
+            <option value="">اختر النوع</option>
+            <option value="زيارة">زيارة</option>
+            <option value="عمل">عمل</option>
+            <option value="عمرة">عمرة</option>
+            <option value="أخرى">أخرى</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="passport-received-date" className="form-label">تاريخ استلام الجواز</label>
+          <input
+            type="date"
+            id="passport-received-date"
+            className="form-input"
+            value={formData.passport_received_date}
+            onChange={(e) =>
+              setFormData({ ...formData, passport_received_date: e.target.value })
+            }
+            disabled={loading}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="embassy-submit-date" className="form-label">تاريخ التقديم للسفارة</label>
+          <input
+            type="date"
+            id="embassy-submit-date"
+            className="form-input"
+            value={formData.embassy_submit_date}
+            onChange={(e) =>
+              setFormData({ ...formData, embassy_submit_date: e.target.value })
+            }
+            disabled={loading}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="expected-exit-date" className="form-label">تاريخ الخروج المتوقع</label>
+          <input
+            type="date"
+            id="expected-exit-date"
+            className="form-input"
+            value={formData.expected_exit_date}
+            onChange={(e) =>
+              setFormData({ ...formData, expected_exit_date: e.target.value })
+            }
+            disabled={loading}
+          />
+        </div>
+      </div>
+
+      <div className="form-group" style={{ marginTop: '1rem' }}>
+        <label htmlFor="admin-notes" className="form-label">ملاحظات المدير (اختياري)</label>
+        <textarea
+          id="admin-notes"
+          className="form-textarea"
+          value={formData.admin_notes}
+          onChange={(e) => setFormData({ ...formData, admin_notes: e.target.value })}
+          placeholder="أضف أي ملاحظات حول هذا المدخل..."
+          rows="3"
+          disabled={loading}
+        />
+      </div>
+
+      {error && <div className="alert alert-danger" style={{ color: 'red', marginTop: '1rem' }}>{error}</div>}
+
+      <div style={{ marginTop: '2rem', textAlign: 'left' }}>
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? 'جارٍ الإضافة...' : 'حفظ وإضافة المدخل'}
         </button>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 };
 

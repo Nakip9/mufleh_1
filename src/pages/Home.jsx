@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Hero from '../components/sections/Hero/index.jsx';
+import PassportCheck from '../components/sections/PassportCheck/index.jsx';
 import HomeServices from '../components/sections/HomeServices/index.jsx';
 import FeaturedDestinations from '../components/sections/FeaturedDestinations/index.jsx';
 import './Home.css'; 
@@ -10,6 +11,7 @@ const Home = () => {
   return (
     <main className="home-page-container">
       <Hero />
+      <PassportCheck />
       <HomeServices />
       <FeaturedDestinations />
       <section style={{ padding: '4rem 0', textAlign: 'center', background: 'var(--primary-light)' }}>

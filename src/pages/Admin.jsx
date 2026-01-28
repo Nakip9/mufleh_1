@@ -6,7 +6,8 @@ import ContentEditor from '../components/admin/ContentEditor';
 import './Admin.css';
 
 const Admin = () => {
-  const [activeTab, setActiveTab] = useState('visa'); // 'visa', 'services', or 'content'
+  const [activeTab, setActiveTab] = useState('visa'); // 'visa', 'services', 'content'
+  const [showAddForm, setShowAddForm] = useState(false);
   
   // Visa Status State
   const [entries, setEntries] = useState([]);
@@ -36,7 +37,6 @@ const Admin = () => {
       }
 
       const response = await fetch(`/api/admin/list-entries?${params.toString()}`);
-
       const data = await response.json();
 
       if (!response.ok) {
@@ -66,12 +66,12 @@ const Admin = () => {
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page on new search
+    setCurrentPage(1);
   };
 
   const handleStatusFilter = (e) => {
     setStatusFilter(e.target.value);
-    setCurrentPage(1); // Reset to first page on filter change
+    setCurrentPage(1);
   };
 
   const handlePageChange = (newPage) => {
@@ -79,74 +79,106 @@ const Admin = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const NavItem = ({ id, icon, label }) => (
+    <button 
+      className={`nav-item ${activeTab === id ? 'active' : ''}`}
+      onClick={() => setActiveTab(id)}
+    >
+      <span className="nav-icon">{icon}</span>
+      <span>{label}</span>
+    </button>
+  );
+
   return (
     <div className="admin-page">
-      <div className="container">
-        <div className="admin-header">
-          <h1>لوحة الإدارة</h1>
-          <p>إدارة محتوى الموقع والخدمات</p>
+      {/* Sidebar Navigation */}
+      <aside className="admin-sidebar">
+        <div className="sidebar-header">
+          <h2 className="sidebar-title">لوحة التحكم</h2>
         </div>
+        
+        <nav className="sidebar-nav">
+          <NavItem id="visa" icon="🛂" label="إدارة التأشيرات" />
+          <NavItem id="services" icon="🛠️" label="إدارة الخدمات" />
+          <NavItem id="content" icon="📝" label="إدارة المحتوى" />
+          
+          <div style={{ marginTop: 'auto', borderTop: '1px solid var(--admin-border)', paddingTop: '0.5rem' }}>
+            <a href="/" className="nav-item" style={{ textDecoration: 'none' }}>
+              <span className="nav-icon">🏠</span>
+              <span>العودة للموقع</span>
+            </a>
+          </div>
+        </nav>
 
-        <div className="admin-tabs">
-          <button 
-            className={`tab-btn ${activeTab === 'visa' ? 'active' : ''}`}
-            onClick={() => setActiveTab('visa')}
-          >
-            إدارة التأشيرات
-          </button>
-          <button 
-            className={`tab-btn ${activeTab === 'services' ? 'active' : ''}`}
-            onClick={() => setActiveTab('services')}
-          >
-            إدارة الخدمات
-          </button>
-          <button 
-            className={`tab-btn ${activeTab === 'content' ? 'active' : ''}`}
-            onClick={() => setActiveTab('content')}
-          >
-            إدارة المحتوى (جديد)
-          </button>
+        <div className="sidebar-footer">
+          <p>© 2025 مفلح للسفريات</p>
         </div>
+      </aside>
 
-        <div className="admin-content">
-          {activeTab === 'visa' ? (
-            <>
-              <AddEntryForm onSuccess={handleRefresh} />
+      {/* Main Content */}
+      <main className="admin-main">
+        {activeTab === 'visa' && (
+          <>
+            <div className="page-header">
+              <h1 className="page-title">إدارة جوازات السفر والتأشيرات</h1>
+              <div className="page-actions">
+                <button 
+                  className="btn btn-primary"
+                  onClick={() => setShowAddForm(!showAddForm)}
+                >
+                  {showAddForm ? 'إلغاء الإضافة' : '+ إضافة جواز جديد'}
+                </button>
+              </div>
+            </div>
 
-              <div className="admin-filters">
-                <div className="filter-group">
-                  <label htmlFor="search">ابحث عن الجواز</label>
+            {showAddForm && (
+              <div className="admin-card">
+                <h3 className="card-title">بيانات الجواز الجديد</h3>
+                <AddEntryForm onSuccess={() => {
+                  setShowAddForm(false);
+                  handleRefresh();
+                }} />
+              </div>
+            )}
+
+            <div className="admin-card">
+              <div className="filters-bar">
+                <div className="search-input">
                   <input
                     type="text"
-                    id="search"
-                    placeholder="أدخل رقم الجواز..."
+                    className="form-input"
+                    placeholder="بحث برقم الجواز..."
                     value={searchTerm}
                     onChange={handleSearch}
                   />
                 </div>
-
                 <div className="filter-group">
-                  <label htmlFor="status-filter">فرز حسب الحاله</label>
-                  <select id="status-filter" value={statusFilter} onChange={handleStatusFilter}>
-                    <option value="all">الكل</option>
-                    <option value="pending">في الانتظار</option>
+                  <select 
+                    className="form-select" 
+                    value={statusFilter} 
+                    onChange={handleStatusFilter}
+                  >
+                    <option value="all">كل الحالات</option>
+                    <option value="pending">قيد الانتظار</option>
                     <option value="in_embassy">في السفارة</option>
-                    <option value="ready">جاهز</option>
+                    <option value="ready">جاهز للاستلام</option>
                     <option value="in_aden">في عدن</option>
                   </select>
                 </div>
+                <button className="btn btn-secondary" onClick={handleRefresh}>
+                  تحديث ↻
+                </button>
               </div>
 
               {error && (
-                <div className="error-banner">
+                <div className="alert alert-danger" style={{ padding: '1rem', background: '#fee2e2', color: '#b91c1c', borderRadius: '0.5rem', marginBottom: '1rem' }}>
                   {error}
-                  <button onClick={handleRefresh}>إعادة المحاولة</button>
                 </div>
               )}
 
               {loading ? (
-                <div className="loading-state">
-                  <div className="spinner-large"></div>
+                <div className="text-center" style={{ padding: '2rem' }}>
+                  <div className="spinner"></div>
                   <p>جاري تحميل البيانات...</p>
                 </div>
               ) : (
@@ -158,19 +190,19 @@ const Admin = () => {
                   />
 
                   {pagination && pagination.totalPages > 1 && (
-                    <div className="pagination">
+                    <div className="pagination" style={{ marginTop: '1.5rem', justifyContent: 'center' }}>
                       <button
-                        className="btn-pagination"
+                        className="btn btn-secondary"
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
                       >
                         السابق
                       </button>
-                      <span className="pagination-info">
-                        صفحة {pagination.page} من {pagination.totalPages} (الكل {pagination.total})
+                      <span style={{ margin: '0 1rem', alignSelf: 'center' }}>
+                        صفحة {pagination.page} من {pagination.totalPages}
                       </span>
                       <button
-                        className="btn-pagination"
+                        className="btn btn-secondary"
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === pagination.totalPages}
                       >
@@ -180,14 +212,14 @@ const Admin = () => {
                   )}
                 </>
               )}
-            </>
-          ) : activeTab === 'services' ? (
-            <ServicesManager />
-          ) : (
-            <ContentEditor />
-          )}
-        </div>
-      </div>
+            </div>
+          </>
+        )}
+
+        {activeTab === 'services' && <ServicesManager />}
+        
+        {activeTab === 'content' && <ContentEditor />}
+      </main>
     </div>
   );
 };

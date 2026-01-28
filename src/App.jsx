@@ -1,5 +1,5 @@
 import { useState, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Navbar, Footer } from './components/layout';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import Analytics from './components/common/Analytics';
@@ -39,7 +39,10 @@ const PageLoader = () => (
   </div>
 );
 
-function App() {
+// Inner Layout Component to handle conditional rendering
+const AppLayout = () => {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
   const [theme, setTheme] = useState('light');
 
   const toggleTheme = () => {
@@ -49,36 +52,33 @@ function App() {
   };
 
   return (
+    <div className="app" data-theme={theme}>
+      {!isAdmin && <Navbar />}
+
+      <main className={isAdmin ? 'admin-layout-wrapper' : 'main-content'}>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/destinations" element={<Destinations />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/admin" element={<Admin />} />
+          </Routes>
+        </Suspense>
+      </main>
+
+      {!isAdmin && <Footer />}
+    </div>
+  );
+};
+
+function App() {
+  return (
     <ErrorBoundary>
       <Router>
         <Analytics />
-        <div className="app" data-theme={theme}>
-          <Navbar />
-
-          {/* Theme Toggle Button */}
-          {/* <button
-            className="theme-toggle"
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-          >
-            {theme === 'light' ? '🌙' : '☀️'}
-          </button> */}
-
-          <main className="main-content">
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/destinations" element={<Destinations />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/admin" element={<Admin />} />
-              </Routes>
-            </Suspense>
-          </main>
-
-          <Footer />
-        </div>
+        <AppLayout />
       </Router>
     </ErrorBoundary>
   );

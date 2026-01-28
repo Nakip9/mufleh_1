@@ -48,7 +48,6 @@ const ServicesManager = () => {
         throw new Error(data.error || 'Failed to delete service');
       }
 
-      // Remove from local state
       setServices(prev => prev.filter(service => service.id !== id));
     } catch (err) {
       console.error('Error deleting service:', err);
@@ -59,7 +58,6 @@ const ServicesManager = () => {
   const handleEdit = (service) => {
     setEditingService(service);
     setIsCreating(false);
-    // Scroll to top of form
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -75,17 +73,20 @@ const ServicesManager = () => {
 
   return (
     <div className="services-manager">
-      <div className="section-header">
-        <h2>إدارة الخدمات</h2>
+      <div className="page-header">
+        <h2 className="page-title">إدارة الخدمات</h2>
         {!isCreating && !editingService && (
-          <button className="btn-primary" onClick={() => setIsCreating(true)}>
+          <button className="btn btn-primary" onClick={() => setIsCreating(true)}>
             + إضافة خدمة جديدة
           </button>
         )}
       </div>
 
       {(isCreating || editingService) && (
-        <div className="form-container">
+        <div className="admin-card">
+          <div className="card-title">
+            {isCreating ? 'إضافة خدمة جديدة' : 'تعديل الخدمة'}
+          </div>
           <ServiceForm 
             initialData={editingService}
             onSuccess={editingService ? handleUpdateSuccess : handleCreateSuccess}
@@ -98,21 +99,21 @@ const ServicesManager = () => {
       )}
 
       {loading ? (
-        <div className="loading-state">
+        <div className="text-center" style={{ padding: '2rem' }}>
           <div className="spinner"></div>
           <p>جاري تحميل الخدمات...</p>
         </div>
       ) : error ? (
-        <div className="error-banner">
+        <div className="alert alert-danger" style={{ padding: '1rem', background: '#fee2e2', color: '#b91c1c', borderRadius: '0.5rem' }}>
           {error}
-          <button onClick={fetchServices}>إعادة المحاولة</button>
+          <button className="btn btn-secondary" style={{ marginRight: '1rem' }} onClick={fetchServices}>إعادة المحاولة</button>
         </div>
       ) : (
-        <div className="services-list">
+        <div className="admin-card">
           {services.length === 0 ? (
-            <p className="no-data">لا توجد خدمات مضافة حالياً.</p>
+            <p className="text-center text-muted" style={{ padding: '2rem' }}>لا توجد خدمات مضافة حالياً.</p>
           ) : (
-            <div className="table-responsive">
+            <div className="table-wrapper">
               <table className="admin-table">
                 <thead>
                   <tr>
@@ -127,19 +128,21 @@ const ServicesManager = () => {
                     <tr key={service.id}>
                       <td className="font-medium">{service.title}</td>
                       <td>
-                        <span className="badge">{service.category || '-'}</span>
+                        <span className="badge badge-info">{service.category || '-'}</span>
                       </td>
                       <td>{new Date(service.updated_at).toLocaleDateString('ar-SA')}</td>
                       <td>
-                        <div className="actions-cell">
+                        <div className="action-buttons" style={{ display: 'flex', gap: '0.5rem' }}>
                           <button 
-                            className="btn-edit"
+                            className="btn btn-secondary"
+                            style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem' }}
                             onClick={() => handleEdit(service)}
                           >
                             تعديل
                           </button>
                           <button 
-                            className="btn-delete"
+                            className="btn btn-danger"
+                            style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem' }}
                             onClick={() => handleDelete(service.id)}
                           >
                             حذف

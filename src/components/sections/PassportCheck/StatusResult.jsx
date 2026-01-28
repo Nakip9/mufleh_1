@@ -182,6 +182,12 @@ const getStepStatus = (step, index) => {
                 <strong>ملاحظة من الإدارة:</strong> {result.admin_notes}
                 </div>
             )}
+
+            {result.updated_at && (
+              <div className="last-updated" style={{ textAlign: 'center', fontSize: '0.85rem', color: '#94a3b8', marginTop: '1rem' }}>
+                آخر تحديث: {formatDate(result.updated_at)}
+              </div>
+            )}
         </div>
 
         <button onClick={onReset} className="btn-reset">
