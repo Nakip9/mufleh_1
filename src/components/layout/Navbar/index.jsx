@@ -21,7 +21,7 @@ const Navbar = () => {
         
         {/* Logo */}
         <Link to="/" className="navbar-logo" aria-label="العودة إلى الصفحة الرئيسية">
-          <img src="/logo_muf.svg" alt="شعار ابن المفلحي" className="logo-image" />
+          <img src="/logo_svg.svg" alt="شعار ابن المفلحي" className="logo-image" />
         </Link>
 
         {/* Desktop Menu */}

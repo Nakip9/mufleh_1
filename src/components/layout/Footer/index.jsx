@@ -13,7 +13,7 @@ const Footer = () => {
         <div className="footer-grid">
           <div className="footer-col brand-col">
             <Link to="/" className="footer-logo">
-              <img src="/logo_muf.svg" alt="شعار ابن المفلحي" className="footer-logo-image" />
+              <img src="/logo_svg.svg" alt="شعار ابن المفلحي" className="footer-logo-image" />
             </Link>
             <p>شريكك الموثوق للسفر والسياحة. نحول أحلامك إلى وجهات، ونضمن لك رحلة آمنة وممتعة.</p>
             <div className="social-links">
