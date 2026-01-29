@@ -1,22 +1,243 @@
-.destinations-azure { padding: 6rem 0; background-color: var(--bg-main); }
-.section-header-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
-.azure-tag { color: var(--primary-brand); font-weight: 800; letter-spacing: 1px; text-transform: uppercase; font-size: 0.85rem; display: block; margin-bottom: 0.5rem; }
-.view-all-btn { display: inline-flex; align-items: center; gap: 8px; color: var(--text-muted); text-decoration: none; font-weight: 600; transition: color 0.3s; }
-.view-all-btn:hover { color: var(--primary-brand); }
-.destinations-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2.5rem; }
-.dest-card { background: white; border-radius: var(--radius-xl); overflow: hidden; border: 1px solid #f1f5f9; transition: all 0.4s ease; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-.dest-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
-.card-image-wrapper { position: relative; height: 240px; overflow: hidden; }
-.card-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-.dest-card:hover .card-image-wrapper img { transform: scale(1.1); }
-.price-badge { position: absolute; bottom: 15px; right: 15px; background: white; color: var(--primary-brand); padding: 6px 14px; border-radius: var(--radius-full); font-weight: 800; font-size: 0.9rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-.rating-badge { position: absolute; top: 15px; left: 15px; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); color: #facc15; padding: 4px 10px; border-radius: 8px; font-weight: 700; display: flex; align-items: center; gap: 4px; font-size: 0.85rem; }
-.card-content { padding: 1.5rem; }
-.card-meta { display: flex; gap: 15px; margin-bottom: 1rem; font-size: 0.85rem; color: var(--text-muted); }
-.meta-item { display: flex; align-items: center; gap: 6px; }
-.dest-card h3 { font-size: 1.25rem; margin-bottom: 0.75rem; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
-.pin-icon { color: var(--primary-brand); }
-.dest-card p { font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.6; }
-.btn-card-action { display: block; text-align: center; width: 100%; padding: 12px; border-radius: 12px; background: var(--primary-light); color: var(--primary-brand); font-weight: 700; text-decoration: none; transition: all 0.3s; }
-.btn-card-action:hover { background: var(--primary-brand); color: white; }
-@media (max-width: 768px) { .section-header-row { flex-direction: column; align-items: flex-start; } .view-all-btn { margin-top: 0.5rem; } }
+/* 
+   Featured Destinations - Universal Carousel Theme
+*/
+
+.destinations-showcase-section {
+  padding: 6rem 0 8rem;
+  background-color: var(--bg-secondary);
+  overflow: hidden;
+}
+
+/* Header */
+.showcase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.pill-tag {
+  display: inline-block;
+  background: rgba(14, 165, 233, 0.1);
+  color: var(--primary-brand);
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.showcase-title {
+  font-size: 2.5rem;
+  color: var(--text-main);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.showcase-title .highlight {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+}
+
+.showcase-title .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background: rgba(14, 165, 233, 0.2);
+  z-index: -1;
+  transform: rotate(-1deg);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nav-btn:hover {
+  background: var(--primary-brand);
+  color: white;
+  border-color: var(--primary-brand);
+}
+
+.view-all-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--primary-brand);
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+/* Carousel */
+.destinations-carousel-container {
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  padding-bottom: 3rem; /* Space for shadows */
+  padding-top: 1rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  /* Hide Scrollbar */
+  scrollbar-width: none;
+  margin: 0 -1rem; /* Full bleed on mobile */
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.destinations-carousel-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Card */
+.showcase-card {
+  min-width: 300px;
+  width: 300px;
+  height: 420px;
+  background: white;
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+  scroll-snap-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 4px solid white; /* Frame effect */
+}
+
+.showcase-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.card-image-box {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.card-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.showcase-card:hover .card-image-box img {
+  transform: scale(1.1);
+}
+
+.overlay-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+  opacity: 0.8;
+}
+
+.card-top-badges {
+  position: absolute;
+  top: 15px;
+  left: 15px; /* RTL flip: Actually left visually */
+  z-index: 2;
+}
+
+.rating-pill {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-main);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.star-fill { color: #f59e0b; }
+
+.card-details-floating {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  z-index: 2;
+  color: white;
+}
+
+.card-details-floating h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pin { color: #38bdf8; }
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.meta-row .price {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #fff;
+  background: var(--primary-brand);
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+
+.card-link-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-actions { display: none; } /* Hide nav buttons on mobile, swipe is natural */
+  .showcase-card { 
+    min-width: 85vw; 
+    width: 85vw; 
+    height: 480px; 
+  }
+}

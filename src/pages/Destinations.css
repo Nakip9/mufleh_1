@@ -1,16 +1,254 @@
-.destinations-page-azure { background-color: var(--bg-main); padding-bottom: 6rem; min-height: 100vh; }
-.dest-hero { background: var(--bg-secondary); padding: 120px 0 60px; text-align: center; margin-bottom: 4rem; }
-.dest-hero h1 { font-size: 3rem; color: var(--text-main); margin-bottom: 1rem; }
-.dest-hero p { color: var(--text-muted); font-size: 1.2rem; }
-.destinations-grid-full { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2.5rem; }
-/* Reusing card styles from Home, adding specifics here just in case */
-.dest-card { background: white; border-radius: var(--radius-xl); overflow: hidden; border: 1px solid #f1f5f9; transition: all 0.4s ease; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-.dest-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
-.card-image-wrapper { position: relative; height: 220px; overflow: hidden; background: #eee; }
-.card-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-.dest-card:hover .card-image-wrapper img { transform: scale(1.1); }
-.price-badge { position: absolute; bottom: 15px; right: 15px; background: white; color: var(--primary-brand); padding: 6px 14px; border-radius: var(--radius-full); font-weight: 800; font-size: 0.9rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-.card-content { padding: 1.5rem; }
-.card-meta { display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.85rem; color: var(--text-muted); }
-.btn-card-action { display: block; text-align: center; width: 100%; padding: 12px; border-radius: 12px; background: var(--primary-light); color: var(--primary-brand); font-weight: 700; text-decoration: none; transition: all 0.3s; margin-top: 1rem; }
-.btn-card-action:hover { background: var(--primary-brand); color: white; }
+/* 
+   Destinations - "Cinematic Showcase" Theme
+*/
+
+.destinations-creative-page {
+  background-color: #f8fafc;
+  min-height: 100vh;
+  padding-bottom: 8rem;
+  overflow-x: hidden;
+}
+
+/* --- Hero --- */
+.creative-hero {
+  padding: 180px 0 100px;
+  text-align: center;
+  position: relative;
+}
+
+.creative-hero::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-tag {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--primary-brand);
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-headline {
+  font-size: 4rem;
+  color: var(--text-main);
+  margin-bottom: 1.5rem;
+  font-weight: 900;
+  line-height: 1.1;
+  position: relative;
+  z-index: 1;
+}
+
+.underline-accent {
+  position: relative;
+  color: var(--primary-brand);
+  z-index: 1;
+}
+
+.underline-accent::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 100%;
+  height: 15px;
+  background: rgba(14, 165, 233, 0.15);
+  z-index: -1;
+  transform: rotate(-2deg);
+}
+
+.hero-sub {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Grid --- */
+.cinematic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 3rem;
+  padding: 0 1rem;
+}
+
+/* --- Card Design --- */
+.cinematic-card {
+  position: relative;
+  height: 500px; /* Tall, portrait cards */
+  border-radius: 32px;
+  overflow: hidden;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cinematic-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+  z-index: 10;
+}
+
+/* Image Layer */
+.card-image-layer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.card-image-layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.cinematic-card:hover .card-image-layer img {
+  transform: scale(1.15); /* Slow zoom effect */
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 40%,
+    rgba(0,0,0,0.6) 100%
+  );
+  opacity: 0.6;
+  transition: opacity 0.4s;
+}
+
+.cinematic-card:hover .image-overlay {
+  opacity: 0.4; /* Lighten on hover */
+}
+
+/* Explore Circle Button */
+.explore-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 5;
+}
+
+.cinematic-card:hover .explore-circle {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Info Glass Box */
+.card-info-glass {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  padding: 1.5rem;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: bottom 0.4s, background 0.4s;
+}
+
+.cinematic-card:hover .card-info-glass {
+  background: white; /* Turn solid white on hover */
+  bottom: 30px; /* Float up slightly */
+}
+
+.info-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.dest-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+  color: var(--primary-brand);
+}
+
+.duration-text {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.info-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.info-main h2 {
+  font-size: 1.8rem;
+  margin: 0;
+  color: var(--text-main);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.price-box {
+  text-align: left; /* Keep price aligned left */
+}
+
+.price-box .label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.price-box .amount {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary-brand);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .hero-headline { font-size: 2.8rem; }
+  .cinematic-grid { grid-template-columns: 1fr; }
+  .cinematic-card { height: 400px; }
+  
+  /* On mobile, allow the button to be visible or simplify interaction */
+  .explore-circle { display: none; } /* Hide complex hover on touch */
+}

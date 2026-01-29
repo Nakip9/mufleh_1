@@ -1,74 +1,153 @@
-import { FiUsers, FiAward, FiTarget } from 'react-icons/fi';
+import { useState } from 'react';
+import { FiAward, FiUsers, FiTrendingUp, FiTarget, FiChevronDown, FiHelpCircle } from 'react-icons/fi';
 import { useContent } from '../context/ContentContext';
 import './About.css';
+
+const FAQItem = ({ question, answer, isOpen, toggle }) => {
+  return (
+    <div className={`faq-item ${isOpen ? 'open' : ''}`} onClick={toggle}>
+      <div className="faq-question">
+        <h4>{question}</h4>
+        <span className="toggle-icon"><FiChevronDown /></span>
+      </div>
+      <div className="faq-answer">
+        <p>{answer}</p>
+      </div>
+    </div>
+  );
+};
 
 const About = () => {
   const { content } = useContent();
   const { company_info } = content;
+  const faqs = content.faqs || [];
+  
+  const [openIndex, setOpenIndex] = useState(0); // First item open by default
+
+  const handleToggle = (index) => {
+    setOpenIndex(openIndex === index ? -1 : index);
+  };
 
   return (
-    <div className="about-page-azure">
-      {/* Hero Section */}
-      <section className="about-hero">
-        <div className="container">
-          <h1>من نحن</h1>
-          <p>أكثر من مجرد وكالة سفر.. نحن رفاقك في استكشاف العالم.</p>
+    <div className="about-modern">
+      {/* 1. Cinematic Hero */}
+      <section className="about-hero-cinematic">
+        <div className="hero-bg" style={{backgroundImage: "url('/hero_mountain_background_1764893090134.jpg')"}}></div>
+        <div className="overlay-gradient"></div>
+        <div className="container relative z-10 text-center text-white">
+          <span className="pill-badge fade-in-up">قصتنا ورؤيتنا</span>
+          <h1 className="hero-title fade-in-up delay-100">
+            أكثر من مجرد <span className="text-highlight">وكالة سفر</span>
+          </h1>
+          <p className="hero-subtitle fade-in-up delay-200">
+            نحن الجسر الذي يربطك بأجمل ذكريات حياتك. رحلة بدأت بشغف، واستمرت بخدمة آلاف المسافرين.
+          </p>
         </div>
       </section>
 
-      {/* Story Section */}
-      <section className="about-story container">
+      {/* 2. The Story (Split Layout) */}
+      <section className="about-story-section container">
         <div className="story-grid">
-          <div className="story-content">
-            <span className="azure-tag">قصتنا</span>
-            <h2>بدأنا بحلم، وأصبحنا واقعاً</h2>
-            <p>
-              تأسست وكالة "{company_info.name}" برؤية واضحة: جعل السفر تجربة سلسة وممتعة للجميع. 
-              بدأنا كفريق صغير من الشغوفين بالسفر، واليوم نفتخر بخدمة آلاف المسافرين سنوياً.
-            </p>
-            <p>
-              نؤمن بأن السفر ليس مجرد انتقال من مكان لآخر، بل هو استثمار في الذكريات وتوسيع للآفاق.
-            </p>
+          <div className="story-content slide-in-right">
+            <h2 className="section-title">
+              الرحلة من <span className="accent-text">الحلم</span> إلى الواقع
+            </h2>
+            <div className="story-text">
+              <p>
+                تأسست <strong>{company_info.name}</strong> برؤية بسيطة ولكن طموحة: إعادة تعريف مفهوم السفر للمسافر العربي.
+                لم نرد أن نكون مجرد وسيط لحجز التذاكر، بل أردنا أن نكون الرفيق الأمين الذي يحمل عنك عبء التخطيط ويترك لك متعة الاستكشاف.
+              </p>
+              <p>
+                من بداياتنا المتواضعة، نمت عائلتنا لتشمل خبراء في السياحة، مرشدين محليين، وشركاء حول العالم، 
+                يجمعنا هدف واحد: <strong>راحتك وسعادتك.</strong>
+              </p>
+            </div>
             
-            <div className="stats-row">
-              <div className="stat-box">
-                <strong>+15</strong> <span>عاماً خبرة</span>
+            <div className="stats-counter-row">
+              <div className="stat-item">
+                <span className="stat-number">+15</span>
+                <span className="stat-label">عاماً من الخبرة</span>
               </div>
-              <div className="stat-box">
-                <strong>+50k</strong> <span>عميل سعيد</span>
+              <div className="stat-item">
+                <span className="stat-number">+50k</span>
+                <span className="stat-label">مسافر سعيد</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">100%</span>
+                <span className="stat-label">التزام بالجودة</span>
               </div>
             </div>
           </div>
-          <div className="story-image">
-             {/* Placeholder for About Image */}
-            <div className="img-placeholder"></div>
+          
+          <div className="story-visual slide-in-left">
+            <div className="visual-card main-visual">
+              <img src="/assets/travel-happy.jpg" alt="فريقنا" className="img-cover" /> 
+              {/* Fallback color if image missing */}
+            </div>
+            <div className="visual-card floating-visual">
+              <img src="/public/hajj.jpg" alt="خدماتنا" className="img-cover" />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="about-values">
+      {/* 3. Core Values (Glass Cards) */}
+      <section className="about-values-section">
         <div className="container">
-          <div className="values-grid">
-            <div className="value-card">
-              <FiUsers className="val-icon" />
+          <div className="section-header text-center">
+            <h2>قيمنا الراسخة</h2>
+            <p>المبادئ التي تقود كل قرار نتخذه</p>
+          </div>
+          
+          <div className="values-grid-modern">
+            <div className="value-card-glass">
+              <div className="icon-wrapper"><FiUsers /></div>
               <h3>العميل أولاً</h3>
-              <p>رضاك هو معيار نجاحنا الوحيد. نحن معك في كل خطوة.</p>
+              <p>أنت لست مجرد رقم. نحن نصمم كل رحلة وكأنها رحلتنا الخاصة.</p>
             </div>
-            <div className="value-card">
-              <FiAward className="val-icon" />
-              <h3>التميز</h3>
-              <p>لا نقبل بأقل من الكمال في تخطيط وتنفيذ رحلاتك.</p>
+            <div className="value-card-glass">
+              <div className="icon-wrapper"><FiAward /></div>
+              <h3>التميز والدقة</h3>
+              <p>نهتم بأدق التفاصيل، من لحظة الحجز وحتى عودتك سالماً.</p>
             </div>
-            <div className="value-card">
-              <FiTarget className="val-icon" />
-              <h3>الشفافية</h3>
-              <p>أسعار واضحة، لا رسوم خفية، ومصداقية تامة.</p>
+            <div className="value-card-glass">
+              <div className="icon-wrapper"><FiTarget /></div>
+              <h3>الشفافية التامة</h3>
+              <p>لا رسوم خفية. وضوح كامل في الأسعار والخدمات المقدمة.</p>
+            </div>
+            <div className="value-card-glass">
+              <div className="icon-wrapper"><FiTrendingUp /></div>
+              <h3>التطوير المستمر</h3>
+              <p>نبحث دائماً عن وجهات جديدة وخدمات أفضل لنقدمها لك.</p>
             </div>
           </div>
         </div>
       </section>
+
+      {/* 4. FAQ Section */}
+      <section className="about-faq-section">
+        <div className="container">
+          <div className="section-header text-center">
+            <span className="pill-badge-blue">أسئلة شائعة</span>
+            <h2>لديك استفسار؟ لدينا <span className="accent-text">الإجابة</span></h2>
+          </div>
+
+          <div className="faq-wrapper">
+            {faqs.map((faq, index) => (
+              <FAQItem 
+                key={index} 
+                question={faq.question} 
+                answer={faq.answer} 
+                isOpen={openIndex === index}
+                toggle={() => handleToggle(index)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 };
+
 export default About;

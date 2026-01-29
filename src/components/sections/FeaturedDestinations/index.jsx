@@ -1,50 +1,85 @@
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { FiMapPin, FiClock, FiStar, FiArrowLeft } from 'react-icons/fi';
+import { FiMapPin, FiClock, FiStar, FiArrowLeft, FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import { useContent } from '../../../context/ContentContext';
 import './FeaturedDestinations.css';
 
 const FeaturedDestinations = () => {
   const { content } = useContent();
-  // Use first 3 destinations from the centralized data
-  const destinations = content.destinations ? content.destinations.slice(0, 3) : [];
+  const destinations = content.destinations || [];
+  const scrollRef = useRef(null);
+
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const { current } = scrollRef;
+      const scrollAmount = 350; // Card width approx
+      if (direction === 'left') {
+        current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      } else {
+        current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
+    }
+  };
 
   return (
-    <section className="destinations-azure">
+    <section className="destinations-showcase-section">
       <div className="container">
-        <div className="section-header-row">
+        
+        {/* Header */}
+        <div className="showcase-header">
           <div>
-            <span className="azure-tag">وجهات مميزة</span>
-            <h2 className="section-title">اختر وجهتك القادمة</h2>
+            <span className="pill-tag">اكتشف العالم</span>
+            <h2 className="showcase-title">وجهاتنا <span className="highlight">المختارة</span></h2>
           </div>
-          <Link to="/destinations" className="view-all-btn">
-            عرض كل الرحلات <FiArrowLeft />
-          </Link>
+          
+          <div className="header-actions">
+            <div className="nav-buttons">
+              <button onClick={() => scroll('right')} className="nav-btn prev" aria-label="السابق">
+                <FiChevronRight />
+              </button>
+              <button onClick={() => scroll('left')} className="nav-btn next" aria-label="التالي">
+                <FiChevronLeft />
+              </button>
+            </div>
+            <Link to="/destinations" className="view-all-link">
+              عرض الكل <FiArrowLeft />
+            </Link>
+          </div>
         </div>
-        <div className="destinations-grid">
+
+        {/* Carousel Container */}
+        <div className="destinations-carousel-container" ref={scrollRef}>
           {destinations.map((place, index) => (
-            <div className="dest-card" key={place.id || index}>
-              <div className="card-image-wrapper">
+            <div className="showcase-card" key={place.id || index}>
+              
+              <div className="card-image-box">
                 <img 
                   src={place.image} 
                   alt={place.name} 
                   onError={(e) => e.target.src = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=800&q=80'} 
                 />
-                <div className="price-badge">{place.price}</div>
-                <div className="rating-badge"><FiStar className="star-icon" /> 5.0</div>
-              </div>
-              <div className="card-content">
-                <div className="card-meta">
-                  <span className="meta-item"><FiClock /> 5 أيام / 4 ليالي</span>
+                <div className="overlay-gradient"></div>
+                <div className="card-top-badges">
+                  <span className="rating-pill"><FiStar className="star-fill" /> {place.rating || '5.0'}</span>
                 </div>
-                <h3><FiMapPin className="pin-icon" /> {place.name}</h3>
-                <p>{place.description ? place.description.substring(0, 100) + '...' : ''}</p>
-                <Link to={`/destinations`} className="btn-card-action">تفاصيل الرحلة</Link>
               </div>
+
+              <div className="card-details-floating">
+                <h3><FiMapPin className="pin" /> {place.name}</h3>
+                <div className="meta-row">
+                  <span><FiClock /> {place.duration || '5 أيام'}</span>
+                  <span className="price">{place.price}</span>
+                </div>
+                <Link to="/contact" className="card-link-overlay"></Link>
+              </div>
+
             </div>
           ))}
         </div>
+
       </div>
     </section>
   );
 };
+
 export default FeaturedDestinations;

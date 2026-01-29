@@ -1,55 +1,123 @@
 import { Link } from 'react-router-dom';
-import { FiInstagram, FiTwitter, FiFacebook, FiPhone, FiMapPin, FiMail } from 'react-icons/fi';
-import { useContent } from '../../../context/ContentContext';
+import { 
+  FaWhatsapp, 
+  FaFacebookF, 
+  FaMapMarkerAlt, 
+  FaPhoneAlt, 
+  FaPlane, 
+  FaKaaba, 
+  FaIdCard, 
+  FaBullhorn, 
+  FaUsers
+} from 'react-icons/fa';
 import './Footer.css';
 
 const Footer = () => {
-  const { content } = useContent();
-  const { contact_info, social_links } = content;
-
   return (
-    <footer className="footer-azure">
+    <footer className="footer-modern">
       <div className="container">
-        <div className="footer-grid">
-          <div className="footer-col brand-col">
+        <div className="footer-grid-modern">
+          
+          {/* Column 1: Brand & Identity */}
+          <div className="footer-brand-col">
             <Link to="/" className="footer-logo">
               <img src="/logo_svg.svg" alt="شعار ابن المفلحي" className="footer-logo-image" />
             </Link>
-            <p>شريكك الموثوق للسفر والسياحة. نحول أحلامك إلى وجهات، ونضمن لك رحلة آمنة وممتعة.</p>
-            <div className="social-links">
-              <a href={social_links.instagram} className="social-icon" target="_blank" rel="noopener noreferrer"><FiInstagram /></a>
-              <a href={social_links.twitter} className="social-icon" target="_blank" rel="noopener noreferrer"><FiTwitter /></a>
-              <a href={social_links.facebook} className="social-icon" target="_blank" rel="noopener noreferrer"><FiFacebook /></a>
+            <p className="brand-slogan">"لسنا الوحيدون ولكننا نسعى للتميز"</p>
+            <p className="brand-desc">
+              المفلحي للسفريات والسياحة وخدمات الحج والعمرة والأيدي العاملة وجميع الخدمات العامة.
+            </p>
+            
+            <div className="location-box">
+              <a 
+                href="https://maps.app.goo.gl/DiyZKTDnnF7SRxmr5" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="location-link"
+              >
+                <div className="icon-circle"><FaMapMarkerAlt /></div>
+                <span>المنصورة - شارع خديجة بنت خويلد - بلوك 33</span>
+              </a>
+              <a href="tel:02352646" className="phone-link">
+                <div className="icon-circle"><FaPhoneAlt /></div>
+                <span>02-352646</span>
+              </a>
             </div>
           </div>
-          <div className="footer-col">
-            <h4>روابط سريعة</h4>
-            <ul className="footer-links">
-              <li><Link to="/">الرئيسية</Link></li>
-              <li><Link to="/about">من نحن</Link></li>
-              <li><Link to="/services">خدماتنا</Link></li>
-              <li><Link to="/destinations">الوجهات</Link></li>
-            </ul>
+
+          {/* Column 2: Specialized Departments (WhatsApp) */}
+          <div className="footer-dept-col">
+            <h4 className="footer-title">أقسامنا (تواصل مباشر)</h4>
+            <div className="dept-grid">
+              
+              <a href="https://wa.me/782425551" target="_blank" rel="noopener noreferrer" className="dept-card">
+                <FaPlane className="dept-icon" />
+                <div className="dept-info">
+                  <span className="dept-name">الطيران والنقل البري</span>
+                  <span className="dept-sub">موافقات دخول مصر والأردن</span>
+                </div>
+              </a>
+
+              <a href="https://wa.me/782425552" target="_blank" rel="noopener noreferrer" className="dept-card">
+                <FaKaaba className="dept-icon" />
+                <div className="dept-info">
+                  <span className="dept-name">الحج والعمرة والتأشيرات</span>
+                  <span className="dept-sub">فيز عمل، زيارات</span>
+                </div>
+              </a>
+
+              <a href="https://wa.me/782111608" target="_blank" rel="noopener noreferrer" className="dept-card">
+                <FaIdCard className="dept-icon" />
+                <div className="dept-info">
+                  <span className="dept-name">الخدمات العامة</span>
+                  <span className="dept-sub">بطائق، جوازات، شهادات</span>
+                </div>
+              </a>
+
+            </div>
           </div>
-          <div className="footer-col">
-            <h4>تواصل معنا</h4>
-            <ul className="contact-list">
-              <li><FiPhone /> {contact_info.phone}</li>
-              <li><FiMail /> {contact_info.email}</li>
-              <li><FiMapPin /> {contact_info.address}</li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>نشرة العروض</h4>
-            <p className="newsletter-text">اشترك للحصول على آخر العروض الحصرية.</p>
-            <form className="newsletter-form">
-              <input type="email" placeholder="بريدك الإلكتروني" />
-              <button type="submit">اشترك</button>
-            </form>
+
+          {/* Column 3: Sales & Community */}
+          <div className="footer-community-col">
+            
+            <div className="sales-section">
+              <h4 className="footer-title">فريق المبيعات</h4>
+              <div className="sales-links">
+                <a href="https://wa.me/780104667" className="sales-badge orange">
+                  <FaWhatsapp /> مبيعات 1
+                </a>
+                <a href="https://wa.me/781379611" className="sales-badge red">
+                  <FaWhatsapp /> مبيعات 2
+                </a>
+              </div>
+            </div>
+
+            <div className="community-section">
+              <h4 className="footer-title">مجتمعنا</h4>
+              <ul className="social-links-list">
+                <li>
+                  <a href="https://www.facebook.com/share/1AcWpmnJ5P/" target="_blank" rel="noopener noreferrer" className="social-btn fb">
+                    <FaFacebookF /> <span>صفحتنا على فيسبوك</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://whatsapp.com/channel/0029Vavig5c2v1IloZ1TpV0D" target="_blank" rel="noopener noreferrer" className="social-btn channel">
+                    <FaBullhorn /> <span>قناة الواتساب الرسمية</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://chat.whatsapp.com/BbemjsKXHMeErDjTBWjQ0X" target="_blank" rel="noopener noreferrer" className="social-btn community">
+                    <FaUsers /> <span>مجتمع العملاء</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
           </div>
         </div>
-        <div className="footer-bottom">
-          <p>© {new Date().getFullYear()} ابن المفلحي للسفر والسياحة. جميع الحقوق محفوظة.</p>
+
+        <div className="footer-bottom-modern">
+          <p>© {new Date().getFullYear()} مجموعة المفلحي للسفريات والخدمات العامة. جميع الحقوق محفوظة.</p>
         </div>
       </div>
     </footer>
