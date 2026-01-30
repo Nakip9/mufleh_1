@@ -76,7 +76,7 @@
   font-weight: 700;
   backdrop-filter: blur(10px);
   animation: fadeInDown 0.8s ease-out;
-  margin-top: 60px; /* Pushed down for mobile visibility */
+  margin-top: 120px; /* INCREASED: Pushed down significantly to clear mobile navbar (approx 100px height) */
 }
 
 .pulse-dot {
