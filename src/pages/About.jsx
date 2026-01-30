@@ -81,11 +81,11 @@ const About = () => {
           
           <div className="story-visual slide-in-left">
             <div className="visual-card main-visual">
-              <img src="/public/almadina.jpg" alt="فريقنا" className="img-cover" /> 
+              <img src=" /almadina.jpg" alt="فريقنا" className="img-cover" /> 
               {/* Fallback color if image missing */}
             </div>
             <div className="visual-card floating-visual">
-              <img src="/public/hajj.jpg" alt="خدماتنا" className="img-cover" />
+              <img src="/hajj.jpg" alt="خدماتنا" className="img-cover" />
             </div>
           </div>
         </div>
