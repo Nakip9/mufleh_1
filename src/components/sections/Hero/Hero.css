@@ -1,21 +1,26 @@
 /* 
    ابن المفلحي - Mobile First "Cinema" Theme
-   Version: 4.0.0
+   Version: 4.1.0 (Mobile Navbar Fix)
 */
 
 /* --- Base Layout & Background --- */
 .hero-mobile-first {
   position: relative;
-  height: 100vh; /* Full viewport height */
+  /* MODERN MOBILE FIX: Use dvh to avoid address bar overlapping */
+  min-height: 100dvh; 
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  
+  /* CRITICAL FIX FOR MOBILE NAVBAR OVERLAP */
+  /* Instead of centering, we start from top and push down with padding */
+  justify-content: flex-start; 
+  padding-top: 140px; /* 100px navbar + 40px spacing */
+  
   align-items: center;
   overflow: hidden;
   text-align: center;
   color: white;
-  /* Prevent scroll bouncing on mobile - REMOVED to allow scrolling */
 }
 
 .hero-bg-wrapper {
@@ -48,7 +53,7 @@
     rgba(15, 23, 42, 0.6) 50%,
     rgba(15, 23, 42, 0.95) 100%
   );
-  backdrop-filter: blur(2px); /* Softens the background for text readability */
+  backdrop-filter: blur(2px);
 }
 
 .hero-content-wrapper {
@@ -60,7 +65,8 @@
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  margin-top: -40px; /* Optical centering compensation */
+  /* Margin top removed as we control spacing via parent padding now */
+  margin-top: 0; 
 }
 
 /* --- Animated Badge --- */
@@ -76,7 +82,8 @@
   font-weight: 700;
   backdrop-filter: blur(10px);
   animation: fadeInDown 0.8s ease-out;
-  margin-top: 120px; /* INCREASED: Pushed down significantly to clear mobile navbar (approx 100px height) */
+  /* Reset margin-top as parent padding handles the offset */
+  margin-top: 0; 
 }
 
 .pulse-dot {
@@ -103,23 +110,15 @@
 
 .slide-text-2 {
   display: block;
-  font-size: 2.5rem; /* Slightly smaller to fit long service names */
+  font-size: 2.2rem; /* Optimized for mobile readability */
   animation: fadeInUp 0.8s ease-out 0.4s backwards;
-  min-height: 80px; /* Prevent layout jump */
+  min-height: 80px;
 }
 
 /* Brand Blue for Typewriter */
 .brand-blue-text {
-  color: #38bdf8; /* Sky Blue - Matches Brand */
-  text-shadow: 0 0 20px rgba(56, 189, 248, 0.4); /* Subtle glow */
-}
-
-/* Old gradient removed in favor of brand blue */
-.text-gradient {
-  background: linear-gradient(to right, #38bdf8, #818cf8);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: #38bdf8;
+  text-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
 }
 
 .hero-desc-mobile {
@@ -134,7 +133,7 @@
 /* --- Buttons --- */
 .hero-actions {
   display: flex;
-  flex-direction: column; /* Mobile first: Stacked */
+  flex-direction: column;
   gap: 1rem;
   width: 100%;
   max-width: 350px;
@@ -166,7 +165,6 @@
   box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.5);
 }
 
-/* Shine effect */
 .btn-primary-hero::after {
   content: '';
   position: absolute;
@@ -201,7 +199,7 @@
   align-items: center;
   justify-content: center;
   font-size: 0.9rem;
-  padding-left: 2px; /* Visual center adjustment for play icon */
+  padding-left: 2px;
 }
 
 .action-icon {
@@ -209,7 +207,7 @@
 }
 
 .btn-primary-hero:hover .action-icon {
-  transform: translateX(-5px); /* RTL: move left */
+  transform: translateX(-5px);
 }
 
 /* --- Trust Indicators --- */
@@ -304,10 +302,16 @@
   to { opacity: 1; }
 }
 
-/* --- Desktop Enhancements (Media Queries) --- */
+/* --- DESKTOP ENHANCEMENTS (Tablet & Desktop) --- */
 @media (min-width: 768px) {
+  .hero-mobile-first {
+    /* Reset layout for larger screens */
+    justify-content: center;
+    padding-top: 0; 
+  }
+
   .hero-actions {
-    flex-direction: row; /* Side by side on desktop */
+    flex-direction: row;
     justify-content: center;
     max-width: 500px;
   }
@@ -317,7 +321,7 @@
   }
   
   .slide-text-2 {
-    font-size: 4rem; /* Adjusted for desktop */
+    font-size: 4rem;
   }
 
   .hero-desc-mobile {
