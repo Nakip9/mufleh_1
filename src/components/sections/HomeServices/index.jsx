@@ -5,7 +5,7 @@ import './HomeServices.css';
 
 const HomeServices = () => {
   
-  // Specific Services Data with custom background images
+  // Specific Services Data with corrected paths (directly from root as they are in public folder)
   const services = [
     {
       title: "حجوزات الطيران والنقل البري",
@@ -14,7 +14,7 @@ const HomeServices = () => {
       features: ["حجوزات طيران دولية", "نقل بري حديث", "موافقات أمنية (مصر/الأردن)"],
       icon: <FaPlane />,
       whatsapp: "https://wa.me/782425551",
-      bgImage: "/public/plan_ser.jpg"
+      bgImage: "/plan_ser.jpg"
     },
     {
       title: "الحج والعمرة والتأشيرات",
@@ -23,7 +23,7 @@ const HomeServices = () => {
       features: ["برامج عمرة فاخرة", "تأشيرات عمل وزيارة", "تخليص معاملات الحج"],
       icon: <FaGlobe />,
       whatsapp: "https://wa.me/782425552",
-      bgImage: "/public/haj_ser.jpg"
+      bgImage: "/haj_ser.jpg"
     },
     {
       title: "الخدمات العامة",
@@ -32,7 +32,7 @@ const HomeServices = () => {
       features: ["بطائق شخصية وجوازات", "دفتر عائلي وميلاد", "خدمات تعقيب المعاملات"],
       icon: <FaIdCard />,
       whatsapp: "https://wa.me/782111608",
-      bgImage: "/public/desk_ser.png"
+      bgImage: "/desk_ser.png" // Corrected extension to .png
     }
   ];
   
