@@ -218,6 +218,10 @@
   background: linear-gradient(135deg, #ef4444, #dc2626);
 }
 
+.sales-badge.blue-dark {
+  background: linear-gradient(135deg, #334155, #0f172a);
+}
+
 .social-links-list {
   list-style: none;
   display: flex;

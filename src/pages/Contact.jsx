@@ -19,7 +19,20 @@ const Contact = () => {
 
       <div className="container contact-hub-wrapper">
         
-        {/* 2. Sales Team (Primary Action) */}
+        {/* 2. Management (New) */}
+        <div className="section-label">الإدارة العامة</div>
+        <div className="management-grid" style={{ marginBottom: '2rem' }}>
+          <a href="https://wa.me/967775972318" target="_blank" rel="noopener noreferrer" className="sales-card blue-dark">
+            <div className="icon-box" style={{ background: '#1e293b' }}><FaWhatsapp /></div>
+            <div className="text-box">
+              <h3>المدير العام محمد المفلحي</h3>
+              <p>للشكاوى والمقترحات والتواصل المباشر</p>
+            </div>
+            <span className="arrow-icon">&larr;</span>
+          </a>
+        </div>
+
+        {/* 3. Sales Team (Primary Action) */}
         <div className="section-label">فريق المبيعات (حجوزات فورية)</div>
         <div className="sales-grid">
           <a href="https://wa.me/780104667" target="_blank" rel="noopener noreferrer" className="sales-card orange">

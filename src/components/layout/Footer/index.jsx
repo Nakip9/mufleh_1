@@ -81,6 +81,15 @@ const Footer = () => {
           <div className="footer-community-col">
             
             <div className="sales-section">
+              <h4 className="footer-title">الإدارة العامة</h4>
+              <div className="sales-links">
+                <a href="https://wa.me/967775972318" target="_blank" rel="noopener noreferrer" className="sales-badge blue-dark">
+                  <FaWhatsapp /> المدير العام محمد المفلحي
+                </a>
+              </div>
+            </div>
+
+            <div className="sales-section">
               <h4 className="footer-title">فريق المبيعات</h4>
               <div className="sales-links">
                 <a href="https://wa.me/780104667" className="sales-badge orange">

@@ -18,6 +18,8 @@ export const COMPANY_INFO = {
 export const CONTACT_INFO = {
     // Add \u202D at the start and \u202C at the end for proper phone number display
     phone: "\u202D+967 779 717 177\u202C",
+    managerPhone: "\u202D+967 775 972 318\u202C",
+    managerName: "المدير العام محمد المفلحي",
     email: "alnajmpluo@gmail.com",
     whatsapp: "+967 779 717 177",
     address: "صنعاء شارع القدس مقابل السفارة السعودية",
