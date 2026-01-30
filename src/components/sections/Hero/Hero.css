@@ -15,8 +15,7 @@
   overflow: hidden;
   text-align: center;
   color: white;
-  /* Prevent scroll bouncing on mobile */
-  touch-action: none; 
+  /* Prevent scroll bouncing on mobile - REMOVED to allow scrolling */
 }
 
 .hero-bg-wrapper {
@@ -77,6 +76,7 @@
   font-weight: 700;
   backdrop-filter: blur(10px);
   animation: fadeInDown 0.8s ease-out;
+  margin-top: 60px; /* Pushed down for mobile visibility */
 }
 
 .pulse-dot {
@@ -103,10 +103,18 @@
 
 .slide-text-2 {
   display: block;
-  font-size: 3.5rem;
+  font-size: 2.5rem; /* Slightly smaller to fit long service names */
   animation: fadeInUp 0.8s ease-out 0.4s backwards;
+  min-height: 80px; /* Prevent layout jump */
 }
 
+/* Brand Blue for Typewriter */
+.brand-blue-text {
+  color: #38bdf8; /* Sky Blue - Matches Brand */
+  text-shadow: 0 0 20px rgba(56, 189, 248, 0.4); /* Subtle glow */
+}
+
+/* Old gradient removed in favor of brand blue */
 .text-gradient {
   background: linear-gradient(to right, #38bdf8, #818cf8);
   -webkit-background-clip: text;
@@ -309,7 +317,7 @@
   }
   
   .slide-text-2 {
-    font-size: 5rem;
+    font-size: 4rem; /* Adjusted for desktop */
   }
 
   .hero-desc-mobile {

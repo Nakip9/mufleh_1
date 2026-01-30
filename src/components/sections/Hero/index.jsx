@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FiArrowLeft, FiPlay, FiCheck, FiChevronDown } from 'react-icons/fi';
+import Typewriter from 'typewriter-effect';
 import './Hero.css';
 
 const Hero = () => {
@@ -19,11 +20,26 @@ const Hero = () => {
           <span>موسم العمرة مفتوح الآن</span>
         </div>
 
-        {/* Main Title */}
+        {/* Main Title with Typewriter */}
         <h1 className="hero-title-mobile">
-          <span className="slide-text-1">رحلتك القادمة</span>
+          <span className="slide-text-1">وجهتك الأولى لـ</span>
           <br />
-          <span className="slide-text-2 text-gradient">تبدأ من هنا</span>
+          <span className="slide-text-2 brand-blue-text typewriter-wrapper">
+            <Typewriter
+              options={{
+                strings: [
+                  'حجوزات طيران ونقل بري',
+                  'خدمات حج وعمرة وتأشيرات',
+                  'تخليص معاملات وخدمات عامة'
+                ],
+                autoStart: true,
+                loop: true,
+                delay: 50,
+                deleteSpeed: 30,
+                pauseFor: 2500, // Longer pause for readability
+              }}
+            />
+          </span>
         </h1>
 
         {/* Description */}
