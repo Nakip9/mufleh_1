@@ -89,9 +89,39 @@ const Admin = () => {
     </button>
   );
 
+  const MobileBottomNav = () => (
+    <div className="mobile-bottom-nav">
+      <button 
+        className={`mobile-nav-item ${activeTab === 'visa' ? 'active' : ''}`}
+        onClick={() => { setActiveTab('visa'); window.scrollTo(0,0); }}
+      >
+        <span className="nav-icon">🛂</span>
+        <span>تأشيرات</span>
+      </button>
+      <button 
+        className={`mobile-nav-item ${activeTab === 'services' ? 'active' : ''}`}
+        onClick={() => { setActiveTab('services'); window.scrollTo(0,0); }}
+      >
+        <span className="nav-icon">🛠️</span>
+        <span>خدمات</span>
+      </button>
+      <button 
+        className={`mobile-nav-item ${activeTab === 'content' ? 'active' : ''}`}
+        onClick={() => { setActiveTab('content'); window.scrollTo(0,0); }}
+      >
+        <span className="nav-icon">📝</span>
+        <span>محتوى</span>
+      </button>
+      <a href="/" className="mobile-nav-item home-link">
+        <span className="nav-icon">🏠</span>
+        <span>الرئيسية</span>
+      </a>
+    </div>
+  );
+
   return (
     <div className="admin-page">
-      {/* Sidebar Navigation */}
+      {/* Sidebar Navigation (Desktop) */}
       <aside className="admin-sidebar">
         <div className="sidebar-header">
           <h2 className="sidebar-title">لوحة التحكم</h2>
@@ -219,7 +249,12 @@ const Admin = () => {
         {activeTab === 'services' && <ServicesManager />}
         
         {activeTab === 'content' && <ContentEditor />}
+
+        {/* Padding for bottom nav */}
+        <div className="bottom-nav-spacer"></div>
       </main>
+
+      <MobileBottomNav />
     </div>
   );
 };

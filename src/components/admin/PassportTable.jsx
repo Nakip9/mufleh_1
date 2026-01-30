@@ -80,17 +80,17 @@ const PassportTable = ({ entries, onRefresh, onDelete }) => {
           <tbody>
             {entries.map((entry) => (
               <tr key={entry.id}>
-                <td>
+                <td data-label="رقم الجواز">
                   <strong style={{ fontFamily: 'monospace', fontSize: '1.1em' }}>{entry.passport_number}</strong>
                 </td>
-                <td>
+                <td data-label="الاسم الكامل">
                   {[entry.first_name, entry.last_name].filter(Boolean).join(' ') || '—'}
                 </td>
-                <td>{entry.visa_type || '—'}</td>
-                <td>{getStatusBadge(entry.status)}</td>
-                <td>{new Date(entry.created_at).toLocaleDateString('ar-SA')}</td>
-                <td>{new Date(entry.updated_at).toLocaleDateString('ar-SA')}</td>
-                <td className="notes-cell">
+                <td data-label="نوع التأشيرة">{entry.visa_type || '—'}</td>
+                <td data-label="الحالة">{getStatusBadge(entry.status)}</td>
+                <td data-label="تاريخ الإنشاء">{new Date(entry.created_at).toLocaleDateString('ar-SA')}</td>
+                <td data-label="آخر تحديث">{new Date(entry.updated_at).toLocaleDateString('ar-SA')}</td>
+                <td data-label="ملاحظات" className="notes-cell">
                   {entry.admin_notes ? (
                     <span title={entry.admin_notes} style={{ maxWidth: '150px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {entry.admin_notes}
@@ -99,7 +99,7 @@ const PassportTable = ({ entries, onRefresh, onDelete }) => {
                     <span className="text-muted">—</span>
                   )}
                 </td>
-                <td>
+                <td data-label="الإجراءات">
                   <div className="action-buttons" style={{ display: 'flex', gap: '0.5rem' }}>
                     <button
                       className="btn btn-secondary"

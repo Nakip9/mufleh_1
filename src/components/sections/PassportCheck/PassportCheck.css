@@ -1,10 +1,9 @@
 /* PassportCheck - "Floating Utility Bar" Theme */
 
 .passport-utility-bar {
-  /* This ensures it floats over the hero/content boundary */
   position: relative;
   z-index: 50; 
-  margin-top: -40px; /* Pull it up into the Hero */
+  margin-top: -40px;
   margin-bottom: 4rem;
   padding: 0 1rem;
 }
@@ -28,7 +27,7 @@
 .utility-glass-bar.expanded-mode {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  box-shadow: none; /* Shadow moves to drawer */
+  box-shadow: none;
   border-bottom: 1px solid #f1f5f9;
 }
 
@@ -105,7 +104,7 @@
   font-weight: 600;
   color: var(--text-main);
   outline: none;
-  width: 100%; /* Fix specifically for mobile */
+  width: 100%;
 }
 
 .bar-input::placeholder {
@@ -166,37 +165,320 @@
 }
 
 .result-drawer.open {
-  max-height: 800px; /* Allow enough space for content */
+  max-height: 1000px; /* Increased for new content */
   opacity: 1;
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-top: none;
 }
 
-.drawer-content {
-  padding: 0 1.5rem 2rem;
+/* =================================================================
+   NEW STATUS RESULT STYLES (Mobile First)
+   ================================================================= */
+
+.status-result-card {
+  padding: 1rem 1.5rem 2rem;
+  animation: slideUp 0.4s ease-out;
 }
 
-/* Override StatusResult styles to fit drawer */
-.result-drawer .status-result-container {
-  margin-top: 0;
-  border-top: none;
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 1. Hero Header */
+.result-hero-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
   padding-top: 1rem;
 }
 
-.result-drawer .status-result-container::before,
-.result-drawer .status-result-container::after {
-  display: none; /* Remove ticket notches for drawer look */
+.hero-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: white;
+  margin: 0 auto 1rem;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes spin { to { transform: rotate(360deg); } }
+.step-0 .hero-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); } /* Pending */
+.step-1 .hero-icon { background: linear-gradient(135deg, #f59e0b, #d97706); } /* Embassy */
+.step-2 .hero-icon { background: linear-gradient(135deg, #8b5cf6, #7c3aed); } /* Aden */
+.step-3 .hero-icon { background: linear-gradient(135deg, #10b981, #059669); } /* Ready */
 
-/* Mobile */
+/* Pulse animation for active status */
+.pulse-ring {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: inherit;
+  z-index: 1;
+  opacity: 0.2;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: translateX(-50%) scale(1); opacity: 0.2; }
+  100% { transform: translateX(-50%) scale(1.5); opacity: 0; }
+}
+
+.result-hero-header h2 {
+  font-size: 1.8rem;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.last-update {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  background: #f1f5f9;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* 2. Timeline */
+.timeline-track {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  padding: 0 10px;
+}
+
+.timeline-line {
+  position: absolute;
+  top: 14px;
+  left: 20px;
+  right: 20px;
+  height: 4px;
+  background: #e2e8f0;
+  z-index: 0;
+  border-radius: 2px;
+}
+
+.line-fill {
+  height: 100%;
+  background: var(--primary-brand);
+  border-radius: 2px;
+  transition: width 1s ease;
+}
+
+.timeline-step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 60px; /* Fixed width for alignment */
+}
+
+.step-dot {
+  width: 32px;
+  height: 32px;
+  background: white;
+  border: 2px solid #cbd5e1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd5e1;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.timeline-step.completed .step-dot,
+.timeline-step.current .step-dot {
+  border-color: var(--primary-brand);
+  color: var(--primary-brand);
+  background: white;
+}
+
+.timeline-step.current .step-dot {
+  background: var(--primary-brand);
+  color: white;
+  transform: scale(1.2);
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+}
+
+.dot-circle {
+  width: 8px;
+  height: 8px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.step-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.timeline-step.current .step-label {
+  color: var(--primary-brand);
+  font-weight: 700;
+}
+
+/* 3. Details Card */
+.details-card-modern {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 2rem;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail-icon {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  border: 1px solid #f1f5f9;
+}
+
+.detail-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.lbl {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.val {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.val.mono {
+  font-family: monospace;
+  letter-spacing: 1px;
+}
+
+.copy-btn {
+  background: transparent;
+  border: none;
+  color: var(--primary-brand);
+  cursor: pointer;
+  padding: 8px;
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+
+.copy-btn:hover {
+  opacity: 1;
+  background: #e0f2fe;
+  border-radius: 8px;
+}
+
+/* 4. Footer */
+.pickup-alert {
+  background: #ecfdf5;
+  color: #047857;
+  padding: 12px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  border: 1px solid #d1fae5;
+}
+
+.btn-new-search {
+  width: 100%;
+  padding: 14px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 50px;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.btn-new-search:hover {
+  background: #f1f5f9;
+  color: var(--text-main);
+}
+
+/* Error State */
+.status-result-card.error-state {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.status-icon-wrapper.error {
+  font-size: 3rem;
+  color: #ef4444;
+  margin-bottom: 1rem;
+}
+
+.status-text-content h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn-retry {
+  margin-top: 1.5rem;
+  background: #fee2e2;
+  color: #b91c1c;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Mobile Adjustments */
 @media (max-width: 480px) {
-  .passport-utility-bar {
-    margin-top: -30px;
-  }
-  .utility-glass-bar {
-    padding: 1.25rem;
-  }
+  .result-hero-header h2 { font-size: 1.5rem; }
+  .hero-icon { width: 60px; height: 60px; font-size: 1.8rem; }
+  .pulse-ring { width: 60px; height: 60px; top: 1rem; }
+  
+  .timeline-step { width: auto; flex: 1; }
+  .step-label { font-size: 0.65rem; }
+  .step-dot { width: 24px; height: 24px; font-size: 0.8rem; }
+  
+  .details-card-modern { padding: 1rem; }
 }
+
+@keyframes spin { to { transform: rotate(360deg); } }
