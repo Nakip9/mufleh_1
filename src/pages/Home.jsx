@@ -6,6 +6,7 @@ import PassportCheck from '../components/sections/PassportCheck/index.jsx';
 import HomeServices from '../components/sections/HomeServices/index.jsx';
 import FeaturedDestinations from '../components/sections/FeaturedDestinations/index.jsx';
 import Testimonials from '../components/sections/Testimonials/index.jsx';
+import Partners from '../components/sections/Partners/index.jsx';
 import './Home.css'; 
 
 const Home = () => {
@@ -30,6 +31,9 @@ const Home = () => {
 
       {/* Social Proof */}
       <Testimonials />
+
+      {/* Partners Section */}
+      <Partners />
 
       {/* Final CTA Section */}
       <section className="home-final-cta">

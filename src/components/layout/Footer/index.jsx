@@ -28,6 +28,12 @@ const Footer = () => {
               المفلحي للسفريات والسياحة وخدمات الحج والعمرة والأيدي العاملة وجميع الخدمات العامة.
             </p>
             
+            <div style={{ marginBottom: '1.5rem' }}>
+              <Link to="/offers" style={{ color: '#38bdf8', fontWeight: 'bold', textDecoration: 'none', borderBottom: '1px dashed #38bdf8' }}>
+                &larr; شاهد معرض الصور والعروض
+              </Link>
+            </div>
+            
             <div className="location-box">
               <a 
                 href="https://maps.app.goo.gl/DiyZKTDnnF7SRxmr5" 

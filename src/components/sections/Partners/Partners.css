@@ -1,0 +1,193 @@
+/* Partners Section Styles */
+
+.partners-section {
+  padding: 4rem 0;
+  background-color: white;
+  overflow: hidden;
+  position: relative;
+}
+
+.section-header-simple {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-header-simple h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.text-highlight {
+  color: var(--primary-brand);
+  position: relative;
+  display: inline-block;
+}
+
+.header-line {
+  width: 60px;
+  height: 4px;
+  background: var(--primary-brand);
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
+/* Carousel Wrapper */
+.partners-carousel-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 2rem 0;
+  background: white; /* Ensure background matches */
+}
+
+/* Track - The moving part */
+.partners-track {
+  display: flex;
+  gap: 4rem; /* Space between logos */
+  width: max-content;
+  animation: scroll 30s linear infinite;
+  padding: 0 2rem;
+}
+
+/* Individual Logo Card */
+.partner-logo-card {
+  flex: 0 0 auto;
+  width: 180px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: grayscale(100%);
+  opacity: 0.6;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: white;
+  /* Optional: Add a subtle box if desired, but clean logos are better */
+  /* border: 1px solid #f1f5f9;
+     border-radius: 12px; */
+}
+
+.partner-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s;
+}
+
+/* Hover Effects */
+.partner-logo-card:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.1);
+  z-index: 2;
+}
+
+/* Pause Animation on Hover */
+.partners-carousel-wrapper:hover .partners-track {
+  animation-play-state: paused;
+}
+
+/* Animation Keyframes */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* Move by half the width since we doubled the items. 
+       This assumes the doubled items are enough to fill the screen + scroll.
+       If the track width is W, we scroll -50%? No, we scroll -50% of the TRACK width?
+       Actually, standard marquee technique: transform translateX(-50%) works if the track contains 2 identical sets.
+    */
+    transform: translateX(50%); /* RTL: Move Right for Arabic? */
+  }
+}
+
+/* Note on Direction: 
+   For LTR (Left-to-Right layout), infinite scroll usually moves Right-to-Left (translateX(-50%)).
+   For RTL (Right-to-Left layout - Arabic), it should naturally move Left-to-Right (translateX(50%)) or Right-to-Left depending on preference.
+   Usually logos flow from one side to another.
+   Let's assume standard flow: items move and new ones appear.
+   If RTL, let's try translateX(50%) (moving right) -> items enter from left.
+   Or translateX(-50%) (moving left) -> items enter from right.
+   Usually scrolling ticker goes 'forward'. In RTL, forward is Right to Left? No, reading is Right to Left.
+   Let's stick to translateX(50%) for RTL so it moves towards the right (start).
+   Wait, if we scroll to 50%, the items move to the right.
+   Let's check the animation direction.
+*/
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(50%); /* Move content to the right */
+  }
+}
+/* If content is duplicated: [A B C D] [A B C D]
+   Start: Visible [A B C D] ... offscreen [A B C D] (if RTL starts from right)
+   Wait, in RTL flex container:
+   [A B C D] [A B C D] ->
+   Items are ordered right-to-left?
+   flex-direction: row in RTL means: item 1 is rightmost.
+   So: [D C B A] [D C B A] (visually right to left)
+   If we translateX(50%), we move everything right.
+   This might show empty space if not handled.
+   
+   Better Approach for Infinite Scroll:
+   Use `direction: ltr` for the track specifically to manage the scroll logic easily, 
+   or handle the math carefully.
+   
+   Simpler: Move Left (translateX(-50%)) regardless of RTL.
+   [1 2 3 4 5 6] [1 2 3 4 5 6]
+   We see 1..4.
+   Move left -> 1 disappears, 5 comes in.
+   At -50%, we are at the start of the second set (which is identical to first).
+   Snap back to 0.
+*/
+
+.partners-track {
+  direction: ltr; /* Force LTR for predictable scrolling math */
+  animation: scroll-left 40s linear infinite;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+
+/* Fade Overlays */
+.fade-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.fade-overlay.left {
+  left: 0;
+  background: linear-gradient(to right, white, transparent);
+}
+
+.fade-overlay.right {
+  right: 0;
+  background: linear-gradient(to left, white, transparent);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .partner-logo-card {
+    width: 120px;
+    height: 80px;
+  }
+  .partners-track {
+    gap: 2rem;
+  }
+}

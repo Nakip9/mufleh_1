@@ -3,10 +3,11 @@ import AddEntryForm from '../components/admin/AddEntryForm';
 import PassportTable from '../components/admin/PassportTable';
 import ServicesManager from '../components/admin/ServicesManager';
 import ContentEditor from '../components/admin/ContentEditor';
+import OffersManager from '../components/admin/OffersManager';
 import './Admin.css';
 
 const Admin = () => {
-  const [activeTab, setActiveTab] = useState('visa'); // 'visa', 'services', 'content'
+  const [activeTab, setActiveTab] = useState('visa'); // 'visa', 'services', 'content', 'offers'
   const [showAddForm, setShowAddForm] = useState(false);
   
   // Visa Status State
@@ -106,6 +107,13 @@ const Admin = () => {
         <span>خدمات</span>
       </button>
       <button 
+        className={`mobile-nav-item ${activeTab === 'offers' ? 'active' : ''}`}
+        onClick={() => { setActiveTab('offers'); window.scrollTo(0,0); }}
+      >
+        <span className="nav-icon">🖼️</span>
+        <span>المعرض</span>
+      </button>
+      <button 
         className={`mobile-nav-item ${activeTab === 'content' ? 'active' : ''}`}
         onClick={() => { setActiveTab('content'); window.scrollTo(0,0); }}
       >
@@ -130,6 +138,7 @@ const Admin = () => {
         <nav className="sidebar-nav">
           <NavItem id="visa" icon="🛂" label="إدارة التأشيرات" />
           <NavItem id="services" icon="🛠️" label="إدارة الخدمات" />
+          <NavItem id="offers" icon="🖼️" label="العروض والمعرض" />
           <NavItem id="content" icon="📝" label="إدارة المحتوى" />
           
           <div style={{ marginTop: 'auto', borderTop: '1px solid var(--admin-border)', paddingTop: '0.5rem' }}>
@@ -247,6 +256,8 @@ const Admin = () => {
         )}
 
         {activeTab === 'services' && <ServicesManager />}
+        
+        {activeTab === 'offers' && <OffersManager />}
         
         {activeTab === 'content' && <ContentEditor />}
 

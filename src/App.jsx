@@ -11,6 +11,7 @@ const About = lazy(() => import('./pages/About'));
 const Services = lazy(() => import('./pages/Services'));
 const Destinations = lazy(() => import('./pages/Destinations'));
 const Contact = lazy(() => import('./pages/Contact'));
+const OffersGallery = lazy(() => import('./pages/OffersGallery'));
 const Admin = lazy(() => import('./pages/Admin'));
 
 // Loading fallback component
@@ -62,6 +63,7 @@ const AppLayout = () => {
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
             <Route path="/destinations" element={<Destinations />} />
+            <Route path="/offers" element={<OffersGallery />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/admin" element={<Admin />} />
           </Routes>
