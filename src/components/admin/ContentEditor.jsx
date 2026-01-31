@@ -16,7 +16,9 @@ const ContentEditor = () => {
     { id: 'destinations', label: 'الوجهات' },
     { id: 'testimonials', label: 'آراء العملاء' },
     { id: 'faqs', label: 'الأسئلة الشائعة' },
-    { id: 'services', label: 'الخدمات' }
+    { id: 'services', label: 'الخدمات' },
+    { id: 'offers', label: 'العروض' },
+    { id: 'gallery', label: 'معرض الصور' }
   ];
 
   // Arabic Label Mappings
@@ -49,7 +51,10 @@ const ContentEditor = () => {
     category: 'الفئة',
     price: 'السعر',
     features: 'المميزات',
-    detailedDescription: 'وصف تفصيلي'
+    detailedDescription: 'وصف تفصيلي',
+    image_url: 'رابط الصورة',
+    type: 'النوع',
+    description: 'الوصف'
   };
 
   const getLabel = (key) => labelMap[key] || key;

@@ -39,7 +39,10 @@ const Navbar = () => {
             الوجهات
           </NavLink>
           <NavLink to="/offers" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-            العروض والمعرض
+            العروض
+          </NavLink>
+          <NavLink to="/gallery" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            معرض الصور
           </NavLink>
           <NavLink to="/contact" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
             اتصل بنا
@@ -65,7 +68,8 @@ const Navbar = () => {
             <Link to="/about" onClick={() => setIsOpen(false)}>من نحن</Link>
             <Link to="/services" onClick={() => setIsOpen(false)}>خدماتنا</Link>
             <Link to="/destinations" onClick={() => setIsOpen(false)}>الوجهات</Link>
-            <Link to="/offers" onClick={() => setIsOpen(false)}>العروض والمعرض</Link>
+            <Link to="/offers" onClick={() => setIsOpen(false)}>العروض</Link>
+            <Link to="/gallery" onClick={() => setIsOpen(false)}>معرض الصور</Link>
             <Link to="/contact" onClick={() => setIsOpen(false)}>اتصل بنا</Link>
           </div>
         </div>

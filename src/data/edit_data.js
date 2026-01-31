@@ -281,8 +281,6 @@ export const faqs = [
 // ------------------------------------------
 // 5. SERVICES (STATIC FALLBACK)
 // ------------------------------------------
-// Note: Services are primarily managed via the Admin Panel. 
-// These are fallback values if the database connection fails or for initial setup.
 export const services = [
     {
         title: "تفاويض العمالة (مساند)",
@@ -334,6 +332,74 @@ export const allServices = [
         icon: "FiBriefcase",
         features: ["استقدام المهن الفنية", "استقدام المهن الإدارية", "تسهيل إجراءات الإقامة", "فحص مهني معتمد", "حلول شاملة للشركات"],
         category: "manpower"
-    },
-    // ... (rest of services from previous file can be added here if needed)
+    }
 ];
+
+// ------------------------------------------
+// 6. OFFERS
+// ------------------------------------------
+export const offers = [
+    {
+        id: 1,
+        title: "عرض شهر العسل - المالديف",
+        description: "استمتع بإقامة فاخرة لمدة 5 أيام في منتجع فوق الماء مع وجبات كاملة.",
+        type: "offer",
+        image_url: "/beach.jpg",
+        price: "4500 ر.س"
+    },
+    {
+        id: 2,
+        title: "رحلة إسطنبول التاريخية",
+        description: "جولة سياحية شاملة لزيارة المعالم التاريخية والبوسفور.",
+        type: "offer",
+        image_url: "/istanbul.jpeg",
+        price: "2000 ر.س"
+    },
+    {
+        id: 5,
+        title: "عرض دبي للتسوق",
+        description: "تذكرة طيران + فيزا + فندق 4 نجوم لمدة 4 ليالي.",
+        type: "offer",
+        image_url: "/dubai.jpg",
+        price: "1800 ر.س"
+    }
+];
+
+// ------------------------------------------
+// 7. GALLERY IMAGES
+// ------------------------------------------
+export const galleryImages = [
+  "https://ik.imagekit.io/onxay8yzf/photo_1_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_2_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_3_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_4_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_5_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_6_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_7_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_8_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_9_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_11_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_13_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_14_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_15_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_16_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_17_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_19_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_20_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_21_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_22_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_23_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_24_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_25_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_26_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_27_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_28_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_29_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_30_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_31_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_32_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_33_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_34_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_35_2026-01-31_07-47-19.jpg",
+  "https://ik.imagekit.io/onxay8yzf/photo_36_2026-01-31_07-47-19.jpg"
+].map(url => ({ image_url: url })); // Format as objects for the editor

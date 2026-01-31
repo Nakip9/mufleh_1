@@ -12,7 +12,9 @@ export const ContentProvider = ({ children }) => {
     popular_destinations: defaultData.popularDestinations,
     testimonials: defaultData.testimonials,
     faqs: defaultData.faqs,
-    services: defaultData.allServices
+    services: defaultData.allServices,
+    offers: defaultData.offers,
+    gallery: defaultData.galleryImages
   });
   
   const [loading, setLoading] = useState(true);
