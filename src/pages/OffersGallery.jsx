@@ -1,46 +1,52 @@
-import { useState, useEffect } from 'react';
-import { FiTag, FiImage, FiX, FiZoomIn, FiLoader } from 'react-icons/fi';
+import { useState } from 'react';
+import { FiTag, FiImage, FiX, FiZoomIn } from 'react-icons/fi';
 import './OffersGallery.css';
 
 const OffersGallery = () => {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // 'all', 'offer', 'gallery'
   const [selectedImage, setSelectedImage] = useState(null);
 
-  useEffect(() => {
-    fetchOffers();
-  }, []);
-
-  const fetchOffers = async () => {
-    setLoading(true);
-    try {
-      // In development (Vite), we might need to point to the local function URL if proxy isn't set up perfectly,
-      // but usually /api works if configured. For now, we assume /api works or falls back.
-      // Since this is a client-side fetch, ensure the API route is accessible.
-      const response = await fetch('/api/offers/get'); 
-      const data = await response.json();
-      
-      if (data.success) {
-        setItems(data.data);
-      } else {
-        console.error('Failed to load data');
-      }
-    } catch (error) {
-      console.error('Error loading offers:', error);
-      // Fallback data if API fetch fails entirely (e.g. network error)
-      setItems([
-        {
-          id: 1, title: "عرض شهر العسل - المالديف", description: "استمتع بإقامة فاخرة لمدة 5 أيام.", type: "offer", image_url: "/beach.jpg", price: "4500 ر.س"
-        },
-        {
-          id: 3, title: "فندق برج الساعة", description: "صور من إقامتنا المميزة.", type: "gallery", image_url: "/hero_makkah_background_1764893075599.jpg"
-        }
-      ]);
-    } finally {
-      setLoading(false);
+  // Hardcoded Data (No Database)
+  const items = [
+    {
+      id: 1,
+      title: "عرض شهر العسل - المالديف",
+      description: "استمتع بإقامة فاخرة لمدة 5 أيام في منتجع فوق الماء مع وجبات كاملة.",
+      type: "offer",
+      image_url: "/beach.jpg",
+      price: "4500 ر.س"
+    },
+    {
+      id: 2,
+      title: "رحلة إسطنبول التاريخية",
+      description: "جولة سياحية شاملة لزيارة المعالم التاريخية والبوسفور.",
+      type: "offer",
+      image_url: "/istanbul.jpeg",
+      price: "2000 ر.س"
+    },
+    {
+      id: 3,
+      title: "فندق برج الساعة",
+      description: "صور من إقامتنا المميزة لعملائنا في مكة المكرمة.",
+      type: "gallery",
+      image_url: "/hero_makkah_background_1764893075599.jpg"
+    },
+    {
+      id: 4,
+      title: "مجموعة سياحية في لندن",
+      description: "لقطات من رحلتنا الجماعية الأخيرة إلى لندن.",
+      type: "gallery",
+      image_url: "/london.jpeg"
+    },
+    {
+      id: 5,
+      title: "عرض دبي للتسوق",
+      description: "تذكرة طيران + فيزا + فندق 4 نجوم لمدة 4 ليالي.",
+      type: "offer",
+      image_url: "/dubai.jpg",
+      price: "1800 ر.س"
     }
-  };
+  ];
 
   const filteredItems = items.filter(item => filter === 'all' ? true : item.type === filter);
 
@@ -79,40 +85,33 @@ const OffersGallery = () => {
         </div>
 
         {/* Grid */}
-        {loading ? (
-          <div className="loading-state">
-            <div className="spinner"></div>
-            <p>جاري تحميل المحتوى...</p>
-          </div>
-        ) : (
-          <div className="gallery-grid">
-            {filteredItems.map((item, index) => (
-              <div key={item.id || index} className={`gallery-card ${item.type}`}>
-                <div className="card-media" onClick={() => setSelectedImage(item)}>
-                  <img src={item.image_url} alt={item.title} loading="lazy" />
-                  <div className="media-overlay">
-                    <FiZoomIn />
-                  </div>
-                  {item.type === 'offer' && <span className="badge-offer">عرض مميز</span>}
+        <div className="gallery-grid">
+          {filteredItems.map((item, index) => (
+            <div key={item.id || index} className={`gallery-card ${item.type}`}>
+              <div className="card-media" onClick={() => setSelectedImage(item)}>
+                <img src={item.image_url} alt={item.title} loading="lazy" />
+                <div className="media-overlay">
+                  <FiZoomIn />
                 </div>
-                <div className="card-body">
-                  <div className="card-header-row">
-                    <h3>{item.title}</h3>
-                    {item.price && <span className="price-tag">{item.price}</span>}
-                  </div>
-                  <p>{item.description}</p>
-                  {item.type === 'offer' && (
-                    <a href="https://wa.me/967775972318" target="_blank" rel="noopener noreferrer" className="book-btn">
-                      احجز الآن
-                    </a>
-                  )}
-                </div>
+                {item.type === 'offer' && <span className="badge-offer">عرض مميز</span>}
               </div>
-            ))}
-          </div>
-        )}
+              <div className="card-body">
+                <div className="card-header-row">
+                  <h3>{item.title}</h3>
+                  {item.price && <span className="price-tag">{item.price}</span>}
+                </div>
+                <p>{item.description}</p>
+                {item.type === 'offer' && (
+                  <a href="https://wa.me/967775972318" target="_blank" rel="noopener noreferrer" className="book-btn">
+                    احجز الآن
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
 
-        {!loading && filteredItems.length === 0 && (
+        {filteredItems.length === 0 && (
           <div className="empty-state">
             <p>لا توجد عناصر لعرضها في هذا القسم حالياً.</p>
           </div>
