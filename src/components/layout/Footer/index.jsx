@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { 
   FaWhatsapp, 
   FaFacebookF, 
+  FaInstagram,
+  FaTiktok,
   FaMapMarkerAlt, 
   FaPhoneAlt, 
   FaPlane, 
@@ -112,12 +114,22 @@ const Footer = () => {
               <ul className="social-links-list">
                 <li>
                   <a href="https://www.facebook.com/share/1AcWpmnJ5P/" target="_blank" rel="noopener noreferrer" className="social-btn fb">
-                    <FaFacebookF /> <span>صفحتنا على فيسبوك</span>
+                    <FaFacebookF /> <span>فيسبوك</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.instagram.com/bnalmuflhi?igsh=MThwZ2M1MDNhYzBlZA==" target="_blank" rel="noopener noreferrer" className="social-btn insta" style={{backgroundColor: '#E1306C', color: 'white'}}>
+                    <FaInstagram /> <span>انستقرام</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.tiktok.com/@user75276359?_r=1&_t=ZS-93WCG6VCzki" target="_blank" rel="noopener noreferrer" className="social-btn tiktok" style={{backgroundColor: '#000', color: 'white'}}>
+                    <FaTiktok /> <span>تيك توك</span>
                   </a>
                 </li>
                 <li>
                   <a href="https://whatsapp.com/channel/0029Vavig5c2v1IloZ1TpV0D" target="_blank" rel="noopener noreferrer" className="social-btn channel">
-                    <FaBullhorn /> <span>قناة الواتساب الرسمية</span>
+                    <FaBullhorn /> <span>قناة الواتساب</span>
                   </a>
                 </li>
                 <li>

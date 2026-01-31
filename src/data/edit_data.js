@@ -28,9 +28,9 @@ export const CONTACT_INFO = {
 
 export const SOCIAL_LINKS = {
     facebook: "https://www.facebook.com/profile.php?id=61571202487332#",
-    twitter: "https://twitter.com/your-handle",
-    instagram: "https://www.instagram.com/your-handle",
-    whatsapp: "https://www.whatsapp.com/your-number"
+    instagram: "https://www.instagram.com/bnalmuflhi?igsh=MThwZ2M1MDNhYzBlZA==",
+    tiktok: "https://www.tiktok.com/@user75276359?_r=1&_t=ZS-93WCG6VCzki",
+    whatsapp: "https://whatsapp.com/channel/0029Vavig5c2v1IloZ1TpV0D"
 };
 
 // ------------------------------------------

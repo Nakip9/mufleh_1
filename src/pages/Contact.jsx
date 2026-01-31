@@ -1,5 +1,5 @@
 import { FiMapPin, FiPhoneCall, FiMessageCircle, FiUsers, FiClock } from 'react-icons/fi';
-import { FaWhatsapp, FaFacebookF, FaPlane, FaGlobe, FaPassport } from 'react-icons/fa';
+import { FaWhatsapp, FaFacebookF, FaInstagram, FaTiktok, FaPlane, FaGlobe, FaPassport } from 'react-icons/fa';
 import './Contact.css';
 
 const Contact = () => {
@@ -89,26 +89,51 @@ const Contact = () => {
           </a>
         </div>
 
-        {/* 4. Location & Fixed Phone */}
-        <div className="section-label">المقر الرئيسي</div>
-        <div className="location-grid">
-          <div className="info-card location">
-            <FiMapPin className="info-icon" />
-            <div>
-              <h3>المنصورة</h3>
-              <p>شارع خديجة بنت خويلد - بلوك 33</p>
-              <a href="https://maps.app.goo.gl/DiyZKTDnnF7SRxmr5" target="_blank" rel="noopener noreferrer" className="map-link">عرض الموقع</a>
+        {/* 4. Location & Map Combined Section */}
+        <div className="section-label">المقر الرئيسي والموقع</div>
+        <div className="location-map-container">
+          
+          <div className="location-side">
+            <div className="info-card location">
+              <FiMapPin className="info-icon" />
+              <div>
+                <h3>المنصورة</h3>
+                <p>شارع خديجة بنت خويلد - بلوك 33</p>
+                <a href="https://maps.app.goo.gl/DiyZKTDnnF7SRxmr5" target="_blank" rel="noopener noreferrer" className="map-link">عرض في خرائط جوجل</a>
+              </div>
+            </div>
+
+            <div className="info-card phone">
+              <FiPhoneCall className="info-icon" />
+              <div>
+                <h3>الهاتف الثابت</h3>
+                <p>للاتصال المباشر بالمكتب</p>
+                <a href="tel:02352646" className="phone-number">02-352646</a>
+              </div>
+            </div>
+
+            <div className="info-card hours">
+              <FiClock className="info-icon" />
+              <div>
+                <h3>ساعات العمل</h3>
+                <p>السبت - الخميس: 9:00 ص - 9:00 م</p>
+                <p>الجمعة: 4:00 م - 9:00 م</p>
+              </div>
             </div>
           </div>
 
-          <div className="info-card phone">
-            <FiPhoneCall className="info-icon" />
-            <div>
-              <h3>الهاتف الثابت</h3>
-              <p>للاتصال المباشر بالمكتب</p>
-              <a href="tel:02352646" className="phone-number">02-352646</a>
-            </div>
+          <div className="map-side">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3846.123456789012!2d44.9876543!3d12.8765432!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDUyJzM1LjYiTiA0NMKwNTknMTUuNiJF!5e0!3m2!1sen!2s!4v1600000000000!5m2!1sen!2s" 
+              width="100%" 
+              height="100%" 
+              style={{border:0}} 
+              allowFullScreen="" 
+              loading="lazy"
+              title="موقع وكالة ابن المفلحي"
+            ></iframe>
           </div>
+
         </div>
 
         {/* 5. Community & Socials */}
@@ -117,6 +142,12 @@ const Contact = () => {
           <div className="social-row">
             <a href="https://www.facebook.com/share/1AcWpmnJ5P/" target="_blank" rel="noopener noreferrer" className="social-pill fb">
               <FaFacebookF /> فيسبوك
+            </a>
+            <a href="https://www.instagram.com/bnalmuflhi?igsh=MThwZ2M1MDNhYzBlZA==" target="_blank" rel="noopener noreferrer" className="social-pill insta" style={{background: '#E1306C', color: 'white'}}>
+              <FaInstagram /> انستقرام
+            </a>
+            <a href="https://www.tiktok.com/@user75276359?_r=1&_t=ZS-93WCG6VCzki" target="_blank" rel="noopener noreferrer" className="social-pill tiktok" style={{background: '#000', color: 'white'}}>
+              <FaTiktok /> تيك توك
             </a>
             <a href="https://whatsapp.com/channel/0029Vavig5c2v1IloZ1TpV0D" target="_blank" rel="noopener noreferrer" className="social-pill channel">
               <FaWhatsapp /> القناة الرسمية
@@ -127,19 +158,6 @@ const Contact = () => {
           </div>
         </div>
 
-      </div>
-
-      {/* 6. Map Section */}
-      <div className="map-section">
-        <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3846.123456789012!2d44.9876543!3d12.8765432!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDUyJzM1LjYiTiA0NMKwNTknMTUuNiJF!5e0!3m2!1sen!2s!4v1600000000000!5m2!1sen!2s" 
-          width="100%" 
-          height="400" 
-          style={{border:0}} 
-          allowFullScreen="" 
-          loading="lazy"
-          title="موقعنا"
-        ></iframe>
       </div>
 
     </div>

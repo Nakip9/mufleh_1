@@ -59,8 +59,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: grayscale(100%);
-  opacity: 0.6;
+  filter: grayscale(0%);
+  opacity: 1;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   background: white;
   /* Optional: Add a subtle box if desired, but clean logos are better */
@@ -77,8 +77,6 @@
 
 /* Hover Effects */
 .partner-logo-card:hover {
-  filter: grayscale(0%);
-  opacity: 1;
   transform: scale(1.1);
   z-index: 2;
 }

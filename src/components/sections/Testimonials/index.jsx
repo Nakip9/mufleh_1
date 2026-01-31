@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaQuoteRight } from 'react-icons/fa';
+import { FaQuoteRight, FaChevronLeft, FaChevronRight, FaStar } from 'react-icons/fa';
 import { useContent } from '../../../context/ContentContext';
 import './Testimonials.css';
 
@@ -20,14 +20,22 @@ const Testimonials = () => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
+    const handleNext = () => {
+        setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    };
+
+    const handlePrev = () => {
+        setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    };
+
     // Auto-advance
     useEffect(() => {
         if (!testimonials || testimonials.length <= 1) return;
         const timer = setInterval(() => {
-            setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-        }, 5000);
+            handleNext();
+        }, 6000); // Slower auto-advance for better reading
         return () => clearInterval(timer);
-    }, [testimonials?.length]);
+    }, [currentIndex, testimonials?.length]);
 
     if (!testimonials || testimonials.length === 0) {
         return null; 
@@ -48,10 +56,10 @@ const Testimonials = () => {
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={currentIndex}
-                                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                                transition={{ duration: 0.6, ease: "easeOut" }}
+                                initial={{ opacity: 0, x: 50 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -50 }}
+                                transition={{ duration: 0.4, ease: "easeInOut" }}
                                 className="testimonial-luxury-card"
                             >
                                 <div className="quote-watermark"><FaQuoteRight /></div>
@@ -62,7 +70,7 @@ const Testimonials = () => {
                                     </div>
                                     <div className="stars-row">
                                         {[...Array(5)].map((_, i) => (
-                                            <span key={i} className="star-gold">★</span>
+                                            <FaStar key={i} className="star-gold" />
                                         ))}
                                     </div>
                                 </div>
@@ -79,15 +87,25 @@ const Testimonials = () => {
                         </AnimatePresence>
                     </div>
 
-                    <div className="slider-indicators">
-                        {testimonials.map((_, index) => (
-                            <button
-                                key={index}
-                                className={`indicator-dot ${index === currentIndex ? 'active' : ''}`}
-                                onClick={() => setCurrentIndex(index)}
-                                aria-label={`Go to testimonial ${index + 1}`}
-                            ></button>
-                        ))}
+                    <div className="slider-controls">
+                        <button className="nav-btn" onClick={handlePrev} aria-label="Previous testimonial">
+                            <FaChevronRight /> {/* RTL Arrow direction */}
+                        </button>
+                        
+                        <div className="slider-indicators">
+                            {testimonials.map((_, index) => (
+                                <button
+                                    key={index}
+                                    className={`indicator-dot ${index === currentIndex ? 'active' : ''}`}
+                                    onClick={() => setCurrentIndex(index)}
+                                    aria-label={`Go to testimonial ${index + 1}`}
+                                ></button>
+                            ))}
+                        </div>
+
+                        <button className="nav-btn" onClick={handleNext} aria-label="Next testimonial">
+                            <FaChevronLeft /> {/* RTL Arrow direction */}
+                        </button>
                     </div>
                 </div>
             </div>
