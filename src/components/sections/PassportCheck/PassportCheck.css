@@ -482,3 +482,27 @@
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+.status-context-msg {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  max-width: 90%;
+}
+
+.notes-row {
+  background: #fffbeb;
+  border: 1px dashed #f59e0b;
+  border-radius: 8px;
+  padding: 10px !important;
+  margin-top: 10px;
+}
+
+.notes-text {
+  white-space: pre-wrap;
+  color: #92400e;
+  font-size: 0.95rem;
+  margin-top: 4px;
+}

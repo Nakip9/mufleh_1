@@ -45,6 +45,20 @@ const StatusResult = ({ result, onReset }) => {
   const currentStatusConfig = steps[currentStepIndex];
   const fullName = [result.first_name, result.last_name].filter(Boolean).join(' ');
 
+  // Context Messages
+  const getStatusMessage = () => {
+    switch (result.status) {
+      case 'in_aden':
+        return 'الجواز حالياً في عدن ولم يصل إلى صنعاء بعد.';
+      case 'in_embassy':
+        return 'الجواز حالياً في السفارة للمعالجة.';
+      case 'ready':
+        return 'الجواز جاهز للاستلام في مكتبنا.';
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="status-result-card success-state">
       
@@ -55,7 +69,8 @@ const StatusResult = ({ result, onReset }) => {
           {currentStatusConfig.icon}
         </div>
         <h2>{currentStatusConfig.label}</h2>
-        <span className="last-update">آخر تحديث: {new Date().toLocaleDateString('ar-EG')}</span>
+        <span className="last-update">آخر تحديث: {new Date(result.updated_at || Date.now()).toLocaleDateString('ar-EG')}</span>
+        {getStatusMessage() && <p className="status-context-msg">{getStatusMessage()}</p>}
       </div>
 
       {/* 2. Timeline Stepper */}
@@ -101,6 +116,16 @@ const StatusResult = ({ result, onReset }) => {
             <div className="detail-content">
               <span className="lbl">نوع المعاملة</span>
               <span className="val">{result.visa_type}</span>
+            </div>
+          </div>
+        )}
+
+        {result.admin_notes && (
+          <div className="detail-row notes-row">
+            <div className="detail-icon"><FiFileText /></div>
+            <div className="detail-content">
+              <span className="lbl">ملاحظات إدارية</span>
+              <p className="val notes-text">{result.admin_notes}</p>
             </div>
           </div>
         )}
