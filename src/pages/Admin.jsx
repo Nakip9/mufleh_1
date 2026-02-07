@@ -36,6 +36,9 @@ const Admin = () => {
         params.append('status', status);
       }
 
+      // Add timestamp to bypass cache
+      params.append('t', Date.now().toString());
+
       const response = await fetch(`/api/admin/list-entries?${params.toString()}`);
       const data = await response.json();
 

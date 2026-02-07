@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useContent } from '../../context/ContentContext';
 import ServiceForm from './ServiceForm';
 import './Admin.css';
 
 const ServicesManager = () => {
+  const { refreshContent } = useContent();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,7 +15,7 @@ const ServicesManager = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/services');
+      const response = await fetch(`/api/services?t=${Date.now()}`);
       const data = await response.json();
       
       if (!response.ok) {
@@ -49,6 +51,7 @@ const ServicesManager = () => {
       }
 
       setServices(prev => prev.filter(service => service.id !== id));
+      refreshContent();
     } catch (err) {
       console.error('Error deleting service:', err);
       alert('حدث خطأ أثناء حذف الخدمة');
@@ -64,11 +67,13 @@ const ServicesManager = () => {
   const handleCreateSuccess = () => {
     setIsCreating(false);
     fetchServices();
+    refreshContent();
   };
 
   const handleUpdateSuccess = (updatedService) => {
     setServices(prev => prev.map(s => s.id === updatedService.id ? updatedService : s));
     setEditingService(null);
+    refreshContent();
   };
 
   return (

@@ -22,7 +22,8 @@ export const ContentProvider = ({ children }) => {
   // Function to refresh content from API
   const refreshContent = async () => {
     try {
-      const response = await fetch('/api/content/get');
+      // Add timestamp to bypass browser cache
+      const response = await fetch(`/api/content/get?t=${Date.now()}`);
       const result = await response.json();
 
       if (result.success && result.data) {
